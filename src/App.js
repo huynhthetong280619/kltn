@@ -1,24 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Suspense, useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import Pages from '../src/Layouts/pages'
+import LoadingView from '../src/Layouts/loading'
+import '../src/styles/main.scss'
+import { I18nextProvider } from 'react-i18next';
+import i18n from './i18n'
+import Login from './Layouts/login';
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 3000)
+
+  }, [])
+
+
+  if (isLoading) {
+    return <LoadingView />
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <I18nextProvider i18n={i18n}>
+        <Router>
+          <Suspense fallback={<LoadingView />}>
+            <Route path="/login" component={Login} />
+            <Route path="/" component={Pages} />
+          </Suspense>
+        </Router>
+      </I18nextProvider>
+    </>
   );
 }
 
