@@ -15,6 +15,7 @@ import en from '../../assets/images/en.png'
 // import vi from '../../assets/images/vn.png'
 import ArrowDown from '../../assets/images/ic_arr_down.png'
 import { Link } from 'react-router-dom'
+import Message from '../message'
 
 
 
@@ -22,33 +23,7 @@ const { Text } = Typography;
 
 
 
-const init = [
-    {
-        id: 'nguyenanhquan',
-        content: 'Content 1',
-        time: '20:22:56 20/12/2020'
-    },
-    {
-        id: 'nguyenanhquan',
-        content: 'Content 1',
-        time: '20:22:56 20/12/2020'
-    },
-    {
-        id: 'currentUser',
-        content: 'Content 1',
-        time: '20:22:56 20/12/2020'
-    },
-    {
-        id: 'nguyenanhquan',
-        content: 'Content 1',
-        time: '20:22:56 20/12/2020'
-    },
-    {
-        id: 'currentUser',
-        content: 'Content 1',
-        time: '20:22:56 20/12/2020'
-    }
-]
+
 const HeaderLayout = () => {
     const { t, i18n } = useTranslation()
 
@@ -56,7 +31,6 @@ const HeaderLayout = () => {
 
     const [language, setLanguage] = useState('vi')
 
-    const [conversation, setConversation] = useState(init)
 
     useEffect(() => {
         const lang = localStorage.getItem(STORE_KEY.LANGUAGE)
@@ -250,35 +224,7 @@ const HeaderLayout = () => {
             </Col>
         </Col>
 
-        <div className="chat-tab" >
-
-            <div className="chat-tab-header">
-                <Col span={12}>
-                    <div></div>
-                    <div> Nguyễn Anh Quân</div>
-                </Col>
-                <Col span={12}></Col>
-
-            </div>
-            <div className="chat-tab-content">
-                {
-                    conversation.map((item, index) => (
-                        <div>
-                            <div>{item.content}</div>
-                            <div>{item.time}</div>
-                        </div>
-                    ))
-                }
-            </div>
-            <div className="chat-tab-footer">
-                <Col span={8}>
-                </Col>
-                <Col span={16}>
-
-                    <input className="input-message" placeholder="Aa ..." />
-                </Col>
-            </div>
-        </div>
+        <Message />
     </div>
 }
 

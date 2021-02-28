@@ -104,10 +104,33 @@
         width: 100%;
         height: 40px;
         line-height: 40px;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
+        border-radius: 15px 15px 0 0;
         padding: 1px 8px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .chat-tab-content{
+        height: 100%;
+        overflow-y: auto;
+        padding: 46px 10px;
+        background-color: #171A1F;
+         border-radius: 15px 15px 0 0 ;
+        .item-message-tab{
+            display: flex;
+            line-height: 22px;
+            align-items: center;
+            margin-bottom: 8px;
+            .item-message-content{
+                color: #fff;
+                padding: 8px 10px;
+                border-radius: 8px;
+            }
+            .message-client{
+background-color: #2D2E30;
+            }
+            .message-server{
+                background-color: #ffffff33;
+            }
+        }
     }
     .chat-tab-footer{
         position: absolute;
@@ -115,20 +138,22 @@
         left: 0;
         width: 100%;
         height: 50px;
-        background-color: #3A3B3C;
+        background-color: #2D2E30;
         border-top: 1px solid rgba(255, 255, 255, 0.1);
         line-height: 50px;
         display: flex;
+        padding: 0 4px;
         .input-message{
             height: 37px;
             border-radius: 20px;
             outline: none;
             border: 0;
-            width: 75%;
+            width: 100%;
             padding-left: 10px;
             padding-right: 15px;
             background-color: #242526;
             color: #fff;
+            margin-right: 5px;
         }
     }
 }
