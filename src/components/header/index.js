@@ -14,9 +14,8 @@ import { STORE_KEY } from '../../utils/STORE_KEY'
 import en from '../../assets/images/en.png'
 // import vi from '../../assets/images/vn.png'
 import ArrowDown from '../../assets/images/ic_arr_down.png'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import Message from '../message'
-
 
 
 const { Text } = Typography;
@@ -214,11 +213,11 @@ const HeaderLayout = () => {
                 </div>
                 <div className="user-setting">{t('title_setting')}</div>
             </Col>
-            <Col span={6} className="header-user-login cursor-act" >
-                <div>
-                    <img src={IC_USER} width="25px" />
-                </div>
-                <Link to={"/login"}>
+            <Col span={6} className="header-user-login cursor-act">
+                <Link to="/login" style={{display: 'flex'}}>
+                    <div>
+                        <img src={IC_USER} width="25px" />
+                    </div>
                     <div className="user-login-text">{t('title_login')}</div>
                 </Link>
             </Col>

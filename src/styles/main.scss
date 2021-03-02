@@ -164,6 +164,69 @@ background-color: #2D2E30;
     cursor: pointer;
 }
 
+.login-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #171A1F;
+    .form-login{
+        width: 330px;
+        height: 631px;
+        background: url('../assets/images/background.svg');
+        background-size: cover;
+        padding: 10px;
+        border-radius: 8px;
+        .login-logo{
+            text-align: center;
+            margin-bottom: 27px;
+        }
+        .ant-input-affix-wrapper{
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            input{
+                background: transparent;
+            }
+        }
+        .btn-login{
+            background: #60B44A;
+    border-radius: 8px;
+    width: 90%;
+    outline: none;
+    border: 0;
+        }
+
+        .login-utils{
+            display: flex;
+            margin-bottom: 10px;
+            .remember-me{
+                color: #fff;
+                display: flex;
+            }
+            .forget-pass{
+                text-align: right;
+                color: #fff
+            }
+        }
+        .social-login{
+            display: flex;
+            .facebook-login{
+                text-align: center;
+            }
+            .google-login{
+                text-align: center;
+            }
+        }
+
+        .register-account{
+            text-align: center;
+            margin-top: 30px;
+            color: #fff;
+        }
+    }
+}
+
+
 ::-webkit-scrollbar{
     width: 4px;
     color: '#000'

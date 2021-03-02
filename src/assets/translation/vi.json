@@ -4,5 +4,11 @@
     "title_notification": "Thông báo",
     "title_message": "Tin nhắn",
     "title_setting": "Cài đặt",
-    "title_login": "Đăng nhập"
+    "title_login": "Đăng nhập",
+    "placeholder_username": "Tên đăng nhập",
+    "placeholder_password": "Mật khẩu",
+
+    "req_username": "Yêu cầu tên đăng nhập",
+    "req_password": "Yêu cầu mật khẩu"
+
 }
