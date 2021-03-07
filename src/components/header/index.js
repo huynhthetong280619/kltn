@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Col, Row, Typography } from 'antd'
 // import IC_MENU from '../../assets/images/ic_menu_bar.png'
 import Menu from '../../assets/images/ic_menu.svg'
@@ -16,6 +16,7 @@ import en from '../../assets/images/en.png'
 import ArrowDown from '../../assets/images/ic_arr_down.png'
 import { Link, Redirect } from 'react-router-dom'
 import Message from '../message'
+import { StoreTrading } from '../../store-trading'
 
 
 const { Text } = Typography;
@@ -25,6 +26,7 @@ const { Text } = Typography;
 
 const HeaderLayout = ({ setOpen }) => {
     const { t, i18n } = useTranslation()
+    const {authFlag} = useContext(StoreTrading)
 
     const [openMessage, setOpenMessage] = useState(false)
 
@@ -218,7 +220,7 @@ const HeaderLayout = ({ setOpen }) => {
                     <div>
                         <img src={IC_USER} width="25px" />
                     </div>
-                    <div className="user-login-text">{t('title_login')}</div>
+                    <div className="user-login-text">{authFlag ? t('title_logout') : t('title_login')}</div>
                 </Link>
             </Col>
         </Col>

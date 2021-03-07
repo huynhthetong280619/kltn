@@ -1,14 +1,39 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Form, Button, Input, Divider, Col, Checkbox } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { UserOutlined, KeyOutlined, FacebookOutlined, GooglePlusOutlined, } from '@ant-design/icons';
 import Facebook from '../../assets/images/facebook.svg'
 import Google from '../../assets/images/google.svg'
 import Logo from '../../assets/images/logo.svg'
+import { StoreTrading } from '../../store-trading';
+import { useHistory } from 'react-router';
+import RestClient from '../../utils/restClient';
 const Login = () => {
     const { t } = useTranslation();
+    const history = useHistory()
+    const { setAuth, setToken, setUserInfo } = useContext(StoreTrading)
 
-    const handleLoginForm = async (values) => { }
+    const handleLoginForm = async (values) => {
+
+        const data = {
+            code: values.username,
+            password: values.password
+        }
+
+        const restClientAPI = new RestClient({ token: null });
+        restClientAPI.asyncPost('/user/authenticate', data)
+            .then(res => {
+                if (!res.hasError) {
+                    const { token, user } = res.data;
+                    setAuth(true);
+                    setToken(token);
+                    setUserInfo(user)
+
+                    history.push('/home/main-app')
+                }
+            })
+
+    }
 
     const onChange = (e) => {
         console.log(`checked = ${e.target.checked}`);
@@ -18,7 +43,7 @@ const Login = () => {
         <div>
             <div className="form-login">
                 <div className="login-logo">
-                    <img src={Logo} width={90}/>
+                    <img src={Logo} width={90} />
                 </div>
                 <Form
                     onFinish={handleLoginForm}
@@ -72,7 +97,7 @@ const Login = () => {
                 </Form>
 
 
-                <Divider style={{color: '#fff'}}>Hoặc</Divider>
+                <Divider style={{ color: '#fff' }}>Hoặc</Divider>
 
                 <div className="social-login">
                     <Col span={12} className="facebook-login">
