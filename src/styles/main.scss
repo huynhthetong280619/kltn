@@ -337,6 +337,43 @@ background-color: #2D2E30;
     
 }
 
+.main-todolist-layout{
+    margin: 0 auto;
+    max-width: 47.5rem;
+    padding: 1.5rem 1.5rem;
+    .main-content-todolist{
+        -webkit-align-items: center;
+        align-items: center;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-direction: column;
+        flex-direction: column;
+        padding-bottom: 4rem;
+        padding-top: 4rem;
+        .empty-content-todolist{
+            background: url(https://www.gstatic.com/classroom/no_assignments_web.png) center no-repeat;
+            background-color: #f1f3f4;
+            -webkit-background-size: contain;
+            background-size: contain;
+            -webkit-border-radius: 50%;
+            border-radius: 50%;
+            height: 12.5rem;
+            width: 12.5rem;
+        }
+        .title-empty-content-todolist__f{
+            margin-bottom: 0.5rem;
+            margin-top: 1.5rem;
+        }
+        .title-empty-content-todolist__s{
+            letter-spacing: .01428571em;
+            font-size: 0.875rem;
+            font-weight: 400;
+            line-height: 1.25rem;
+            color: #3c4043;
+        }
+    }
+}
 
 
 h5.ant-typography{

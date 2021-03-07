@@ -7,6 +7,7 @@ import MainAppLayout from '../main';
 import CourseApp from '../course';
 import LeftBar from '../../components/left-bar';
 import Setting from '../setting-app';
+import TodoList from '../../components/todo-list';
 
 const { Header, Content, Footer } = Layout
 
@@ -20,6 +21,9 @@ function Child() {
             return <CourseApp />
         case 'setting':
             return <Setting />
+        case 'todo-list':
+            return <TodoList />
+
         default:
             break
     }

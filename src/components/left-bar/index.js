@@ -19,6 +19,7 @@ const LeftBar = ({ isOpen, setOpen }) => {
 
     const navigationTo = (url) => {
         history.push(url)
+        onClose()
     }
 
     return (
@@ -50,7 +51,7 @@ const LeftBar = ({ isOpen, setOpen }) => {
             </div>
             <Divider />
             <Title level={5}>Đã đăng ký</Title>
-            <div className="drawer-item-app">
+            <div className="drawer-item-app" onClick={() => navigationTo('/home/todo-list')}>
                 <div className="mask-hover"></div>
                 <div className="drawer-item__i">
                     <IC_TODO />
