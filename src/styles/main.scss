@@ -11,6 +11,9 @@
                 align-items: center;
                 .header-layout--element__first{
                     text-align: center;
+                    &:hover{
+                        cursor: pointer;
+                    }
                 }
                 .header-layout--element__second{
                     text-transform: uppercase;
@@ -58,7 +61,8 @@
     position: absolute;
     top: 64px;
     border-radius: 8px 8px 8px 8px;
-    padding: 10px 20px;                   
+    padding: 10px 20px;  
+    z-index: 9999999;                 
     .title-message{
         margin: 0;
         height: 32px;
@@ -95,6 +99,7 @@
     bottom: 0px;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
+    z-index: 999;
     .chat-tab-header{
         position: absolute;
         top: 0;
@@ -170,10 +175,13 @@ background-color: #2D2E30;
     align-items: center;
     height: 100vh;
     background: #171A1F;
+    background: url('../assets/images/bg-login.jpeg');
+    background-repeat: no-repeat;
+    background-size: cover;
     .form-login{
         width: 330px;
         height: 631px;
-        background: url('../assets/images/background.svg');
+        // background: url('../assets/images/background.svg');
         background-size: cover;
         padding: 10px;
         border-radius: 8px;
@@ -226,6 +234,57 @@ background-color: #2D2E30;
     }
 }
 
+.main-app-layout{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
+    justify-content: space-around;
+    .course-card{
+        width: 250px;
+        border-radius: 20px;
+        margin: 10px;
+    }
+}
+
+.main-setting{
+    margin: 0 auto;
+    max-width: 47.5rem;
+    padding: 1.5rem 1.5rem;
+    .main-setting__f{
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+
+        background-color: #fff;
+        border: .0625rem solid #dadce0;
+        -webkit-border-radius: 0.5rem;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        .main-setting__f-avatar{
+            padding: 0 8px;
+
+            -webkit-box-align: center;
+            box-align: center;
+            -webkit-align-items: center;
+            align-items: center;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+            position: relative;
+            .main-setting__f-avatar__{
+                display: inline-block;
+                margin: 0;
+                color: #1a73e8;
+                .avatar-display{
+                    margin-right: 0.5rem;
+                }        
+            }
+        }
+    }
+    .main-setting__s{
+        display: flex;
+        justify-content: space-between;
+    }
+}
 
 ::-webkit-scrollbar{
     width: 4px;
@@ -234,4 +293,52 @@ background-color: #2D2E30;
 
 ::-webkit-scrollbar-thumb {
     background-color: darkgrey;
+}
+
+
+
+// overwrite
+.ant-drawer-body{
+    position: relative;
+}
+
+.ant-dropdown-menu{
+    border-radius: 8px  !important;
+    padding: 0 !important;
+}
+.drawer-item-app{
+    display: flex;
+    height: 50px;
+    align-items: center;
+    cursor: pointer;
+    .mask-hover{
+        position: absolute;
+        width: 260px;
+        height: 50px;
+        left: 0;
+    }
+    .drawer-item__i{
+        height: 24px;
+    }
+    .drawer-item__c{
+        margin-left: 1rem;
+    }
+}
+
+.drawer-item-app:hover .mask-hover{
+    position: absolute;
+    width: 260px;
+    height: 50px;
+    left: 0;
+    background-color: rgba(32,33,36,0.039);
+    border-radius: 0 40px 40px 0;
+    z-index: -1;
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+    
+}
+
+
+
+h5.ant-typography{
+    // color: #24253d66 !important;
 }

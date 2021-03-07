@@ -23,7 +23,7 @@ const { Text } = Typography;
 
 
 
-const HeaderLayout = () => {
+const HeaderLayout = ({ setOpen }) => {
     const { t, i18n } = useTranslation()
 
     const [openMessage, setOpenMessage] = useState(false)
@@ -50,7 +50,7 @@ const HeaderLayout = () => {
 
     return <div className="header-layout ant-col-24">
         <Col span={12} className="header-layout-left">
-            <Col span={4} className="header-layout--element__first">
+            <Col span={4} className="header-layout--element__first" onClick={() => setOpen(true)}>
                 <div>
                     {/* <Menu /> */}
                     <img src={Menu} width="25px" />
@@ -214,7 +214,7 @@ const HeaderLayout = () => {
                 <div className="user-setting">{t('title_setting')}</div>
             </Col>
             <Col span={6} className="header-user-login cursor-act">
-                <Link to="/login" style={{display: 'flex'}}>
+                <Link to="/login" style={{ display: 'flex' }}>
                     <div>
                         <img src={IC_USER} width="25px" />
                     </div>

@@ -1,9 +1,12 @@
-import React ,{ Suspense } from 'react'
+import React, { Suspense, useState } from 'react'
 import { Switch, Route, useParams } from 'react-router-dom'
 import LoadingView from '../../Layouts/loading'
 import { Layout } from 'antd';
 import HeaderLayout from '../../../src/components/header/index';
 import MainAppLayout from '../main';
+import CourseApp from '../course';
+import LeftBar from '../../components/left-bar';
+import Setting from '../setting-app';
 
 const { Header, Content, Footer } = Layout
 
@@ -13,21 +16,25 @@ function Child() {
     switch (link) {
         case 'main-app':
             return <MainAppLayout />
-        case 'foreign_trad':
-            return <span>foreign_trad component</span>
+        case 'course-app':
+            return <CourseApp />
+        case 'setting':
+            return <Setting />
         default:
             break
     }
 }
 
 const PagesView = () => {
+    const [isOpen, setOpen] = useState(false)
+
     return (
         <Layout style={{ minWidth: 1070, height: '100vh' }} className="main-layout">
             <Header className="main-header-layout">
-                <HeaderLayout />
+                <HeaderLayout setOpen={setOpen} />
             </Header>
 
-            <Content>
+            <Content style={{ overflow: 'auto' }}>
                 <Suspense fallback={<LoadingView />}>
                     <Switch>
                         <Route path="/home/:link" children={<Child />} />
@@ -37,6 +44,7 @@ const PagesView = () => {
             <Footer className="main-footer-layout">
 
             </Footer>
+            <LeftBar isOpen={isOpen} setOpen={setOpen} />
         </Layout>
     )
 }

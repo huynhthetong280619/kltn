@@ -28,7 +28,8 @@ function App() {
         <Router>
           <Suspense fallback={<LoadingView />}>
             <Route path="/login" component={Login} />
-            <Route exact path="/home" component={Pages} />
+            <Route exact path="/" component={Pages} />            
+            <Route  path="/home" component={Pages} />
           </Suspense>
         </Router>
 
