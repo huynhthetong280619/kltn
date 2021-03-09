@@ -12,7 +12,7 @@ const Setting = () => {
                 <div style={{ margin: "0.5rem 0" }}>
                     <span className="main-setting__f-avatar">
                         <span className="main-setting__f-avatar__">
-                            <img class="avatar-display" alt="" height="32px" width="32px" aria-hidden="true" jsname="xJzy8c" src={AVATAR} />Thay đổi
+                            <img className="avatar-display" alt="" height="32px" width="32px" aria-hidden="true" jsname="xJzy8c" src={AVATAR} />Thay đổi
                     </span>
                     </span>
                 </div>

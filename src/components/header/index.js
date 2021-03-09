@@ -12,17 +12,12 @@ import IC_AVATAR_THIRD from '../../assets/images/ic_avatar_third.svg'
 import { useTranslation } from 'react-i18next'
 import { STORE_KEY } from '../../utils/STORE_KEY'
 import en from '../../assets/images/en.png'
-// import vi from '../../assets/images/vn.png'
 import ArrowDown from '../../assets/images/ic_arr_down.png'
 import { Link, Redirect } from 'react-router-dom'
 import Message from '../message'
 import { StoreTrading } from '../../store-trading'
 
-
 const { Text } = Typography;
-
-
-
 
 const HeaderLayout = ({ setOpen }) => {
     const { t, i18n } = useTranslation()
@@ -54,7 +49,6 @@ const HeaderLayout = ({ setOpen }) => {
         <Col span={12} className="header-layout-left">
             <Col span={4} className="header-layout--element__first" onClick={() => setOpen(true)}>
                 <div>
-                    {/* <Menu /> */}
                     <img src={Menu} width="25px" />
                 </div>
             </Col>

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Card, Avatar, Tooltip, Menu, Dropdown } from 'antd';
 import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
@@ -6,6 +6,7 @@ import IC_CHART from '../../assets/images/ic_chart.svg'
 import IC_FAKE_BG from '../../assets/images/fake_bg.svg'
 import { useHistory } from 'react-router';
 import { StoreTrading } from '../../store-trading';
+import RestClient from '../../utils/restClient';
 
 const { Meta } = Card;
 
@@ -15,8 +16,30 @@ const generateColor = () => {
 
 const MainAppLayout = () => {
     const { t } = useTranslation()
-    const { authFlag } = useContext(StoreTrading)
+    const { authFlag, token } = useContext(StoreTrading)
     const history = useHistory()
+
+    const [listSubjectJoined, setListSubjectJoined] = useState([])
+
+    useEffect(() => {
+        getListSubjectJoin();
+
+        if(!authFlag){
+            history.push('/login')
+        }
+    }, [])
+
+    const getListSubjectJoin = async () => {
+        const restClientApi = new RestClient({ token })
+
+        await restClientApi.asyncGet('/subject')
+            .then(res => {
+                if (!res.hasError) {
+                    const { allSubject } = res.data
+                    setListSubjectJoined(allSubject)
+                }
+            })
+    }
 
     const menu = (
         <Menu>
@@ -26,16 +49,13 @@ const MainAppLayout = () => {
         </Menu>
     );
 
-
-
     const navigationTo = () => {
         history.push('/home/course-app')
     }
 
-    console.log('authFlag', authFlag)
     return (<div className="main-app-layout">
         {
-            [1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => {
+            listSubjectJoined.map((item, index) => {
                 return <Card
 
                     key={index}
@@ -56,7 +76,7 @@ const MainAppLayout = () => {
                     <Meta
                         onClick={() => navigationTo()}
                         avatar={<img src={IC_FAKE_BG} />}
-                        title="Card title"
+                        title={item?.name}
                         description="This is the description"
                     />
                 </Card>

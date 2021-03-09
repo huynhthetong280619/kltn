@@ -1,13 +1,18 @@
 import React, { useContext } from 'react'
 import { Form, Button, Input, Divider, Col, Checkbox } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { UserOutlined, KeyOutlined, FacebookOutlined, GooglePlusOutlined, } from '@ant-design/icons';
+import { UserOutlined, KeyOutlined } from '@ant-design/icons';
+import { GOOGLE_CLIENT_ID, FACEBOOK_CLIENT_ID } from '../../assets/constants/const'
 import Facebook from '../../assets/images/facebook.svg'
 import Google from '../../assets/images/google.svg'
 import Logo from '../../assets/images/logo.svg'
 import { StoreTrading } from '../../store-trading';
 import { useHistory } from 'react-router';
 import RestClient from '../../utils/restClient';
+import GoogleLogin from 'react-google-login';
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+import { authenticate } from '../../assets/common/core/localStorage'
+
 const Login = () => {
     const { t } = useTranslation();
     const history = useHistory()
@@ -21,8 +26,10 @@ const Login = () => {
         }
 
         const restClientAPI = new RestClient({ token: null });
+
         restClientAPI.asyncPost('/user/authenticate', data)
             .then(res => {
+                console.log('handleLoginForm', res)
                 if (!res.hasError) {
                     const { token, user } = res.data;
                     setAuth(true);
@@ -38,6 +45,66 @@ const Login = () => {
     const onChange = (e) => {
         console.log(`checked = ${e.target.checked}`);
     }
+
+    const responseGoogle = async (response) => {
+        const token = response.tokenId;
+
+        const data = {
+            token: token
+        }
+
+        const restClientAPI = new RestClient({ token: null });
+
+        await restClientAPI.asyncPost(`/user/auth/google`, data)
+            .then(res => {
+                console.log('responseGoogle', res)
+                if (!res.hasError) {
+                    authenticate(res, () => {
+                        const { token, user } = res.data;
+                        setAuth(true);
+                        setToken(token);
+                        setUserInfo(user)
+
+                        history.push('/home/main-app')
+                    })
+                }
+                else {
+                    console.log('Failure !')
+                }
+            })
+    }
+
+    const responseGoogleFailure = async (response) => {
+        console.log('responseGoogleFailure', response);
+    }
+
+    const responseFacebook = async (response) => {
+        const token = response.accessToken;
+
+        const data = {
+            token: token
+        }
+
+        const restClientAPI = new RestClient({ token: null });
+
+        await restClientAPI.asyncPost(`/user/auth/facebook`, data)
+            .then(res => {
+                if (!res.hasError) {
+                    authenticate(res, () => {
+                        const { token, user } = res.data;
+                        setAuth(true);
+                        setToken(token);
+                        setUserInfo(user)
+
+                        history.push('/home/main-app')
+                    })
+                }
+                else {
+                    console.log('Error login Facebook...')
+                }
+            })
+    }
+
 
     return <div className="login-container">
         <div>
@@ -101,10 +168,24 @@ const Login = () => {
 
                 <div className="social-login">
                     <Col span={12} className="facebook-login">
-                        <img src={Facebook} />
+                        <FacebookLogin
+                            appId={FACEBOOK_CLIENT_ID}
+                            callback={responseFacebook}
+                            render={renderProps => (
+                                <img className="button-google-login" style={{cursor: "pointer"}} src={Facebook} onClick={() => renderProps.onClick()} disabled={renderProps.disabled} />
+                            )}
+                        />
+
                     </Col>
                     <Col span={12} className="google-login">
-                        <img src={Google} />
+                        <GoogleLogin clientId={GOOGLE_CLIENT_ID}
+                            render={renderProps => (
+                                <img className="button-google-login" style={{ cursor: "pointer" }} src={Google} onClick={() => renderProps.onClick()} disabled={renderProps.disabled} />
+                            )}
+                            onSuccess={responseGoogle}
+                            onFailure={responseGoogleFailure}
+                            cookiePolicy={'single_host_origin'}
+                        />
                     </Col>
                 </div>
 

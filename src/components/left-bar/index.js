@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Drawer, Button, Divider, Typography } from 'antd';
 import { ReactComponent as IC_FOLDER } from '../../assets/images/ic_folder.svg'
 import { ReactComponent as IC_TODO } from '../../assets/images/ic_todo.svg'
@@ -6,12 +6,15 @@ import { ReactComponent as IC_STORAGE } from '../../assets/images/ic_storage.svg
 import { ReactComponent as IC_SETTING } from '../../assets/images/ic_set.svg'
 import { ReactComponent as IC_CLASS } from '../../assets/images/ic_class.svg'
 import { useHistory } from 'react-router';
+import { StoreTrading } from '../../store-trading';
 
 const { Title } = Typography;
 
 const LeftBar = ({ isOpen, setOpen }) => {
 
     const history = useHistory()
+    const { token } = useContext(StoreTrading)
+    
 
     const onClose = () => {
         setOpen(false);
