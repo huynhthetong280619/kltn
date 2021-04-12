@@ -7,6 +7,7 @@ import IC_FAKE_BG from '../../assets/images/fake_bg.svg'
 import { useHistory } from 'react-router';
 import { StoreTrading } from '../../store-trading';
 import RestClient from '../../utils/restClient';
+import ModalLoadingLogin from '../login/modal-loading-login';
 
 const { Meta } = Card;
 
@@ -20,6 +21,7 @@ const MainAppLayout = () => {
     const history = useHistory()
 
     const [listSubjectJoined, setListSubjectJoined] = useState([])
+    const [loadingCourse, setLoadingCourse] = useState(false)
 
     useEffect(() => {
         getListSubjectJoin();
@@ -30,12 +32,17 @@ const MainAppLayout = () => {
     }, [])
 
     const getListSubjectJoin = async () => {
+        setLoadingCourse(true)
+        setTimeout(() => {
+            setLoadingCourse(false)
+        }, 15000);
         const restClientApi = new RestClient({ token })
 
         await restClientApi.asyncGet('/subject')
             .then(res => {
                 if (!res.hasError) {
                     const { allSubject } = res.data
+                    setLoadingCourse(true)
                     setListSubjectJoined(allSubject)
                 }
             })
@@ -49,13 +56,18 @@ const MainAppLayout = () => {
         </Menu>
     );
 
-    const navigationTo = () => {
-        history.push('/home/course-app')
+    const navigationTo = (item) => {
+        history.push('/home/course-app', item)
+    }
+
+    if(loadingCourse){
+        return <ModalLoadingLogin visible={loadingCourse} content="He thong dang tai noi dung khoa hoc..." />
     }
 
     return (<div className="main-app-layout">
         {
             listSubjectJoined.map((item, index) => {
+                console.log('item', item)
                 return <Card
 
                     key={index}
@@ -74,10 +86,11 @@ const MainAppLayout = () => {
                     ]}
                 >
                     <Meta
-                        onClick={() => navigationTo()}
+                        onClick={() => navigationTo(item)}
                         avatar={<img src={IC_FAKE_BG} />}
                         title={item?.name}
                         description="This is the description"
+                        style={{cursor: 'pointer'}}
                     />
                 </Card>
             })

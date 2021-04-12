@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Form, Button, Input, Divider, Col, Checkbox } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { UserOutlined, KeyOutlined } from '@ant-design/icons';
@@ -12,14 +12,15 @@ import RestClient from '../../utils/restClient';
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import { authenticate } from '../../assets/common/core/localStorage'
+import ModalLoadingLogin from './modal-loading-login';
 
 const Login = () => {
     const { t } = useTranslation();
     const history = useHistory()
     const { setAuth, setToken, setUserInfo } = useContext(StoreTrading)
-
+    const [loadingLogin, setLoadingLogin] = useState(false)
     const handleLoginForm = async (values) => {
-
+        setLoadingLogin(true)
         const data = {
             code: values.username,
             password: values.password
@@ -35,6 +36,8 @@ const Login = () => {
                     setAuth(true);
                     setToken(token);
                     setUserInfo(user)
+                    setLoadingLogin(false)
+
 
                     history.push('/home/main-app')
                 }
@@ -172,7 +175,7 @@ const Login = () => {
                             appId={FACEBOOK_CLIENT_ID}
                             callback={responseFacebook}
                             render={renderProps => (
-                                <img className="button-google-login" style={{cursor: "pointer"}} src={Facebook} onClick={() => renderProps.onClick()} disabled={renderProps.disabled} />
+                                <img className="button-google-login" style={{ cursor: "pointer" }} src={Facebook} onClick={() => renderProps.onClick()} disabled={renderProps.disabled} />
                             )}
                         />
 
@@ -192,6 +195,9 @@ const Login = () => {
                 <div className="register-account">Bạn chưa có tài khoản? Tạo tài khoản</div>
             </div>
         </div>
+
+        <ModalLoadingLogin visible={loadingLogin} content={t('loading_login')} />
+
     </div>
 }
 

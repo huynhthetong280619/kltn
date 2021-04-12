@@ -1,24 +1,26 @@
-import React, { Suspense, useState } from 'react'
-import { Switch, Route, useParams } from 'react-router-dom'
+import React, { Suspense, useContext, useEffect, useState } from 'react'
+import { Switch, Route, useParams, useHistory } from 'react-router-dom'
 import LoadingView from '../../Layouts/loading'
 import { Layout } from 'antd';
 import HeaderLayout from '../../../src/components/header/index';
 import MainAppLayout from '../main';
-import CourseApp from '../course';
+import Subject from '../subject';
 import LeftBar from '../../components/left-bar';
 import Setting from '../setting-app';
 import TodoList from '../../components/todo-list';
+import { StoreTrading } from '../../store-trading';
 
 const { Header, Content, Footer } = Layout
 
 function Child() {
     let { link } = useParams()
+    
     console.log('Child', link)
     switch (link) {
         case 'main-app':
             return <MainAppLayout />
         case 'course-app':
-            return <CourseApp />
+            return <Subject />
         case 'setting':
             return <Setting />
         case 'todo-list':
@@ -31,6 +33,14 @@ function Child() {
 
 const PagesView = () => {
     const [isOpen, setOpen] = useState(false)
+    const history = useHistory()
+    const {authFlag} = useContext(StoreTrading)
+
+    // useEffect(() => {
+    //     if(!authFlag){
+    //         history.push("/login")
+    //     }
+    // })
 
     return (
         <Layout style={{ minWidth: 1070, height: '100vh' }} className="main-layout">

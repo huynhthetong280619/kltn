@@ -49,7 +49,7 @@ const HeaderLayout = ({ setOpen }) => {
         <Col span={12} className="header-layout-left">
             <Col span={4} className="header-layout--element__first" onClick={() => setOpen(true)}>
                 <div>
-                    <img src={Menu} width="25px" />
+                    <img src={Menu} width="20px" />
                 </div>
             </Col>
             <Col span={7} className="header-layout--element__second">
@@ -70,16 +70,16 @@ const HeaderLayout = ({ setOpen }) => {
                     </div>
                 </div>
             </Col>
-            <Col span={4} className="header-message cursor-act">
+            <Col className="header-message cursor-act ml-2 mr-2">
                 <div>
-                    <img src={IC_NOTIFICATION} width="25px" />
+                    <img src={IC_NOTIFICATION} width="20px" />
                 </div>
                 <div className="user-message">{t('title_notification')}</div>
             </Col>
-            <Col span={5} className="header-message cursor-act" >
+            <Col className="header-message cursor-act ml-2 mr-2" >
                 <div style={{ display: 'inline-flex' }} className="cursor-act" onClick={() => setOpenMessage(!openMessage)}>
                     <div>
-                        <img src={IC_MESSAGE} width="25px" />
+                        <img src={IC_MESSAGE} width="20px" />
                     </div>
                     <div className="user-message" >{t('title_message')}</div>
                 </div>
@@ -203,23 +203,23 @@ const HeaderLayout = ({ setOpen }) => {
                     </div>
                 </div>
             </Col>
-            <Col span={4} className="header-setting cursor-act">
+            {/* <Col span={4} className="header-setting cursor-act">
                 <div>
-                    <img src={IC_SETTING} width="25px" />
+                    <img src={IC_SETTING} width="20px" />
                 </div>
                 <div className="user-setting">{t('title_setting')}</div>
-            </Col>
-            <Col span={6} className="header-user-login cursor-act">
+            </Col> */}
+            <Col className="header-user-login cursor-act ml-2 mr-2">
                 <Link to="/login" style={{ display: 'flex' }}>
                     <div>
-                        <img src={IC_USER} width="25px" />
+                        <img src={IC_USER} width="20px" />
                     </div>
                     <div className="user-login-text">{authFlag ? t('title_logout') : t('title_login')}</div>
                 </Link>
             </Col>
         </Col>
 
-        <Message />
+        {/* <Message /> */}
     </div>
 }
 

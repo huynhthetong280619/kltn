@@ -2,7 +2,7 @@ import { Col } from 'antd'
 import React, { useContext, useEffect, useState } from 'react'
 import { StoreTrading } from '../../store-trading'
 import RestClient from '../../utils/restClient'
-
+import {ReactComponent as IC_TODO} from '../../assets/images/todo-item.svg'
 
 const TodoList = () => {
     const { token } = useContext(StoreTrading)
@@ -29,16 +29,27 @@ const TodoList = () => {
         <main className="main-todolist-layout">
             <div></div>
             <div className="main-content-todolist">
-                <div className="empty-content-todolist"></div>
+                {/* <div className="empty-content-todolist"></div>
                 <div className="title-empty-content-todolist__f">
                     Bài tập được giao sẽ xuất hiện ở đây
                 </div>
                 <div className="title-empty-content-todolist__s">
                     Bạn hiện chưa được giao bài tập nào
-                </div>
+                </div> */}
                 <div className="todos-item">
                     <div className="todos-item__f">
-                        <Col span={12}></Col>
+                        <Col span={12} style={{
+                            display: 'flex',
+                            alignItems: 'center'
+                        }}>
+                            <Col className="todos-item__ic">
+                                <IC_TODO />
+                            </Col>
+                            <Col >
+                                <div className="todos-item__n">Bài tập tuần 5</div>
+                                <div className="todos-item__t">Gần hết hạn</div>
+                            </Col>
+                        </Col>
                         <Col span={12}>
                             <Col span={8}></Col>
                             <Col span={8}></Col>
