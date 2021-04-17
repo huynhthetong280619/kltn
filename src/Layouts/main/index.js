@@ -8,6 +8,7 @@ import { useHistory } from 'react-router';
 import { StoreTrading } from '../../store-trading';
 import RestClient from '../../utils/restClient';
 import ModalLoadingLogin from '../login/modal-loading-login';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const { Meta } = Card;
 
@@ -61,7 +62,7 @@ const MainAppLayout = () => {
     }
 
     if(loadingCourse){
-        return <ModalLoadingLogin visible={loadingCourse} content="He thong dang tai noi dung khoa hoc..." />
+        return <ModalLoadingLogin visible={loadingCourse} content={t("loading_subject")} />
     }
 
     return (<div className="main-app-layout">
@@ -87,9 +88,9 @@ const MainAppLayout = () => {
                 >
                     <Meta
                         onClick={() => navigationTo(item)}
-                        avatar={<img src={IC_FAKE_BG} />}
+                        avatar={<FontAwesomeIcon icon="graduation-cap" style={{width: 50, height: 50, color: '#0F70B8'}} />}
                         title={item?.name}
-                        description="This is the description"
+                        description="Chào mứng đến lớp học vui vẻ của tôi ^_^"
                         style={{cursor: 'pointer'}}
                     />
                 </Card>

@@ -6,14 +6,15 @@
   box-sizing: border-box;
 }
 
-.container{
+.container-right{
   position: fixed;
   width: 65px;
-  top: 250px;
+  top: 275px;
+  right: 0;
   box-shadow: 2px 2px 8px 0 rgba(0,0,0,.4);
   z-index: 1000
 }
-.container a{
+.container-right a{
   position: relative;
   display: block;
   height: 60px;
@@ -23,13 +24,13 @@
   padding-left: 25%;
   border-bottom: 1px solid rgba(0,0,0,.4);
 }
-.container a i{
+.container-right a i{
   position: absolute;
   top: 0;
-  left: 20px;
+  right: 20px;
   font-size: 27px;
 }
-.container a span{
+.container-right a span{
   position: relative;
   margin-left: 30px;
   letter-spacing: 1px;
@@ -45,33 +46,28 @@
   min-width: 150px;
 display: block;
 }
-.container a span:before{
+.container-right a span:before{
   position: absolute;
   content: '';
   top: 50%;
-  left: -8px;
+  right: -8px;
   height: 18px;
   width: 18px;
   transform: translateY(-50%) rotate(45deg);
 }
-.container a:nth-child(1),
-.container a:nth-child(1) span,
-.container a:nth-child(1) span:before{
+.container-right a:nth-child(1),
+.container-right a:nth-child(1) span,
+.container-right a:nth-child(1) span:before{
   background: #423737;
 }
-.container a:nth-child(2),
-.container a:nth-child(2) span,
-.container a:nth-child(2) span:before{
+.container-right a:nth-child(2),
+.container-right a:nth-child(2) span,
+.container-right a:nth-child(2) span:before{
   background: #B32977;
 }
 
-.container a:nth-child(3),
-.container a:nth-child(3) span,
-.container a:nth-child(3) span:before{
-  background: #4cd137;
-}
 
-.container a:hover span{
+.container-right a:hover span{
   margin-left: 75px;
   opacity: 1;
   visibility: visible;

@@ -1,16 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react'
-import Widget from '../../components/widget'
+import WidgetLeft from '../../components/widget'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Skeleton, Timeline, Tooltip } from 'antd'
 import './styles.scss'
 import { useTranslation } from 'react-i18next';
-import forum from '../../assets/images/contents/forum.png'
+import FORUM from '../../assets/images/contents/forum.png'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import RestClient from '../../utils/restClient';
 import { StoreTrading } from '../../store-trading';
 import { useLocation } from 'react-router';
-import { pick } from 'lodash';
+import { isEmpty, pick } from 'lodash';
 import ModalLoadingLogin from '../login/modal-loading-login';
+import AssignmentModal from '../assignmentModal/assignmentModal';
+import AddAssignment from '../addAssignment/addAssignment.jsx';
+import WidgeRight from '../../components/widget-right';
 
 const Subject = () => {
     const { t } = useTranslation()
@@ -19,20 +22,60 @@ const Subject = () => {
 
     const [detailSubject, setDetailSubject] = useState([])
     const [loadingSubject, setLoadingSubject] = useState(false)
+    const [timelinesList, setTimelinesList] = useState([])
+    const [quizList, setQuizList] = useState([])
+    const [surveyList, setSurveyList] = useState([])
+    const restClient = new RestClient({ token })
+
     useEffect(() => {
         queryDetailSubject()
+        queryListTimelines()
+        queryListQuiz()
+        querySurveyList()
 
+        setTimeout(() => {
+            setLoadingSubject(false)
+        }, 5000);
     }, [])
 
     const queryDetailSubject = () => {
         setLoadingSubject(true)
-        const restClient = new RestClient({ token })
+
         restClient.asyncGet(`/subject/${location.state._id}`)
             .then(res => {
                 if (!res.hasError) {
                     console.log(res?.data);
                     setLoadingSubject(false)
                     setDetailSubject(res?.data?.subject?.timelines)
+                }
+            })
+    }
+
+    const queryListTimelines = () => {
+
+        restClient.asyncGet(`/timeline?idSubject=${location.state._id}`)
+            .then(res => {
+                if (!res.hasError) {
+                    console.log(res?.data);
+                    setTimelinesList(res?.data?.timelines)
+                }
+            })
+    }
+
+    const queryListQuiz = () => {
+        restClient.asyncGet(`/quiz?idSubject=${location.state._id}`)
+            .then(res => {
+                if (!res.hasError) {
+                    setQuizList(res?.data?.quizBank)
+                }
+            })
+    }
+
+    const querySurveyList = () => {
+        restClient.asyncGet(`/questionnaire?idSubject=${location.state._id}`)
+            .then(res => {
+                if (!res.hasError) {
+                    setSurveyList(res?.data?.surveyBank)
                 }
             })
     }
@@ -61,8 +104,8 @@ const Subject = () => {
         })
 
     }
-    if(loadingSubject){
-        return <ModalLoadingLogin visible={loadingSubject} content="He thong dang tai noi dung lop hoc..."/>
+    if (loadingSubject) {
+        return <ModalLoadingLogin visible={loadingSubject} content={t("loading_class")} />
     }
 
     return <>
@@ -82,10 +125,11 @@ const Subject = () => {
                                                     <div className="description">{description}</div>
                                                 </div>
                                                 <div className="wrapper-body">
-                                                    <div className="subject-body">
-                                                        {
 
-                                                            information && (
+                                                    {
+
+                                                        !isEmpty(information) && (
+                                                            <div className="subject-body">
                                                                 <div className="announce-wrapper">
                                                                     {information.map((info, indexAnnounce) => {
                                                                         return (<div key={indexAnnounce}>
@@ -95,115 +139,198 @@ const Subject = () => {
                                                                         )
                                                                     })}
                                                                 </div>
-                                                            )
-                                                        }
-                                                    </div>
-                                                    <div className="subject-body">
-                                                        <div className="subject-main">
-                                                            <div className="subject-icon">
-                                                                <FontAwesomeIcon icon='file-powerpoint' style={{ width: 30, height: 30, color: '#d04424' }} />
+                                                            </div>
+                                                        )
+                                                    }
 
-                                                            </div>
-                                                            <div className="subject-content">Kiểm thử phần mềm</div>
-                                                        </div>
-                                                        <div className="subject-action">
-                                                            <div>
-                                                                <Tooltip title={t('edit_file')}>
-                                                                    <a>
-                                                                        <FontAwesomeIcon icon="edit" />
-                                                                    </a>
-                                                                </Tooltip>
-                                                            </div>
-                                                            <div>
-                                                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    {
 
-                                                    <div className="subject-body">
-                                                        <div className="subject-main">
-                                                            <div className="subject-icon">
-                                                                <FontAwesomeIcon icon='file-word' style={{ width: 30, height: 30, color: '#2d5898' }} />
+                                                        !isEmpty(surveys) && (<>
+                                                            {
+                                                                surveys.map((survey, index) => (
+                                                                    <div className="subject-body">
+                                                                        <div className="subject-main">
+                                                                            <div className="subject-icon">
+                                                                                {/* <FontAwesomeIcon icon='file-powerpoint' style={{ width: 30, height: 30, color: '#d04424' }} /> */}
+                                                                                <FontAwesomeIcon icon="poll" style={{ width: 30, height: 30, color: '#ff4000' }} />
+                                                                            </div>
+                                                                            <div className="subject-content">{survey.name}</div>
+                                                                        </div>
+                                                                        <div className="subject-action">
+                                                                            <div>
+                                                                                <Tooltip title={t('edit_file')}>
+                                                                                    <a>
+                                                                                        <FontAwesomeIcon icon="edit" />
+                                                                                    </a>
+                                                                                </Tooltip>
+                                                                            </div>
+                                                                            <div>
+                                                                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                ))
+                                                            }
+                                                        </>
+                                                        )
+                                                    }
 
-                                                            </div>
-                                                            <div className="subject-content">Kiểm thử phần mềm</div>
-                                                        </div>
-                                                        <div className="subject-action">
-                                                            <div>
-                                                                <Tooltip title={t('edit_file')}>
-                                                                    <a>
-                                                                        <FontAwesomeIcon icon="edit" />
-                                                                    </a>
-                                                                </Tooltip>
-                                                            </div>
-                                                            <div>
-                                                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    {
 
-                                                    <div className="subject-body">
-                                                        <div className="subject-main">
-                                                            <div className="subject-icon">
-                                                                <FontAwesomeIcon icon="tasks" style={{ width: 30, height: 30, color: '#009432' }} />
-                                                            </div>
-                                                            <div className="subject-content">Kiểm thử phần mềm</div>
-                                                        </div>
-                                                        <div className="subject-action">
-                                                            <div>
-                                                                <Tooltip title={t('edit_file')}>
-                                                                    <a>
-                                                                        <FontAwesomeIcon icon="edit" />
-                                                                    </a>
-                                                                </Tooltip>
-                                                            </div>
-                                                            <div>
-                                                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                        !isEmpty(files) && (<>
+                                                            {
+                                                                files.map((file, index) => (
+                                                                    <div className="subject-body">
+                                                                        <div className="subject-main">
+                                                                            <div className="subject-icon">
+                                                                                {file.type.includes('doc') && (
+                                                                                    <i>
+                                                                                        <FontAwesomeIcon icon='file-word' style={{ width: 30, height: 30, color: '#2d5898' }} />
+                                                                                    </i>
+                                                                                )}
+                                                                                {file.type.includes('pdf') && (
+                                                                                    <i>
+                                                                                        <FontAwesomeIcon icon='file-pdf' style={{ width: 30, height: 30, color: '#f44236' }} />
+                                                                                    </i>
+                                                                                )}
+                                                                                {file.type.includes('ppt') && (
+                                                                                    <i>
+                                                                                        <FontAwesomeIcon icon='file-powerpoint' style={{ width: 30, height: 30, color: '#d04424' }} />
+                                                                                    </i>
+                                                                                )}
+                                                                                {(file.type.includes('xls') || file.type.includes('csv')) && (
+                                                                                    <i>
+                                                                                        <FontAwesomeIcon icon='file-excel' style={{ width: 30, height: 30, color: '#1a7243' }} />
+                                                                                    </i>
+                                                                                )}
 
-                                                    <div className="subject-body">
-                                                        <div className="subject-main">
-                                                            <div className="subject-icon">
-                                                                <img src={forum} width={30} />
-                                                            </div>
-                                                            <div className="subject-content">Kiểm thử phần mềm</div>
-                                                        </div>
-                                                        <div className="subject-action">
-                                                            <div>
-                                                                <Tooltip title={t('edit_file')}>
-                                                                    <a>
-                                                                        <FontAwesomeIcon icon="edit" />
-                                                                    </a>
-                                                                </Tooltip>
-                                                            </div>
-                                                            <div>
-                                                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                                                {(file.type.includes('rar') || (file.type.includes('zip')) && (
+                                                                                    <i>
+                                                                                        <FontAwesomeIcon icon='archive' style={{ width: 30, height: 30, color: '#9e6fb2' }} />
+                                                                                    </i>
+                                                                                ))}
 
-                                                    <div className="subject-body">
-                                                        <div className="subject-main">
-                                                            <div className="subject-icon">
-                                                                <FontAwesomeIcon icon="spell-check" style={{ width: 40, height: 40, color: '#F79F1F' }} />
-                                                            </div>
-                                                            <div className="subject-content">Kiểm thử phần mềm</div>
-                                                        </div>
-                                                        <div className="subject-action">
-                                                            <div>
-                                                                <Tooltip title={t('edit_file')}>
-                                                                    <a>
-                                                                        <FontAwesomeIcon icon="edit" />
-                                                                    </a>
-                                                                </Tooltip>
-                                                            </div>
-                                                            <div>
-                                                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                                                {!(file.type.includes('ppt')) && !(file.type.includes('doc')) && !(file.type.includes('pdf'))
+                                                                                    && !(file.type.includes('xls')) && !(file.type.includes('csv')) && !(file.type.includes('rar')) && !(file.type.includes('zip'))
+                                                                                    && (
+                                                                                        <i>
+                                                                                            <FontAwesomeIcon icon='file-alt' style={{ width: 30, height: 30, color: '#273c75' }} />
+                                                                                        </i>
+                                                                                    )}
+                                                                            </div>
+                                                                            <div className="subject-content">{file.name}</div>
+                                                                        </div>
+                                                                        <div className="subject-action">
+                                                                            <div>
+                                                                                <Tooltip title={t('edit_file')}>
+                                                                                    <a>
+                                                                                        <FontAwesomeIcon icon="edit" />
+                                                                                    </a>
+                                                                                </Tooltip>
+                                                                            </div>
+                                                                            <div>
+                                                                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                ))
+                                                            }
+                                                        </>
+                                                        )
+                                                    }
+
+                                                    {
+                                                        !isEmpty(assignments) && (<>
+                                                            {
+                                                                assignments.map((assignment, index) => (
+                                                                    <div className="subject-body">
+                                                                        <div className="subject-main">
+                                                                            <div className="subject-icon">
+                                                                                <FontAwesomeIcon icon="tasks" style={{ width: 30, height: 30, color: '#009432' }} />
+                                                                            </div>
+                                                                            <div className="subject-content">{assignment.name}</div>
+                                                                        </div>
+                                                                        <div className="subject-action">
+                                                                            <div>
+                                                                                <Tooltip title={t('edit_file')}>
+                                                                                    <a>
+                                                                                        <FontAwesomeIcon icon="edit" />
+                                                                                    </a>
+                                                                                </Tooltip>
+                                                                            </div>
+                                                                            <div>
+                                                                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                ))
+                                                            }
+                                                        </>
+                                                        )
+                                                    }
+
+
+                                                    {
+                                                        !isEmpty(forums) && (<>
+                                                            {
+                                                                forums.map((forum, index) => (
+                                                                    <div className="subject-body">
+                                                                        <div className="subject-main">
+                                                                            <div className="subject-icon">
+                                                                                <img src={FORUM} width={30} />
+                                                                            </div>
+                                                                            <div className="subject-content">{forum.name}</div>
+                                                                        </div>
+                                                                        <div className="subject-action">
+                                                                            <div>
+                                                                                <Tooltip title={t('edit_file')}>
+                                                                                    <a>
+                                                                                        <FontAwesomeIcon icon="edit" />
+                                                                                    </a>
+                                                                                </Tooltip>
+                                                                            </div>
+                                                                            <div>
+                                                                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                ))
+                                                            }
+                                                        </>
+                                                        )
+                                                    }
+
+
+{
+                                                        !isEmpty(exams) && (<>
+                                                            {
+                                                                exams.map((exam, index) => (
+                                                                    <div className="subject-body">
+                                                                        <div className="subject-main">
+                                                                            <div className="subject-icon">
+                                                                            <FontAwesomeIcon icon="spell-check" style={{ width: 40, height: 40, color: '#F79F1F' }} />
+                                                                            </div>
+                                                                            <div className="subject-content">{exam.name}</div>
+                                                                        </div>
+                                                                        <div className="subject-action">
+                                                                            <div>
+                                                                                <Tooltip title={t('edit_file')}>
+                                                                                    <a>
+                                                                                        <FontAwesomeIcon icon="edit" />
+                                                                                    </a>
+                                                                                </Tooltip>
+                                                                            </div>
+                                                                            <div>
+                                                                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                ))
+                                                            }
+                                                        </>
+                                                        )
+                                                    }
+
                                                 </div>
 
 
@@ -218,707 +345,8 @@ const Subject = () => {
                 )}
             </Droppable>
         </DragDropContext>
-        {/* <div className="subject-container">
-            <div className="subject-wrapper">
-                <div className="subject-header">
-                    <div>Week 01: Chương 1: Quy trình kiểm thử</div>
-                </div>
-                <div className="wrapper-body">
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <FontAwesomeIcon icon='file-powerpoint' style={{ width: 30, height: 30, color: '#d04424' }} />
-
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <FontAwesomeIcon icon='file-word' style={{ width: 30, height: 30, color: '#2d5898' }} />
-
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <FontAwesomeIcon icon="tasks" style={{ width: 30, height: 30, color: '#009432' }} />
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <img src={forum} width={30} />
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <FontAwesomeIcon icon="spell-check" style={{ width: 40, height: 40, color: '#F79F1F' }} />
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-
-            <div className="subject-wrapper">
-                <div className="subject-header">
-                    <div>Week 01: Chương 1: Quy trình kiểm thử</div>
-                </div>
-                <div className="wrapper-body">
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <FontAwesomeIcon icon='file-powerpoint' style={{ width: 30, height: 30, color: '#d04424' }} />
-
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <FontAwesomeIcon icon='file-word' style={{ width: 30, height: 30, color: '#2d5898' }} />
-
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <FontAwesomeIcon icon="tasks" style={{ width: 30, height: 30, color: '#009432' }} />
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <img src={forum} width={30} />
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <FontAwesomeIcon icon="spell-check" style={{ width: 40, height: 40, color: '#F79F1F' }} />
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-
-            <div className="subject-wrapper">
-                <div className="subject-header">
-                    <div>Week 01: Chương 1: Quy trình kiểm thử</div>
-                </div>
-                <div className="wrapper-body">
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <FontAwesomeIcon icon='file-powerpoint' style={{ width: 30, height: 30, color: '#d04424' }} />
-
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <FontAwesomeIcon icon='file-word' style={{ width: 30, height: 30, color: '#2d5898' }} />
-
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <FontAwesomeIcon icon="tasks" style={{ width: 30, height: 30, color: '#009432' }} />
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <img src={forum} width={30} />
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <FontAwesomeIcon icon="spell-check" style={{ width: 40, height: 40, color: '#F79F1F' }} />
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-
-            <div className="subject-wrapper">
-                <div className="subject-header">
-                    <div>Week 01: Chương 1: Quy trình kiểm thử</div>
-                </div>
-                <div className="wrapper-body">
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <FontAwesomeIcon icon='file-powerpoint' style={{ width: 30, height: 30, color: '#d04424' }} />
-
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <FontAwesomeIcon icon='file-word' style={{ width: 30, height: 30, color: '#2d5898' }} />
-
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <FontAwesomeIcon icon="tasks" style={{ width: 30, height: 30, color: '#009432' }} />
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <img src={forum} width={30} />
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <FontAwesomeIcon icon="spell-check" style={{ width: 40, height: 40, color: '#F79F1F' }} />
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-
-            <div className="subject-wrapper">
-                <div className="subject-header">
-                    <div>Week 01: Chương 1: Quy trình kiểm thử</div>
-                </div>
-                <div className="wrapper-body">
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <FontAwesomeIcon icon='file-powerpoint' style={{ width: 30, height: 30, color: '#d04424' }} />
-
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <FontAwesomeIcon icon='file-word' style={{ width: 30, height: 30, color: '#2d5898' }} />
-
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <FontAwesomeIcon icon="tasks" style={{ width: 30, height: 30, color: '#009432' }} />
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <img src={forum} width={30} />
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <FontAwesomeIcon icon="spell-check" style={{ width: 40, height: 40, color: '#F79F1F' }} />
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-
-
-            <div className="subject-wrapper">
-                <div className="subject-header">
-                    <div>Week 01: Chương 1: Quy trình kiểm thử</div>
-                </div>
-                <div className="wrapper-body">
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <FontAwesomeIcon icon='file-powerpoint' style={{ width: 30, height: 30, color: '#d04424' }} />
-
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <FontAwesomeIcon icon='file-word' style={{ width: 30, height: 30, color: '#2d5898' }} />
-
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <FontAwesomeIcon icon="tasks" style={{ width: 30, height: 30, color: '#009432' }} />
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <img src={forum} width={30} />
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="subject-body">
-                        <div className="subject-main">
-                            <div className="subject-icon">
-                                <FontAwesomeIcon icon="spell-check" style={{ width: 40, height: 40, color: '#F79F1F' }} />
-                            </div>
-                            <div className="subject-content">Kiểm thử phần mềm</div>
-                        </div>
-                        <div className="subject-action">
-                            <div>
-                                <Tooltip title={t('edit_file')}>
-                                    <a>
-                                        <FontAwesomeIcon icon="edit" />
-                                    </a>
-                                </Tooltip>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-
-        </div>
-         */}
-        <Widget />
+        <WidgetLeft timelinesList={timelinesList} setTimelinesList={setTimelinesList} quizList={quizList} setQuizList={setQuizList} surveyList={surveyList} setSurveyList={setSurveyList} />
+        <WidgeRight />
     </>
 }
 

@@ -41,25 +41,25 @@ const LeftBar = ({ isOpen, setOpen }) => {
                 <div className="drawer-item__i">
                     <IC_CLASS />
                 </div>
-                <div className="drawer-item__c">Lớp học</div>
+                <div className="drawer-item__c color-default">Lớp học</div>
             </div>
             <Divider />
-            <Title level={5}>Giảng dạy</Title>
+            <Title level={5} style={{color: '#f9f9f9'}}>Giảng dạy</Title>
             <div className="drawer-item-app">
                 <div className="mask-hover"></div>
                 <div className="drawer-item__i">
                     <IC_FOLDER />
                 </div>
-                <div className="drawer-item__c">Để đánh giá</div>
+                <div className="drawer-item__c color-default">Để đánh giá</div>
             </div>
             <Divider />
-            <Title level={5}>Đã đăng ký</Title>
+            <Title level={5} style={{color: '#f9f9f9'}}>Đã đăng ký</Title>
             <div className="drawer-item-app" onClick={() => navigationTo('/home/todo-list')}>
                 <div className="mask-hover"></div>
                 <div className="drawer-item__i">
                     <IC_TODO />
                 </div>
-                <div className="drawer-item__c">Việc cần làm</div>
+                <div className="drawer-item__c color-default">Việc cần làm</div>
             </div>
             <Divider />
             <div className="drawer-item-app">
@@ -67,14 +67,14 @@ const LeftBar = ({ isOpen, setOpen }) => {
                 <div className="drawer-item__i">
                     <IC_STORAGE />
                 </div>
-                <div className="drawer-item__c">Lớp học đã lưu trữ</div>
+                <div className="drawer-item__c color-default">Lớp học đã lưu trữ</div>
             </div>
             <div className="drawer-item-app" onClick={() => navigationTo('/home/setting')}>
                 <div className="mask-hover"></div>
                 <div className="drawer-item__i">
-                    <IC_SETTING />
+                <IC_SETTING />
                 </div>
-                <div className="drawer-item__c">Cài đặt</div>
+                <div className="drawer-item__c color-default">Cài đặt</div>
             </div>
         </Drawer>
     )

@@ -38,10 +38,18 @@ import {
   faFileArchive,
   faFileExcel,
   faArchive,
+  faVideo,
+  faGraduationCap,
+  faDownload,
+  faUpload
 } from "@fortawesome/free-solid-svg-icons";
 
 
 library.add(
+  faDownload,
+  faUpload,
+  faGraduationCap,
+  faVideo,
   faComment,
   faExternalLinkAlt,
   faLockOpen,

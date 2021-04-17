@@ -209,7 +209,7 @@ const HeaderLayout = ({ setOpen }) => {
                 </div>
                 <div className="user-setting">{t('title_setting')}</div>
             </Col> */}
-            <Col className="header-user-login cursor-act ml-2 mr-2">
+            <Col className="header-user-login cursor-act ml-2 mr-4">
                 <Link to="/login" style={{ display: 'flex' }}>
                     <div>
                         <img src={IC_USER} width="20px" />

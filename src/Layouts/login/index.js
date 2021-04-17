@@ -38,6 +38,8 @@ const Login = () => {
                     setUserInfo(user)
                     setLoadingLogin(false)
 
+                    localStorage.setItem('API_TOKEN', token)
+
 
                     history.push('/home/main-app')
                 }
@@ -151,10 +153,10 @@ const Login = () => {
                     <div className="login-utils">
                         <Col span={12} className="remember-me">
                             <Checkbox onChange={onChange} />
-                            <div style={{ marginLeft: 10 }}>Lưu tên đăng nhập</div>
+                            <div style={{ marginLeft: 10, cursor: 'pointer' }}>Lưu tên đăng nhập</div>
                         </Col>
                         <Col span={12} className="forget-pass">
-                            <div>Quên mật khẩu ?</div>
+                            <div style={{cursor: 'pointer'}}>Quên mật khẩu ?</div>
                         </Col>
                     </div>
 
@@ -192,7 +194,7 @@ const Login = () => {
                     </Col>
                 </div>
 
-                <div className="register-account">Bạn chưa có tài khoản? Tạo tài khoản</div>
+                <div className="register-account"><div>Bạn chưa có tài khoản?</div> <a style={{cursor: 'pointer'}}>Tạo tài khoản</a></div>
             </div>
         </div>
 

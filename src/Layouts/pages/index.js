@@ -36,28 +36,29 @@ const PagesView = () => {
     const history = useHistory()
     const {authFlag} = useContext(StoreTrading)
 
-    // useEffect(() => {
-    //     if(!authFlag){
-    //         history.push("/login")
-    //     }
-    // })
+    useEffect(() => {
+        // const localStorageToken = localStorage.getItem('API_TOKEN')
+        // if(!authFlag && localStorageToken){
+        //     history.push("/login")
+        // }
+    })
 
     return (
-        <Layout style={{ minWidth: 1070, height: '100vh' }} className="main-layout">
+        <Layout style={{ minWidth: 1298, height: '100vh' }} className="main-layout">
             <Header className="main-header-layout">
                 <HeaderLayout setOpen={setOpen} />
             </Header>
 
-            <Content style={{ overflow: 'auto' }}>
+            <Content style={{ overflow: 'auto', background: '#232323' }}>
                 <Suspense fallback={<LoadingView />}>
                     <Switch>
                         <Route path="/home/:link" children={<Child />} />
                     </Switch>
                 </Suspense>
             </Content>
-            <Footer className="main-footer-layout">
+            {/* <Footer className="main-footer-layout">
 
-            </Footer>
+            </Footer> */}
             <LeftBar isOpen={isOpen} setOpen={setOpen} />
         </Layout>
     )

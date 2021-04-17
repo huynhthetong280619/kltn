@@ -21,8 +21,14 @@ const URL_DEFAULT = 'https://spkt-server.herokuapp.com'
 
 class RestClient {
     constructor(props) {
+        if (!props.token) {
+            const localStorageToken = localStorage.getItem('API_TOKEN')
+            if (localStorageToken) {
+                this.token = localStorageToken
+            }
+            return;
+        }
         this.token = props.token;
-        console.log('Rest client api token', props)
     }
 
     setExceptionHandler(exceptionHandler) {
@@ -149,7 +155,7 @@ class RestClient {
         try {
             const response = await fetch(this.getUrl(path), {
                 method: 'PATCH',
-                headers: isFormData ? {...omit(this.createHeaders(), 'Content-Type') } : this.createHeaders(),
+                headers: isFormData ? { ...omit(this.createHeaders(), 'Content-Type') } : this.createHeaders(),
                 body: isFormData ? data : JSON.stringify(data),
             });
 
@@ -174,7 +180,7 @@ class RestClient {
     async asyncUploadFile(file) {
         const formData = new FormData();
         formData.append('file', file)
-            // replace this with your upload preset name
+        // replace this with your upload preset name
         formData.append('upload_preset', 'gmttm4bo');
         const options = {
             method: 'POST',

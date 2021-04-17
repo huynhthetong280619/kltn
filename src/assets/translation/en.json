@@ -311,5 +311,8 @@
     "title_message": "Message",
     "title_setting": "Setting",
     "title_login": "Login",
-    "loading_login": "Signing in..."
+    "loading_login": "Signing in...",
+    "loading_subject": "The system is loading subject data ...",
+     "loading_class": "The system is loading class data ...",
+     "call_video": "Call video"
 }
