@@ -8,16 +8,6 @@ const AddTimeline = ({ createTimeline, isLoading }) => {
     const [form] = Form.useForm();
     const { t } = useTranslation()
 
-    const formItemLayout = {
-        labelCol: {
-            span: 8,
-
-        },
-        wrapperCol: {
-            span: 16,
-        },
-    };
-
     const onFinish = (values) => {
         let timeline = {
             name: values.name,
@@ -29,9 +19,9 @@ const AddTimeline = ({ createTimeline, isLoading }) => {
     return (
         <>
             <Form
-                {...formItemLayout}
                 onFinish={onFinish}
                 form={form}
+                layout="vertical"
             >
                 <Form.Item
                     label={t('name')}
@@ -62,8 +52,8 @@ const AddTimeline = ({ createTimeline, isLoading }) => {
                     />
                 </Form.Item>
 
-                <Form.Item wrapperCol={{ ...formItemLayout.wrapperCol, offset: 6 }}>
-                    <Button type="primary"  htmlType="submit">
+                <Form.Item>
+                    <Button type="primary"  htmlType="submit" className="lms-btn">
                         {t('submit')}
                     </Button>
                 </Form.Item>

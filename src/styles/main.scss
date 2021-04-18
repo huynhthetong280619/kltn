@@ -262,8 +262,8 @@ background-color: #2D2E30;
         padding: 1.5rem;
         margin-bottom: 2rem;
 
-        background-color: #fff;
-        border: .0625rem solid #dadce0;
+        background-color: #494949;
+        border: 0;
         -webkit-border-radius: 0.5rem;
         border-radius: 0.5rem;
         overflow: hidden;
@@ -445,6 +445,14 @@ h5.ant-typography{
     background: #121418;
     color: #fff;
     }
+}
+
+.mt-2{
+    margin-top: 0.25rem;
+}
+
+.mt-4{
+    margin-top: 0.5rem;
 }
 
 .ml-2{
@@ -660,6 +668,7 @@ h5.ant-typography{
         background-color: #191919;
         border: 1px solid #ce9b51;
         border-radius: 0.5rem;
+        min-width: 678px;
         .ant-modal-header {
             background-color: #232323;
             text-align: center;
@@ -686,11 +695,11 @@ h5.ant-typography{
 }
 
 .lms-btn{
-    min-width: 6.5rem;
+    width: 9.5rem;
     height: 1.688rem;
     border-radius: .25rem;
     font-size: .75rem;
-    color: var(--BUTTON__TEXT__PRIMARY);
+    color: #f9f9f9;
     cursor: pointer;
     outline: 0;
     display: -webkit-inline-flex;
@@ -700,4 +709,69 @@ h5.ant-typography{
     -webkit-align-items: center;
     align-items: center;
     border: 1px solid transparent;
+    margin-top: 1rem;
+}
+
+.text-center{
+    text-align: center;
+}
+
+.ant-form-item {
+    margin-bottom: 0.25rem !important;
+}
+
+.ant-modal{
+    top: 50px !important
+}
+
+.ant-form-item-control-input-content{
+    text-align: center;
+}
+
+.ant-input-number{
+    background-color: transparent;
+    border: 0;
+    width: 100% !important;
+}
+
+.ant-input-number-input{
+    background: #232323;
+    border: .5px solid #494949 !important;
+    box-sizing: border-box;
+    border-radius: .25rem !important;
+    width: 100%;
+    box-shadow: none;
+    outline: 0;
+    color: #f9f9f9 !important;
+}
+
+.ant-form-vertical .ant-form-item-label, .ant-col-24.ant-form-item-label, .ant-col-xl-24.ant-form-item-label{
+    padding: 0;
+}
+
+.ant-input-password{
+    background-color: #494949 !important;
+    border: 0;
+    input{
+        background-color: transparent !important;
+        border: 0 !important;
+    }
+}
+
+.ant-form-item-optional{
+    color: #f9f9f9 !important;
+}
+
+.pwd-login{
+    background-color: transparent !important;
+    border: 1px solid #d9d9d9 !important;
+}
+
+.menu-container-zoom-meeting{
+    display: flex;
+    justify-content: space-evenly;
+    width: 200px;
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+    column-gap: 0.5rem;
 }

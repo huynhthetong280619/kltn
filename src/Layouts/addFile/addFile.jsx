@@ -93,15 +93,6 @@ const AddFile = ({timelinesList, createFile, updateFile, idSubject, idTimeline, 
     }
 
 
-    const formItemLayout = {
-        labelCol: {
-            span: 8,
-
-        },
-        wrapperCol: {
-            span: 16,
-        },
-    };
 
     const onFinish = async (values) => {
         setLoading(true);
@@ -142,9 +133,9 @@ const AddFile = ({timelinesList, createFile, updateFile, idSubject, idTimeline, 
                 (idFile && !file) ?
                     <div>Loading</div>
                     : (<Form
-                        {...formItemLayout}
                         onFinish={onFinish}
                         form={form}
+                        layout="vertical"
                     >
                         <Form.Item
                             label={t('timeline')}
@@ -193,13 +184,14 @@ const AddFile = ({timelinesList, createFile, updateFile, idSubject, idTimeline, 
                             label={t('display')}
                             name={['file', 'isDeleted']}
                             valuePropName="checked"
+                            style={{flexDirection: 'row', alignItems: 'baseline'}}
                         >
                             <Checkbox />
                         </Form.Item>
 
 
-                        <Form.Item wrapperCol={{ ...formItemLayout.wrapperCol, offset: 6 }}>
-                            <Button type="primary" loading={isLoading} htmlType="submit">
+                        <Form.Item>
+                            <Button type="primary" loading={isLoading} htmlType="submit" className="lms-btn">
                                 {t('submit')}</Button>
                         </Form.Item>
 

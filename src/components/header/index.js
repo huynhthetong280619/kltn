@@ -13,17 +13,19 @@ import { useTranslation } from 'react-i18next'
 import { STORE_KEY } from '../../utils/STORE_KEY'
 import en from '../../assets/images/en.png'
 import ArrowDown from '../../assets/images/ic_arr_down.png'
-import { Link, Redirect } from 'react-router-dom'
+import { Link, Redirect, useHistory } from 'react-router-dom'
 import Message from '../message'
 import { StoreTrading } from '../../store-trading'
+import { LoginOutlined } from '@ant-design/icons'
 
 const { Text } = Typography;
 
 const HeaderLayout = ({ setOpen }) => {
     const { t, i18n } = useTranslation()
-    const {authFlag} = useContext(StoreTrading)
+    const { authFlag } = useContext(StoreTrading)
 
     const [openMessage, setOpenMessage] = useState(false)
+    const history = useHistory()
 
     const [language, setLanguage] = useState('vi')
 
@@ -42,6 +44,16 @@ const HeaderLayout = ({ setOpen }) => {
         i18n.changeLanguage(key)
         localStorage.setItem(STORE_KEY.LANGUAGE, key)
         setLanguage(key)
+    }
+
+    const handleLogIn = () => {
+        history.push('/login')
+    }
+
+    const handleLogout = () => {
+        localStorage.removeItem('API_TOKEN')
+
+        history.push('/login')
     }
 
 
@@ -76,7 +88,7 @@ const HeaderLayout = ({ setOpen }) => {
                 </div>
                 <div className="user-message">{t('title_notification')}</div>
             </Col>
-            <Col className="header-message cursor-act ml-2 mr-2" >
+            {/* <Col className="header-message cursor-act ml-2 mr-2" >
                 <div style={{ display: 'inline-flex' }} className="cursor-act" onClick={() => setOpenMessage(!openMessage)}>
                     <div>
                         <img src={IC_MESSAGE} width="20px" />
@@ -202,7 +214,7 @@ const HeaderLayout = ({ setOpen }) => {
                         </Row>
                     </div>
                 </div>
-            </Col>
+            </Col> */}
             {/* <Col span={4} className="header-setting cursor-act">
                 <div>
                     <img src={IC_SETTING} width="20px" />
@@ -210,12 +222,12 @@ const HeaderLayout = ({ setOpen }) => {
                 <div className="user-setting">{t('title_setting')}</div>
             </Col> */}
             <Col className="header-user-login cursor-act ml-2 mr-4">
-                <Link to="/login" style={{ display: 'flex' }}>
+                <div onClick={() => !authFlag ? handleLogIn() : handleLogout()} style={{ display: 'flex' }}>
                     <div>
                         <img src={IC_USER} width="20px" />
                     </div>
-                    <div className="user-login-text">{authFlag ? t('title_logout') : t('title_login')}</div>
-                </Link>
+                    <div className="user-login-text" >{authFlag ? t('title_logout') : t('title_login')}</div>
+                </div>
             </Col>
         </Col>
 

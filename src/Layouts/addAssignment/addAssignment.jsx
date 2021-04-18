@@ -174,16 +174,6 @@ const AddAssignment = ({ timelinesList, createAssignment, updateAssignment, idSu
     }
 
 
-    const formItemLayout = {
-        labelCol: {
-            span: 8,
-
-        },
-        wrapperCol: {
-            span: 16,
-        },
-    };
-
     return (
         <>
             {
@@ -191,9 +181,9 @@ const AddAssignment = ({ timelinesList, createAssignment, updateAssignment, idSu
                     // <Loading />
                     <div></div>
                     : (<Form
-                        {...formItemLayout}
                         onFinish={onFinish}
                         form={form}
+                        layout="vertical"
                     >
                         <Form.Item
                             label={t('timeline')}
@@ -242,69 +232,38 @@ const AddAssignment = ({ timelinesList, createAssignment, updateAssignment, idSu
                                 autoSize={{ minRows: 3, maxRows: 5 }}
                             />
                         </Form.Item>
-
-                        <Form.Item
-                            label={t('startTime')}
-                            name={['assignment', 'setting', 'startTime']}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: t('req_begin_time'),
-                                }
-                            ]}
-                            hasFeedback>
-                            <DatePicker className="alt-date-picker" showTime format="YYYY-MM-DD HH:mm:ss" />
-                        </Form.Item>
-
-                        <Form.Item
-                            dependencies={['assignment', 'setting', 'startTime']}
-                            label={t('expireTime')}
-                            name={['assignment', 'setting', 'expireTime']}
-                            hasFeedback
-                            rules={[
-                                {
-                                    required: true,
-                                    message: t('req_end_time'),
-                                },
-                                ({ getFieldValue }) => ({
-                                    validator(rule, value) {
-                                        if (!value || value.isAfter(getFieldValue(['assignment', 'setting', 'startTime']))) {
-                                            return Promise.resolve();
-                                        } else {
-                                            return Promise.reject(t('condition_start_end'));
-                                        }
-                                    },
-                                }),
-                            ]}
-                        >
-                            <DatePicker  className="alt-date-picker" showTime format="YYYY-MM-DD HH:mm:ss" />
-                        </Form.Item>
-
-                        <Form.Item
-                            label={t('isOverDue')}
-                            name={['assignment', 'setting', 'isOverDue']}
-                            valuePropName="checked"
-                        >
-                            <Checkbox onChange={e => handleOnchangeOverDue(e)} />
-                        </Form.Item>
-
-                        {isOverDue && (
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <Form.Item
-                                label={t('overDueDate')}
-                                name={['assignment', 'setting', 'overDueDate']}
-                                hasFeedback
-                                dependencies={['assignment', 'setting', 'expireTime']}
+                                label={t('startTime')}
+                                name={['assignment', 'setting', 'startTime']}
                                 rules={[
                                     {
                                         required: true,
-                                        message: t('req_over_time'),
+                                        message: t('req_begin_time'),
+                                    }
+                                ]}
+                                style={{width: '30%'}}
+                                hasFeedback>
+                                <DatePicker className="alt-date-picker" showTime format="YYYY-MM-DD HH:mm:ss" />
+                            </Form.Item>
+
+                            <Form.Item
+                                dependencies={['assignment', 'setting', 'startTime']}
+                                label={t('expireTime')}
+                                name={['assignment', 'setting', 'expireTime']}
+                                style={{width: '30%'}}
+                                hasFeedback
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: t('req_end_time'),
                                     },
                                     ({ getFieldValue }) => ({
                                         validator(rule, value) {
-                                            if (!value || value.isAfter(getFieldValue(['assignment', 'setting', 'expireTime']))) {
+                                            if (!value || value.isAfter(getFieldValue(['assignment', 'setting', 'startTime']))) {
                                                 return Promise.resolve();
                                             } else {
-                                                return Promise.reject(t('condition_end_over'));
+                                                return Promise.reject(t('condition_start_end'));
                                             }
                                         },
                                     }),
@@ -312,11 +271,11 @@ const AddAssignment = ({ timelinesList, createAssignment, updateAssignment, idSu
                             >
                                 <DatePicker className="alt-date-picker" showTime format="YYYY-MM-DD HH:mm:ss" />
                             </Form.Item>
-                        )}
 
-                        <Form.Item
+                            <Form.Item
                             label={t('fileSize')}
                             name={['assignment', 'setting', 'fileSize']}
+                            style={{width: '30%'}}
                             rules={[
                                 {
                                     required: true,
@@ -331,6 +290,10 @@ const AddAssignment = ({ timelinesList, createAssignment, updateAssignment, idSu
                                 <Option value="20">20</Option>
                             </Select>
                         </Form.Item>
+                        </div>
+
+
+                        
 
                         {assignment &&
                             (assignment.attachments.map(f => {
@@ -357,17 +320,54 @@ const AddAssignment = ({ timelinesList, createAssignment, updateAssignment, idSu
                         >
                             <Input type="file" style={{ overflow: 'hidden' }} onChange={e => handleProcessFile(e)} />
                         </Form.Item>
+                        <div style={{display: 'flex'}}>
+                            <Form.Item
+                                label={t('isOverDue')}
+                                name={['assignment', 'setting', 'isOverDue']}
+                                valuePropName="checked"
+                                style={{ flexDirection: 'row', width: '49%', alignItems: 'baseline' }}
+                            >
+                                <Checkbox onChange={e => handleOnchangeOverDue(e)} />
+                            </Form.Item>
 
-                        <Form.Item
-                            label={t('display')}
-                            name={['assignment', 'isDeleted']}
-                            valuePropName="checked"
-                        >
-                            <Checkbox />
-                        </Form.Item>
+                            <Form.Item
+                                label={t('display')}
+                                name={['assignment', 'isDeleted']}
+                                valuePropName="checked"
+                                style={{ flexDirection: 'row',width: '49%', alignItems: 'baseline' }}
+                            >
+                                <Checkbox />
+                            </Form.Item>
+                        </div>
+                        {isOverDue && (
+                            <Form.Item
+                                label={t('overDueDate')}
+                                name={['assignment', 'setting', 'overDueDate']}
+                                hasFeedback
+                                dependencies={['assignment', 'setting', 'expireTime']}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: t('req_over_time'),
+                                    },
+                                    ({ getFieldValue }) => ({
+                                        validator(rule, value) {
+                                            if (!value || value.isAfter(getFieldValue(['assignment', 'setting', 'expireTime']))) {
+                                                return Promise.resolve();
+                                            } else {
+                                                return Promise.reject(t('condition_end_over'));
+                                            }
+                                        },
+                                    }),
+                                ]}
+                            >
+                                <DatePicker className="alt-date-picker" showTime format="YYYY-MM-DD HH:mm:ss" />
+                            </Form.Item>
+                        )}
 
-                        <Form.Item wrapperCol={{ ...formItemLayout.wrapperCol, offset: 6 }}>
-                            <Button type="primary" loading={isLoading} htmlType="submit">
+
+                        <Form.Item >
+                            <Button type="primary" loading={isLoading} htmlType="submit" className="lms-btn">
                                 {t('submit')}</Button>
                         </Form.Item>
 

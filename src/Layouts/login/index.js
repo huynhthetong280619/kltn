@@ -30,18 +30,20 @@ const Login = () => {
 
         restClientAPI.asyncPost('/user/authenticate', data)
             .then(res => {
-                console.log('handleLoginForm', res)
                 if (!res.hasError) {
-                    const { token, user } = res.data;
-                    setAuth(true);
-                    setToken(token);
-                    setUserInfo(user)
-                    setLoadingLogin(false)
+                    authenticate(res, () => {
+                        const { token, user } = res.data;
+                        setAuth(true);
+                        setToken(token);
+                        setUserInfo(user)
+                        setLoadingLogin(false)
 
-                    localStorage.setItem('API_TOKEN', token)
+                        localStorage.setItem('API_TOKEN', token)
 
 
-                    history.push('/home/main-app')
+                        history.push('/home/main-app')
+                    })
+
                 }
             })
 
@@ -62,7 +64,6 @@ const Login = () => {
 
         await restClientAPI.asyncPost(`/user/auth/google`, data)
             .then(res => {
-                console.log('responseGoogle', res)
                 if (!res.hasError) {
                     authenticate(res, () => {
                         const { token, user } = res.data;
@@ -144,6 +145,7 @@ const Login = () => {
                         ]}
                     >
                         <Input.Password
+                            className="pwd-login"
                             prefix={<KeyOutlined className="site-form-item-icon" />}
                             size='large'
                             placeholder={t('placeholder_password')}
@@ -156,7 +158,7 @@ const Login = () => {
                             <div style={{ marginLeft: 10, cursor: 'pointer' }}>Lưu tên đăng nhập</div>
                         </Col>
                         <Col span={12} className="forget-pass">
-                            <div style={{cursor: 'pointer'}}>Quên mật khẩu ?</div>
+                            <div style={{ cursor: 'pointer' }}>Quên mật khẩu ?</div>
                         </Col>
                     </div>
 
@@ -194,7 +196,7 @@ const Login = () => {
                     </Col>
                 </div>
 
-                <div className="register-account"><div>Bạn chưa có tài khoản?</div> <a style={{cursor: 'pointer'}}>Tạo tài khoản</a></div>
+                <div className="register-account"><div>Bạn chưa có tài khoản?</div> <a style={{ cursor: 'pointer' }} className="ml-2">Tạo tài khoản</a></div>
             </div>
         </div>
 

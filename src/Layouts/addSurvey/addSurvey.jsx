@@ -115,26 +115,14 @@ const AddSurvey = ({ timelinesList, surveyList,  createSurvey, updateSurvey, idS
     }
 
 
-    const formItemLayout = {
-        labelCol: {
-            span: 8,
-
-        },
-        wrapperCol: {
-            span: 16,
-        },
-    };
-
-
-
     return (<>
         {
             (idSurvey && !survey) ?
                 <div>Loading</div>
                 : (<Form
-                    {...formItemLayout}
                     onFinish={onFinish}
                     form={form}
+                    layout="vertical"
                 >
                     <Form.Item
                         label={t('timeline')}
@@ -187,7 +175,7 @@ const AddSurvey = ({ timelinesList, surveyList,  createSurvey, updateSurvey, idS
                             }
                         ]}
                     >
-                        <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" />
+                        <DatePicker className="alt-date-picker" showTime format="YYYY-MM-DD HH:mm:ss" />
                     </Form.Item>
 
                     <Form.Item
@@ -213,12 +201,14 @@ const AddSurvey = ({ timelinesList, surveyList,  createSurvey, updateSurvey, idS
                         label={t('display')}
                         name={['survey', 'isDeleted']}
                         valuePropName="checked"
+                        style={{ flexDirection: 'row', alignItems: 'baseline' }}
+
                     >
                         <Checkbox />
                     </Form.Item>
 
-                    <Form.Item wrapperCol={{ ...formItemLayout.wrapperCol, offset: 6 }}>
-                        <Button type="primary" loading={isLoading} htmlType="submit">
+                    <Form.Item >
+                        <Button type="primary" loading={isLoading} htmlType="submit" className="lms-btn">
                             {t('submit')}</Button>
                     </Form.Item>
 

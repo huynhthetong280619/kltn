@@ -28,6 +28,7 @@ export const getCookie = (key) => {
 
 // Set in local storage
 export const setLocalStorage = (key, value) => {
+    console.log(key, value)
     if (window !== "undefined") {
         localStorage.setItem(key, JSON.stringify(value));
     }
@@ -48,6 +49,7 @@ export const getLocalStorage = (key) => {
 
 // Auth enticate user by passing data to cookie and local storage during signin
 export const authenticate = (response, next) => {
+    console.log(response, next)
     //console.log("AUTHENTICATE HELPER ON SIGNIN RESPONSE", response);
     setCookie("token", response.data.token);
     // setCookie('idprvl', response.data.user.idPrivilege)

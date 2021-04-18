@@ -8,7 +8,7 @@ import { UploadOutlined, ExportOutlined } from '@ant-design/icons'
 import AddAssignment from '../../Layouts/addAssignment/addAssignment';
 import { notifySuccess, notifyError } from '../../assets/common/core/notify';
 import { head } from 'lodash';
-import { useLocation } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import AddQuiz from '../../Layouts/addQuiz/addQuiz';
 import AddSurvey from '../../Layouts/addSurvey/addSurvey';
 import AddFile from '../../Layouts/addFile/addFile';
@@ -44,12 +44,16 @@ const WidgetLeft = ({
     const [exportState, setExportState] = useState(false)
     const [isOpenModalFunction, setIsOpenModalFunction] = useState(false)
     const [timelinesIndex, setTimelinesIndex] = useState([])
+    const [currentTitle, setCurrentTitle] = useState('')
+    const history = useHistory()
 
     const restClient = new RestClient({ token: '' })
     const location = useLocation()
 
-    const openModalFunction = (title) => {
+    const openModalFunction = (type) => {
         setIsOpenModalFunction(true)
+        setCurrentTitle(type)
+
     }
 
     const focusTodos = () => {
@@ -90,6 +94,7 @@ const WidgetLeft = ({
     const createAssignment = async ({ assignment, idTimeline }) => {
         notifySuccess(t('success'), t('add_quiz_assign'))
         let timelineUpdate = timelinesList.filter(({ _id }) => _id === idTimeline)
+        console.log('createAssignment', timelineUpdate)
         head(timelineUpdate).assignments.push(assignment)
 
 
@@ -415,7 +420,7 @@ const WidgetLeft = ({
                 <i><FontAwesomeIcon icon="edit" /></i>
                 <span>{t('update')}</span>
             </a>
-            <a>
+            <a onClick={() => history.push('zoom-meeting')}>
                 <i><FontAwesomeIcon icon="video" /></i>
                 <span>{t('call_video')}</span>
             </a>
@@ -442,7 +447,7 @@ const WidgetLeft = ({
                     borderRadius: '0.5rem',
                     cursor: 'pointer'
                 }} onClick={() => {
-                    openModalFunction('');
+                    openModalFunction('create_information');
                     focusNotification();
                 }} >
                     {t('information')}
@@ -458,7 +463,7 @@ const WidgetLeft = ({
                     cursor: 'pointer'
                 }}
                     onClick={() => {
-                        openModalFunction('');
+                        openModalFunction('create_document');
                         focusDocument();
                     }}
                 >
@@ -475,7 +480,7 @@ const WidgetLeft = ({
                     cursor: 'pointer'
                 }}
                     onClick={() => {
-                        openModalFunction('');
+                        openModalFunction('create_assign');
                         focusTodos();
                     }}
                 >
@@ -494,7 +499,7 @@ const WidgetLeft = ({
                     cursor: 'pointer'
                 }}
                     onClick={() => {
-                        openModalFunction('');
+                        openModalFunction('create_quiz');
                         focusQuiz();
                     }}>
                     {t('quiz')}
@@ -509,7 +514,7 @@ const WidgetLeft = ({
                     borderRadius: '0.5rem',
                     cursor: 'pointer'
                 }} onClick={() => {
-                    openModalFunction('');
+                    openModalFunction('create_survey');
                     focusSurvey();
                 }}>
                     {t('survey')}
@@ -524,7 +529,7 @@ const WidgetLeft = ({
                     padding: '0.5rem',
                     cursor: 'pointer'
                 }} onClick={() => {
-                    openModalFunction('');
+                    openModalFunction('create_timeline');
                     focusTimeline();
                 }}>
                     {t('timeline')}
@@ -544,94 +549,14 @@ const WidgetLeft = ({
                     borderRadius: '0.5rem',
                     cursor: 'pointer'
                 }} onClick={() => {
-                    openModalFunction('');
+                    openModalFunction('create_forum');
                     focusForum();
                 }} >
                     {t('forum')}
                 </Col>
             </Row>
 
-            {/* <Row>
-                <div style={{
-                    border: "2px solid #cacaca",
-                    padding: "20px 0",
-                    position: 'relative',
-                    margin: '20px',
-                    width: '100%',
-
-                }}>
-                    <h2 style={{ textTransform: 'uppercase' }}>{t('h1')}</h2>
-                    <p style={{
-                        color: '#9d9393'
-                    }}>{t('h2')}</p>
-                    <p style={{
-                        color: '#9d9393'
-                    }}>{t('h3')} </p>
-                    <p style={{
-                        color: '#9d9393'
-                    }}>{t('h4')}</p>
-                    <p style={{
-                        color: '#9d9393'
-                    }}>{t('h5')}</p>
-                    <p style={{
-                        color: '#9d9393'
-                    }}>{t('h6')}</p>
-                </div>
-            </Row> */}
-            {/* <Row style={{ columnGap: '0.5rem', justifyContent: 'center' }}>
-                <Col span={11} className="action-select-add-content" >
-                    <Button
-                        type='primary'
-                        size='large'
-                        icon={<UploadOutlined />}
-                        style={{
-                            fontSize: '0.75rem',
-                            borderRadius: '0.5rem',
-                            padding: '0 0.5rem',
-                            letterSpacing: '2px',
-                        }}
-
-                    > {t('import').toUpperCase()}</Button>
-
-                </Col>
-                <Col span={11} className="action-select-add-content" >
-                    <Button
-
-                        type='primary'
-                        size='large'
-                        icon={<ExportOutlined />}
-                        style={{
-                            fontSize: '0.75rem',
-                            borderRadius: '0.5rem',
-                            padding: '0 0.5rem',
-                            letterSpacing: '2px',
-                        }}
-                    > {t('export').toUpperCase()}</Button>
-                </Col>
-            </Row> */}
-
-
-
         </Drawer>
-        {/* <Drawer
-            title={'HELLO'}
-            placement="left"
-            onClose={() => { onCloseModalAction() }}
-            visible={isOpenModalFunction}
-            key="left"
-            width={540}
-            style={{ textAlign: 'center' }}
-        >
-            {todosState && (<AddAssignment timelinesList={timelinesList} createAssignment={createAssignment} updateAssignment={updateAssignment} idSubject={location.state._id} idTimeline={null} idAssignment={null} />)}
-            {quizState && (<AddQuiz quizList={quizList} timelinesList={timelinesList} createQuiz={createQuiz} updateQuiz={updateQuiz} idSubject={location.state._id} idTimeline={null} idExam={null} />)}
-            {surveyState && (<AddSurvey timelinesList={timelinesList} surveyList={surveyList} createSurvey={createSurvey} updateSurvey={updateSurvey} idSubject={location.state._id} idTimeline={null} idSurvey={null} />)}
-            {documentState && (<AddFile timelinesList={timelinesList} createFile={createFile} updateFile={updateFile} idSubject={location.state._id} idTimeline={null} idFile={null} />)}
-            {notificationState && (<AddInformation timelinesList={timelinesList} isLoading={null} createInformation={createInformation} idSubject={location.state._id} idTimeline={null} idInformation={null} />)}
-            {timelineState && (<AddTimeline createTimeline={createTimeline} isLoading={null} />)}
-            {importState && (<ImportSubject isLoading={null} handleImportSubject={handleImportSubject} />)}
-            {forumState && (<AddForum timelinesList={timelinesList} createForum={createForum} updateForum={updateForum} idSubject={location.state._id} idTimeline={null} idForum={null} />)}
-            {exportState && (<ExportSubject idSubject={location.state._id} nameSubject={null} />)}
-        </Drawer> */}
         <Modal className="modal-function-customize"
             onCancel={() => onCloseModalAction()}
             visible={isOpenModalFunction}
@@ -641,9 +566,9 @@ const WidgetLeft = ({
                     padding: '1rem 0.625rem 0.625rem 0',
                     alignItems: 'center',
                 }}
-                
+
             >
-                <div style={{ color: '#f9f9f9' }}>{t('common_index_chart_info')}</div>
+                <div style={{ color: '#f9f9f9' }}>{t(currentTitle)}</div>
                 <div className="close-icon-modal" onClick={() => onCloseModalAction()}>
                     <IC_CLOSE />
                 </div>

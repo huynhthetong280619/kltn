@@ -1,0 +1,36 @@
+.profile-lms-ws .ant-row {
+    margin: 0 10px;
+}
+.profile-lms-ws 
+.ant-row.ant-form-item>div.ant-col {
+    width: 100%;
+    margin: 0;
+}
+.profile-lms-ws 
+p.section-description-title {
+    font-size: 15px;
+    color: #79589f;
+}
+.profile-lms-ws 
+p.section-description-content {
+    font-size: 13px;
+    margin-top: 10px;
+    color: #f9f9f9;
+    line-height: 1.5;
+}
+.profile-lms-ws 
+.ant-form.form-profile>div {
+    margin: 0;
+    margin-bottom: 8px;
+}
+.profile-lms-ws 
+.ant-form-item-label>label {
+    font-size: 13px;
+    color: #676f7b;
+    font-weight: 700;
+}
+.profile-lms-ws 
+.ant-form.form-password>div.ant-row {
+    margin: 0;
+    margin-bottom: 8px;
+}

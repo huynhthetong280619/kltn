@@ -9,7 +9,7 @@ import formatTime from '../../assets/common/core/formatTime.js';
 const { Option } = Select;
 const { TextArea } = Input;
 
-const AddQuiz = ({ timelinesList, quizList,  createQuiz, updateQuiz, idSubject, idTimeline, idExam, token }) => {
+const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, idTimeline, idExam, token }) => {
 
     const [form] = Form.useForm();
 
@@ -19,7 +19,7 @@ const AddQuiz = ({ timelinesList, quizList,  createQuiz, updateQuiz, idSubject, 
 
     const [isLoading, setLoading] = useState(false);
     const restClient = new RestClient({ token: '' })
-    const {t} = useTranslation()
+    const { t } = useTranslation()
 
     useEffect(() => {
         if (exam) {
@@ -125,15 +125,7 @@ const AddQuiz = ({ timelinesList, quizList,  createQuiz, updateQuiz, idSubject, 
         setQuizBank(data);
     }
 
-    const formItemLayout = {
-        labelCol: {
-            span: 8,
 
-        },
-        wrapperCol: {
-            span: 16,
-        },
-    };
 
     return (
         <>
@@ -141,9 +133,9 @@ const AddQuiz = ({ timelinesList, quizList,  createQuiz, updateQuiz, idSubject, 
                 (idExam && !exam) ?
                     <div>Loading</div>
                     : (<Form
-                        {...formItemLayout}
                         onFinish={onFinish}
                         form={form}
+                        layout="vertical"
                     >
                         <Form.Item
                             label={t('timeline')}
@@ -190,44 +182,60 @@ const AddQuiz = ({ timelinesList, quizList,  createQuiz, updateQuiz, idSubject, 
                                 autoSize={{ minRows: 3, maxRows: 5 }}
                             />
                         </Form.Item>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <Form.Item
+                                label={t('startTime')}
+                                name={['exam', 'startTime']}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: t('req_begin_time'),
+                                    }
+                                ]}
+                                hasFeedback>
+                                <DatePicker className="alt-date-picker" showTime format="YYYY-MM-DD HH:mm:ss" />
+                            </Form.Item>
 
-                        <Form.Item
-                            label={t('startTime')}
-                            name={['exam', 'startTime']}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: t('req_begin_time'),
-                                }
-                            ]}
-                            hasFeedback>
-                            <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" />
-                        </Form.Item>
-
-                        <Form.Item
-                            dependencies={['exam', 'startTime']}
-                            label={t('expireTime')}
-                            name={['exam', 'expireTime']}
-                            hasFeedback
-                            rules={[
-                                {
-                                    required: true,
-                                    message: t('req_end_time'),
-                                },
-                                ({ getFieldValue }) => ({
-                                    validator(rule, value) {
-                                        if (!value || value.isAfter(getFieldValue(['exam', 'startTime']))) {
-                                            return Promise.resolve();
-                                        }
-
-                                        return Promise.reject(t('condition_start_end'));
+                            <Form.Item
+                                dependencies={['exam', 'startTime']}
+                                label={t('expireTime')}
+                                name={['exam', 'expireTime']}
+                                hasFeedback
+                                style={{ width: '30%' }}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: t('req_end_time'),
                                     },
-                                }),
-                            ]}
-                        >
-                            <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" />
-                        </Form.Item>
+                                    ({ getFieldValue }) => ({
+                                        validator(rule, value) {
+                                            if (!value || value.isAfter(getFieldValue(['exam', 'startTime']))) {
+                                                return Promise.resolve();
+                                            }
 
+                                            return Promise.reject(t('condition_start_end'));
+                                        },
+                                    }),
+                                ]}
+                            >
+                                <DatePicker className="alt-date-picker" showTime format="YYYY-MM-DD HH:mm:ss" />
+                            </Form.Item>
+
+                            <Form.Item
+                                label={t('questionCount')}
+                                name={['exam', 'setting', 'questionCount']}
+                                style={{ width: '30%' }}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: t('req_qty_question'),
+                                    }
+                                ]}
+                                hasFeedback>
+                                <InputNumber min={1} max={quizBank ? quizBank.questions : 30} />
+
+                            </Form.Item>
+                        </div>
                         <Form.Item
                             label={t('code_quiz_bank')}
                             name={['exam', 'setting', 'code']}
@@ -239,72 +247,67 @@ const AddQuiz = ({ timelinesList, quizList,  createQuiz, updateQuiz, idSubject, 
                             ]}
                             hasFeedback
                         >
-                            <Select onChange={handleChangeQuizBank} >
+                            <Select dropdownClassName="ant-customize-dropdown" onChange={handleChangeQuizBank} >
                                 {
                                     quizList.map(q => (<Option value={q._id} key={q._id}>{q.name}</Option>))
                                 }
                             </Select>
                         </Form.Item>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <Form.Item
+                                label={t('timeTodo')}
+                                name={['exam', 'setting', 'timeToDo']}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: t('req_time_take_quiz'),
+                                    }
+                                ]}
+                                style={{ width: '49%' }}
 
-                        <Form.Item
-                            label={t('questionCount')}
-                            name={['exam', 'setting', 'questionCount']}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: t('req_qty_question'),
-                                }
-                            ]}
-                            hasFeedback>
-                            <InputNumber min={1} max={quizBank ? quizBank.questions : 30} />
+                                hasFeedback>
+                                <InputNumber min={1} max={180}
+                                    formatter={value => `${value} ${t('minutes')}`}
+                                    parser={value => value.replace(` ${t('minutes')}`, '')} />
 
-                        </Form.Item>
-                        <Form.Item
-                            label={t('timeTodo')}
-                            name={['exam', 'setting', 'timeToDo']}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: t('req_time_take_quiz'),
-                                }
-                            ]}
-                            hasFeedback>
-                            <InputNumber min={1} max={180}
-                                formatter={value => `${value} ${t('minutes')}`}
-                                parser={value => value.replace(` ${t('minutes')}`, '')} />
+                            </Form.Item>
 
-                        </Form.Item>
+                            <Form.Item
+                                label={t('attemptQuantity')}
+                                name={['exam', 'setting', 'attemptCount']}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: t('req_count_attempt'),
+                                    }
+                                ]}
+                                style={{ width: '49%' }}
 
-                        <Form.Item
-                            label={t('attemptQuantity')}
-                            name={['exam', 'setting', 'attemptCount']}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: t('req_count_attempt'),
-                                }
-                            ]}
-                            hasFeedback>
-                            <InputNumber min={1} max={10}
-                                formatter={value => `${value} ${t('times')}`}
-                                parser={value => value.replace(` ${t('times')}`, '')}
-                            />
+                                hasFeedback>
+                                <InputNumber min={1} max={10}
+                                    formatter={value => `${value} ${t('times')}`}
+                                    parser={value => value.replace(` ${t('times')}`, '')}
+                                />
 
-                        </Form.Item>
+                            </Form.Item>
+
+                            
+
+                        </div>
+
 
 
                         <Form.Item
-                            label={t('display')}
-                            name={['exam', 'isDeleted']}
-                            valuePropName="checked"
-                        >
-                            <Checkbox />
-                        </Form.Item>
+                                label={t('display')}
+                                name={['exam', 'isDeleted']}
+                                valuePropName="checked"
+                                style={{ flexDirection: 'row', alignItems: 'baseline'}}
+                            >
+                                <Checkbox />
+                            </Form.Item>
 
-
-
-                        <Form.Item wrapperCol={{ ...formItemLayout.wrapperCol, offset: 6 }}>
-                            <Button type="primary" loading={isLoading} htmlType="submit">
+                        <Form.Item>
+                            <Button type="primary" loading={isLoading} htmlType="submit" className="lms-btn">
                                 {t('submit')}</Button>
                         </Form.Item>
 

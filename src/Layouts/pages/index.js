@@ -9,12 +9,14 @@ import LeftBar from '../../components/left-bar';
 import Setting from '../setting-app';
 import TodoList from '../../components/todo-list';
 import { StoreTrading } from '../../store-trading';
+import Profile from '../profile';
+import ZoomMeeting from '../zoom-meeting';
 
 const { Header, Content, Footer } = Layout
 
 function Child() {
     let { link } = useParams()
-    
+
     console.log('Child', link)
     switch (link) {
         case 'main-app':
@@ -25,7 +27,10 @@ function Child() {
             return <Setting />
         case 'todo-list':
             return <TodoList />
-
+        case 'profile':
+            return <Profile />
+            case 'zoom-meeting': 
+            return <ZoomMeeting />
         default:
             break
     }
@@ -34,7 +39,7 @@ function Child() {
 const PagesView = () => {
     const [isOpen, setOpen] = useState(false)
     const history = useHistory()
-    const {authFlag} = useContext(StoreTrading)
+    const { authFlag } = useContext(StoreTrading)
 
     useEffect(() => {
         // const localStorageToken = localStorage.getItem('API_TOKEN')

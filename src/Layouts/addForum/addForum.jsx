@@ -1,4 +1,3 @@
-import { withTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { Input, Select, Button, Form, Checkbox } from 'antd'
 // import Loading from '../../loading/loading.jsx';
@@ -101,16 +100,6 @@ const AddForum = ({timelinesList, createForum, updateForum, idSubject, idTimelin
             })
     }
 
-    const formItemLayout = {
-        labelCol: {
-            span: 8,
-
-        },
-        wrapperCol: {
-            span: 16,
-        },
-    };
-
     return (
         <>
             {
@@ -118,9 +107,10 @@ const AddForum = ({timelinesList, createForum, updateForum, idSubject, idTimelin
                     <div>Loading</div>
                     :
                     (<Form
-                        {...formItemLayout}
                         onFinish={onFinish}
                         form={form}
+                        layout="vertical"
+                        
                     >
                         <Form.Item
                             label={t('timeline')}
@@ -172,12 +162,13 @@ const AddForum = ({timelinesList, createForum, updateForum, idSubject, idTimelin
                             label={t('display')}
                             name={['forum', 'isDeleted']}
                             valuePropName="checked"
+                            style={{flexDirection: 'row', alignItems: 'baseline'}}
                         >
                             <Checkbox />
                         </Form.Item>
 
-                        <Form.Item wrapperCol={{ ...formItemLayout.wrapperCol, offset: 6 }}>
-                            <Button type="primary" loading={isLoading} htmlType="submit">
+                        <Form.Item >
+                            <Button type="primary" loading={isLoading} htmlType="submit" className="lms-btn">
                                 {t('submit')}</Button>
                         </Form.Item>
                     </Form>)}
@@ -186,4 +177,4 @@ const AddForum = ({timelinesList, createForum, updateForum, idSubject, idTimelin
 }
 
 
-export default withTranslation('translations')(AddForum)
+export default AddForum

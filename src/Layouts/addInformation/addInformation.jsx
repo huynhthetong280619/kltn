@@ -48,15 +48,7 @@ const AddInformation = ({ timelinesList, isLoading, createInformation, idSubject
         }
     }
 
-    const formItemLayout = {
-        labelCol: {
-            span: 8,
-
-        },
-        wrapperCol: {
-            span: 24,
-        },
-    };
+ 
 
     return (
         <>
@@ -65,8 +57,8 @@ const AddInformation = ({ timelinesList, isLoading, createInformation, idSubject
                     <div>Loading</div>
                     : (
                         <Form
-                            {...formItemLayout}
                             onFinish={onFinish}
+                            layout="vertical"
                             form={form}
                         >
                             <Form.Item
@@ -116,7 +108,7 @@ const AddInformation = ({ timelinesList, isLoading, createInformation, idSubject
                                 />
                             </Form.Item>
 
-                            <Form.Item wrapperCol={{ ...formItemLayout.wrapperCol}}>
+                            <Form.Item>
                                 <Button type="primary" htmlType="submit" className="lms-btn">
                                     {t('submit')}</Button>
                             </Form.Item>

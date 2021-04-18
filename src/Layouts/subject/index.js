@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import WidgetLeft from '../../components/widget'
+import WidgetLeft from '../../components/widget-left'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Skeleton, Timeline, Tooltip } from 'antd'
 import './styles.scss'
@@ -121,8 +121,8 @@ const Subject = () => {
                                         <div className="subject-container" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} key={index}>
                                             <div className="subject-wrapper">
                                                 <div className="subject-header">
-                                                    <div>{`${t('week')} ${index < 9 ? ('0' + (index + 1)) : (index + 1)}: ${name}`}</div>
-                                                    <div className="description">{description}</div>
+                                                    <div className="text-center">{`${t('week')} ${index < 9 ? ('0' + (index + 1)) : (index + 1)}: ${name}`}</div>
+                                                    <div className="description text-center">{description}</div>
                                                 </div>
                                                 <div className="wrapper-body">
 
