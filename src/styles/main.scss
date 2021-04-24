@@ -383,7 +383,7 @@ background-color: #2D2E30;
             color: #3c4043;
         }
         .todos-item{
-            margin: 0 1.5rem;
+            // margin: 0 1.5rem;
             padding: 1rem 0;
             background-color: #fff;
             border: .0625rem solid #dadce0;
@@ -416,6 +416,7 @@ background-color: #2D2E30;
                     font-size: 0.875rem;
                     font-weight: 500;
                     color: #3c4043;
+                    font-weight: bold;
                 }
                 .todos-item__t{
                     letter-spacing: .025em;
@@ -452,7 +453,7 @@ h5.ant-typography{
 }
 
 .mt-4{
-    margin-top: 0.5rem;
+    margin-top: 0.5rem !important;
 }
 
 .ml-2{
@@ -465,6 +466,15 @@ h5.ant-typography{
 
 .mr-4{
     margin-right: 0.5rem;
+}
+
+
+.mb-2{
+    margin-bottom: 0.25rem !important;
+}
+
+.mb-4{
+    margin-bottom: 0.5rem !important;
 }
 
 #antd-customize.ant-input-customize{
@@ -774,4 +784,43 @@ h5.ant-typography{
     flex-wrap: wrap;
     row-gap: 0.5rem;
     column-gap: 0.5rem;
+}
+
+.ant-ribbon-wrapper{
+    width: 100%;
+}
+
+.ant-tabs-card>.ant-tabs-nav .ant-tabs-tab-active, .ant-tabs-card>div>.ant-tabs-nav .ant-tabs-tab-active{
+    background-color: #0f70b8;
+    border-color: #0f70b8;
+}
+
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
+    color: #f9f9f9;
+}
+
+.ant-tabs-top > .ant-tabs-nav, .ant-tabs-bottom > .ant-tabs-nav, .ant-tabs-top > div > .ant-tabs-nav, .ant-tabs-bottom > div > .ant-tabs-nav{
+    margin: 0
+}
+
+.ant-tabs-top > .ant-tabs-nav::before, .ant-tabs-bottom > .ant-tabs-nav::before, .ant-tabs-top > div > .ant-tabs-nav::before, .ant-tabs-bottom > div > .ant-tabs-nav::before{
+    border-bottom: 0.5px solid #494949 !important;
+}
+
+.ant-tabs-card.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab-active, .ant-tabs-card.ant-tabs-top > div > .ant-tabs-nav .ant-tabs-tab-active{
+    border-bottom-color: #0f70b8
+}
+
+.ant-tabs-tabpane{
+    border-bottom: 0.5px solid #494949;
+    border-left: 0.5px solid #494949;
+    border-right: 0.5px solid #494949;
+    padding: 0.5rem 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+
+.ant-list-items{
+    max-height: 230px;
+    overflow: auto;
 }

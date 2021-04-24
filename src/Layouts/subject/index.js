@@ -8,12 +8,14 @@ import FORUM from '../../assets/images/contents/forum.png'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import RestClient from '../../utils/restClient';
 import { StoreTrading } from '../../store-trading';
-import { useLocation } from 'react-router';
-import { isEmpty, pick } from 'lodash';
+import { useHistory, useLocation } from 'react-router';
+import { get, isEmpty, pick } from 'lodash';
 import ModalLoadingLogin from '../login/modal-loading-login';
 import AssignmentModal from '../assignmentModal/assignmentModal';
 import AddAssignment from '../addAssignment/addAssignment.jsx';
 import WidgeRight from '../../components/widget-right';
+import { notifyError, notifySuccess } from '../../assets/common/core/notify';
+
 
 const Subject = () => {
     const { t } = useTranslation()
@@ -25,6 +27,12 @@ const Subject = () => {
     const [timelinesList, setTimelinesList] = useState([])
     const [quizList, setQuizList] = useState([])
     const [surveyList, setSurveyList] = useState([])
+    const [assignmentRequirement, setAssignmentRequirement] = useState({})
+    const [idTimelineRequired, setIdTimelineRequired] = useState('')
+    const [isSubmitAssignment, setIsSubmitAssignment] = useState(false)
+    const [isTodoModal, setIsTodoModal] = useState(false)
+    const [isCommentAssignment, setIsCommentAssignment] = useState(false)
+    const history = useHistory()
     const restClient = new RestClient({ token })
 
     useEffect(() => {
@@ -80,7 +88,6 @@ const Subject = () => {
             })
     }
 
-    console.log(detailSubject)
 
     const handleOnDragEnd = async (result) => {
         //console.log('handleOnDragEnd', result)
@@ -104,6 +111,72 @@ const Subject = () => {
         })
 
     }
+
+    const getRequirementTodo = async (obj) => {
+
+        setIsTodoModal(true)
+        await restClient.asyncGet(`/assignment/${obj.idTodo}?idSubject=${location.state._id}&idTimeline=${obj.idTimeline}`)
+            .then(res => {
+                if (!res.hasError) {
+                    setAssignmentRequirement(get(res, 'data').assignment)
+                    setIdTimelineRequired(obj.idTimeline)
+                } else {
+                    notifyError(t('failure'), res.data.message);
+                }
+            })
+    }
+
+    const onSubmitAssignment = () => {
+        setIsSubmitAssignment(true)
+    }
+
+    const onCancelSubmitAssignment = () => {
+        setIsSubmitAssignment(false)
+    }
+
+
+    const commentAssignmentGrade = async ({ comment, idAssignment }) => {
+        setIsCommentAssignment(true);
+        await restClient.asyncPost(`/assignment/${idAssignment}/comment`, { idSubject: location.state._id, idTimeline: idTimelineRequired, comment: comment }, token)
+            .then(res => {
+                setIsCommentAssignment(false);
+                if (!res.hasError) {
+                    notifySuccess(t('success'), res.data.message)
+                    //console.log('Notification', res)
+                    let submission = res.data.submission;
+                    //console.log('OLD-ASSIGNMENT', assignmentRequirement);
+                    setAssignmentRequirement({ ...assignmentRequirement, submission: submission })
+                } else {
+                    notifyError(t('failure'), res.data.message);
+                }
+            })
+    }
+
+    const closeTodoModal = () => {
+        setIsTodoModal(false)
+        setAssignmentRequirement(null)
+    };
+
+    const submissionFile = async ({ file, idAssignment }) => {
+        await restClient.asyncPost(`/assignment/${idAssignment}/submit`, { idSubject: location.state._id, idTimeline: idTimelineRequired, file: file })
+            .then(res => {
+                this.setState({ isSubmitAssignment: false });
+                if (!res.hasError) {
+                    notifySuccess(t('success'), t('submit_success'))
+                    //console.log('Notification', res)
+                    let submission = res.data.submission;
+                    //console.log('OLD-ASSIGNMENT', this.state.assignmentRequirement);
+                    setAssignmentRequirement({ ...this.state.assignmentRequirement, submission: submission, submissionStatus: true })
+                } else {
+                    notifyError(t('failure'), res.data.message);
+                }
+            })
+    }
+
+    const directForum = (obj) => {
+        history.push('topic', obj)
+    }
+
     if (loadingSubject) {
         return <ModalLoadingLogin visible={loadingSubject} content={t("loading_class")} />
     }
@@ -116,9 +189,9 @@ const Subject = () => {
                         ref={provided.innerRef}>
                         {
                             detailSubject.map(({ _id, name, description, assignments, exams, forums, information, files, surveys }, index) => {
-                                return <Draggable key={_id} draggableId={_id} index={index}>
+                                return <Draggable key={_id.toString()} draggableId={_id} index={index}>
                                     {(provided) => (
-                                        <div className="subject-container" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} key={index}>
+                                        <div className="subject-container" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} key={index.toString()}>
                                             <div className="subject-wrapper">
                                                 <div className="subject-header">
                                                     <div className="text-center">{`${t('week')} ${index < 9 ? ('0' + (index + 1)) : (index + 1)}: ${name}`}</div>
@@ -243,7 +316,7 @@ const Subject = () => {
                                                         !isEmpty(assignments) && (<>
                                                             {
                                                                 assignments.map((assignment, index) => (
-                                                                    <div className="subject-body">
+                                                                    <div className="subject-body" onClick={() => getRequirementTodo({ idTodo: assignment._id, idTimeline: _id })}>
                                                                         <div className="subject-main">
                                                                             <div className="subject-icon">
                                                                                 <FontAwesomeIcon icon="tasks" style={{ width: 30, height: 30, color: '#009432' }} />
@@ -274,7 +347,7 @@ const Subject = () => {
                                                         !isEmpty(forums) && (<>
                                                             {
                                                                 forums.map((forum, index) => (
-                                                                    <div className="subject-body">
+                                                                    <div className="subject-body" onClick={() => directForum({forumId: forum._id, idSubject: location.state._id, idTimeline: _id})}>
                                                                         <div className="subject-main">
                                                                             <div className="subject-icon">
                                                                                 <img src={FORUM} width={30} />
@@ -301,14 +374,14 @@ const Subject = () => {
                                                     }
 
 
-{
+                                                    {
                                                         !isEmpty(exams) && (<>
                                                             {
                                                                 exams.map((exam, index) => (
                                                                     <div className="subject-body">
                                                                         <div className="subject-main">
                                                                             <div className="subject-icon">
-                                                                            <FontAwesomeIcon icon="spell-check" style={{ width: 40, height: 40, color: '#F79F1F' }} />
+                                                                                <FontAwesomeIcon icon="spell-check" style={{ width: 40, height: 40, color: '#F79F1F' }} />
                                                                             </div>
                                                                             <div className="subject-content">{exam.name}</div>
                                                                         </div>
@@ -347,6 +420,8 @@ const Subject = () => {
         </DragDropContext>
         <WidgetLeft timelinesList={timelinesList} setTimelinesList={setTimelinesList} quizList={quizList} setQuizList={setQuizList} surveyList={surveyList} setSurveyList={setSurveyList} />
         <WidgeRight />
+        <AssignmentModal isTodoModal={isTodoModal} isSubmitAssignment={isSubmitAssignment} isCommentAssignment={isCommentAssignment} commentAssignmentGrade={commentAssignmentGrade} assignment={assignmentRequirement} handleCancelModal={closeTodoModal} submitAssignment={submissionFile} onSubmitAssignment={onSubmitAssignment} onCancelSubmitAssignment={onCancelSubmitAssignment} />
+
     </>
 }
 

@@ -11,6 +11,8 @@ import TodoList from '../../components/todo-list';
 import { StoreTrading } from '../../store-trading';
 import Profile from '../profile';
 import ZoomMeeting from '../zoom-meeting';
+import Topic from '../topic';
+import Discussion from '../discussion';
 
 const { Header, Content, Footer } = Layout
 
@@ -29,8 +31,12 @@ function Child() {
             return <TodoList />
         case 'profile':
             return <Profile />
-            case 'zoom-meeting': 
+        case 'zoom-meeting':
             return <ZoomMeeting />
+        case 'topic':
+            return <Topic />
+            case 'discuss': 
+            return <Discussion />
         default:
             break
     }

@@ -1,13 +1,18 @@
-import { Col } from 'antd'
+import { Badge, Col } from 'antd'
 import React, { useContext, useEffect, useState } from 'react'
 import { StoreTrading } from '../../store-trading'
 import RestClient from '../../utils/restClient'
-import {ReactComponent as IC_TODO} from '../../assets/images/todo-item.svg'
+import { ReactComponent as IC_TODO } from '../../assets/images/todo-item.svg'
+import { useTranslation } from 'react-i18next'
+import moment from 'moment'
+import { get } from 'lodash'
 
 const TodoList = () => {
+    const {t} = useTranslation()
     const { token } = useContext(StoreTrading)
 
     const [todolist, setTodoslist] = useState([])
+    const [flag, setFlag] = useState(true)
 
     useEffect(() => {
         getTodosList()
@@ -25,6 +30,38 @@ const TodoList = () => {
             })
     }
 
+
+    const transTime = (time) => {
+        return moment(time).format('DD MMM YYYY h:mm A')
+    }
+
+    const getType = (type) => {
+        switch (type) {
+            case 'exam':
+                return 'Exam';
+            case 'assignment':
+                return 'Assignment';
+            case 'survey':
+                return 'Survey';
+            default:
+                return 'Exam';
+        }
+    }
+
+    const checkUrgentDay = (end) => {
+        const startDate = moment.utc();
+        const endDate = moment.utc(end);
+
+        const duration = moment.duration(endDate.diff(startDate));
+
+        if (duration.days() < 2) {
+            return true
+        }
+        return false
+    }
+
+    console.log('todolist', todolist)
+
     return <div>
         <main className="main-todolist-layout">
             <div></div>
@@ -36,27 +73,31 @@ const TodoList = () => {
                 <div className="title-empty-content-todolist__s">
                     Bạn hiện chưa được giao bài tập nào
                 </div> */}
-                <div className="todos-item">
-                    <div className="todos-item__f">
-                        <Col span={12} style={{
-                            display: 'flex',
-                            alignItems: 'center'
-                        }}>
-                            <Col className="todos-item__ic">
-                                <IC_TODO />
-                            </Col>
-                            <Col >
-                                <div className="todos-item__n">Bài tập tuần 5</div>
-                                <div className="todos-item__t">Gần hết hạn</div>
-                            </Col>
-                        </Col>
-                        <Col span={12}>
-                            <Col span={8}></Col>
-                            <Col span={8}></Col>
-                            <Col span={8}></Col>
-                        </Col>
-                    </div>
-                </div>
+                {
+                    todolist.map(item => {
+                        return <Badge.Ribbon placement="end" text={flag ? t('completed') : checkUrgentDay(get(item, 'expireTime')) ? t('urgent_upcoming_deadline') : t('not_done')} color={flag ? '#4cd137' : checkUrgentDay(get(item, 'expireTime')) ? '#e84118' : '#00a8ff'}
+                        >
+                            <div className="todos-item mb-4">
+                                <div className="todos-item__f">
+                                    <Col span={24} style={{
+                                        display: 'flex',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Col className="todos-item__ic">
+                                            <IC_TODO />
+                                        </Col>
+                                        <Col >
+                                            <div className="todos-item__n">[{getType(item.type)}] {item?.name}</div>
+                                            <div className="todos-item__t">{transTime(get(item, 'expireTime'))}</div>
+                                        </Col>
+                                    </Col>
+                                    
+                                </div>
+                            </div>
+                        </Badge.Ribbon>
+                    })
+                }
+
             </div>
         </main>
     </div>

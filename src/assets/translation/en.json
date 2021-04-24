@@ -58,7 +58,7 @@
     "update": "Update",
     "survey": "The survey",
     "close": "End time",
-    "time_remain": "Time remaining: ",
+    "time_remain": "Time remaining ",
     "status": "Status",
     "take_survey": "Do the survey",
     "msg_timeup_survey": "Expired survey",

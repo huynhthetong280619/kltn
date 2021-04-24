@@ -1,0 +1,21 @@
+#lms-ws-discussion-page .ant-form-item-control-input{
+    width: 100%;
+}
+
+#lms-ws-discussion-page .ant-comment-inner{
+    text-align: left;
+}
+
+#lms-ws-discussion-page .ant-comment-content-author{
+    display: block;
+}
+
+.comment-action {
+    padding-left: 8px;
+    cursor: 'auto';
+  }
+  
+  [class*='-col-rtl'] .comment-action {
+    padding-right: 8px;
+    padding-left: 0;
+  }
