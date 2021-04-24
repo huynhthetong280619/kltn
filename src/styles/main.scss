@@ -824,3 +824,10 @@ h5.ant-typography{
     max-height: 230px;
     overflow: auto;
 }
+
+.zoom-list{
+    .ant-list-items{
+        max-height: 358px;
+        overflow: auto;
+    }
+}

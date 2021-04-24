@@ -5,16 +5,70 @@ import { ReactComponent as New_Meeting } from '../../assets/images/contents/new_
 import { ReactComponent as Share_Screen } from '../../assets/images/contents/share_screen.svg'
 import { ReactComponent as Schedule_Meeting } from '../../assets/images/contents/schedule_meeting.svg'
 import { ReactComponent as IC_CLOSE } from '../../assets/images/contents/ic_close.svg'
+import { Row, Col, Avatar, Form, Button, List, Input, Tooltip, Comment, Skeleton, Modal } from 'antd'
 
 import ModalWrapper from '../../components/basic/modal-wrapper'
-import { Tooltip, Modal } from 'antd'
 import './zoom.scss'
+import { get } from 'lodash'
+import moment from 'moment'
+
+const { TextArea } = Input;
+const CommentList = ({ t, comments }) => (
+    <List
+        dataSource={comments}
+        itemLayout="horizontal"
+        renderItem={props => <Comment author={<a className="color-default">{get(get(props, 'create'), 'surName') + " " + get(get(props, 'create'), 'firstName')}</a>}
+            avatar={
+                <Avatar
+                    src={get(get(props, 'create'), 'urlAvatar')}
+                    alt={get(get(props, 'create'), 'surName') + " " + get(get(props, 'create'), 'firstName')}
+                />
+            }
+
+            content={
+                <p className="color-default">
+                    {get(props, 'content')}
+                </p>
+            }
+
+            datetime={
+                <Tooltip title={moment.utc(get(props, 'time')).format('YYYY-MM-DD HH:mm:ss')}>
+                    <span>{moment.utc(get(props, 'time')).fromNow()}</span>
+                </Tooltip>
+            }
+        />}
+
+
+    />
+);
+
+const Editor = ({ t, onChange, onSubmit, submitting, value }) => (
+    <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        columnGap: '1rem'
+    }}>
+        <Form.Item>
+            <Input onChange={onChange} value={value} placeholder="Nội dung thảo luận..." />
+        </Form.Item>
+        <Form.Item>
+            <Button htmlType="submit" loading={submitting} onClick={onSubmit} type="primary">
+                {t('send')}
+            </Button>
+        </Form.Item>
+    </div>
+);
 
 const ZoomMeeting = () => {
     const { t } = useTranslation()
     const [isOpenModalFunction, setIsOpenModalFunction] = useState(false)
     const [currentTitle, setCurrentTitle] = useState('')
     const [openChatTab, setOpenChatTab] = useState(false)
+    const [commentInput, setCommentInput] = useState('')
+    const [comments, setComments] = useState([])
+    const [profile, setProfile] = useState({})
+    const [submitting, setSubmitting] = useState(false)
+
 
     const onCloseModalAction = () => {
         setIsOpenModalFunction(false)
@@ -32,9 +86,34 @@ const ZoomMeeting = () => {
     const fullScreen = (e) => {
         const currentElement = e.currentTarget
 
-        if(currentElement){
+        if (currentElement) {
             currentElement.classList.toggle('fullsize-screen-item')
         }
+    }
+
+    const handleSubmit = () => {
+        if (!commentInput) {
+            return;
+        }
+
+        setSubmitting(true)
+
+        setComments([
+            ...comments,
+            {
+                author: 'Han Solo',
+                avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                content: <p>{commentInput}</p>,
+                datetime: moment().fromNow(),
+            }
+        ])
+
+        setSubmitting(false)
+        setCommentInput('')
+    }
+
+    const handleChange = (e) => {
+        setCommentInput(e.target.value)
     }
 
     return <div className="mt-4" style={{
@@ -112,8 +191,30 @@ const ZoomMeeting = () => {
                 </div>
                 {
                     openChatTab && <div style={{ width: '40%' }}>
-                        <ModalWrapper style={{ height: '100%' }}>
-
+                        <ModalWrapper style={{ height: '100%', position: 'relative' }} className="zoom-list">
+                            {comments.length > 0 && <CommentList t={t} comments={comments} />}
+                            <Comment
+                                style={{
+                                    position: 'absolute',
+                                    bottom: 0,
+                                    left: '2rem'
+                                }}
+                                avatar={
+                                    <Avatar
+                                        src={profile.urlAvatar}
+                                        alt="Han Solo"
+                                    />
+                                }
+                                content={
+                                    <Editor
+                                        t={t}
+                                        onChange={handleChange}
+                                        onSubmit={handleSubmit}
+                                        submitting={submitting}
+                                        value={commentInput}
+                                    />
+                                }
+                            />
                         </ModalWrapper>
                     </div>
                 }
