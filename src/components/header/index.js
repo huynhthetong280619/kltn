@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Col, Row, Typography } from 'antd'
+import { Col, Dropdown, Row, Typography, } from 'antd'
 // import IC_MENU from '../../assets/images/ic_menu_bar.png'
 import Menu from '../../assets/images/ic_menu.svg'
 import IC_SETTING from '../../assets/images/ic_setting.svg'
@@ -16,13 +16,12 @@ import ArrowDown from '../../assets/images/ic_arr_down.png'
 import { Link, Redirect, useHistory } from 'react-router-dom'
 import Message from '../message'
 import { StoreTrading } from '../../store-trading'
-import { LoginOutlined } from '@ant-design/icons'
-
+import { DownOutlined } from '@ant-design/icons'
 const { Text } = Typography;
 
 const HeaderLayout = ({ setOpen }) => {
     const { t, i18n } = useTranslation()
-    const { authFlag } = useContext(StoreTrading)
+    const { authFlag, setAuth } = useContext(StoreTrading)
 
     const [openMessage, setOpenMessage] = useState(false)
     const history = useHistory()
@@ -32,6 +31,14 @@ const HeaderLayout = ({ setOpen }) => {
 
     useEffect(() => {
         const lang = localStorage.getItem(STORE_KEY.LANGUAGE)
+
+        if (!authFlag) {
+            const API_TOKEN = localStorage.getItem('API_TOKEN')
+
+            if (API_TOKEN) {
+                setAuth(true)
+            }
+        }
 
         if (!lang) {
             localStorage.setItem(STORE_KEY.LANGUAGE, language)
@@ -55,6 +62,27 @@ const HeaderLayout = ({ setOpen }) => {
 
         history.push('/login')
     }
+
+    const menu = (
+        <Menu>
+            <Menu.Item>
+                <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
+                    1st menu item
+      </a>
+            </Menu.Item>
+            <Menu.Item icon={<DownOutlined />} disabled>
+                <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
+                    2nd menu item
+      </a>
+            </Menu.Item>
+            <Menu.Item disabled>
+                <a target="_blank" rel="noopener noreferrer" href="https://www.luohanacademy.com">
+                    3rd menu item
+      </a>
+            </Menu.Item>
+            <Menu.Item danger>a danger item</Menu.Item>
+        </Menu>
+    )
 
 
     return <div className="header-layout ant-col-24">

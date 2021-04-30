@@ -1,4 +1,4 @@
-import React, { Suspense, useContext, useEffect, useState } from 'react'
+import React, { Suspense, useContext, useEffect, useState, lazy } from 'react'
 import { Switch, Route, useParams, useHistory } from 'react-router-dom'
 import LoadingView from '../../Layouts/loading'
 import { Layout } from 'antd';
@@ -13,8 +13,14 @@ import Profile from '../profile';
 import ZoomMeeting from '../zoom-meeting';
 import Topic from '../topic';
 import Discussion from '../discussion';
+import Quiz from '../quiz';
+import Student from '../manage/student';
+import Survey from '../survey';
 
 const { Header, Content, Footer } = Layout
+
+const MainPages = lazy(() => import('../main'))
+
 
 function Child() {
     let { link } = useParams()
@@ -35,8 +41,14 @@ function Child() {
             return <ZoomMeeting />
         case 'topic':
             return <Topic />
-            case 'discuss': 
+        case 'discuss':
             return <Discussion />
+        case 'quiz':
+            return <Quiz />
+        case 'survey':
+            return <Survey />
+        case 'manage-student':
+            return <Student />
         default:
             break
     }
@@ -63,6 +75,7 @@ const PagesView = () => {
             <Content style={{ overflow: 'auto', background: '#232323' }}>
                 <Suspense fallback={<LoadingView />}>
                     <Switch>
+                        <Route exact path="/" component={MainPages} />
                         <Route path="/home/:link" children={<Child />} />
                     </Switch>
                 </Suspense>

@@ -75,7 +75,7 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
         setLoading(true);
         await restClient.asyncPost('/exam', data, token)
             .then(res => {
-                //console.log('handleCreateExam', res)
+                console.log('handleCreateExam', res)
                 setLoading(false);
                 if (!res.hasError) {
                     createQuiz({ exam: res.data.exam, idTimeline: idTimelineAdd })
@@ -111,8 +111,8 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
             startTime: formatTime(fieldsValue.exam.startTime),
             expireTime: formatTime(fieldsValue.exam.expireTime)
         };
-        //console.log(data);
-        //createQuiz({ quiz: data, idTimeline: fieldsValue.idTimeline });
+
+        createQuiz({ exam: data, idTimeline: fieldsValue.idTimeline });
         if (!idExam) {
             handleCreateExam(data, fieldsValue.idTimeline);
         } else {

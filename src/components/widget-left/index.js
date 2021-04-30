@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './widget.scss'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import '../font-awesome-icon'
@@ -29,7 +29,11 @@ const WidgetLeft = ({
     quizList,
     setQuizList,
     surveyList,
-    setSurveyList }) => {
+    setSurveyList,
+    detailSubject,
+    setDetailSubject,
+    isOnEdit,
+    setIsOnEdit }) => {
     const { t } = useTranslation()
     const [openCreateContent, setOpenCreateContent] = useState(false)
 
@@ -43,7 +47,7 @@ const WidgetLeft = ({
     const [importState, setImportState] = useState(false)
     const [exportState, setExportState] = useState(false)
     const [isOpenModalFunction, setIsOpenModalFunction] = useState(false)
-    const [timelinesIndex, setTimelinesIndex] = useState([])
+    const [timelinesIndex, setTimelinesIndex] = useState(detailSubject)
     const [currentTitle, setCurrentTitle] = useState('')
     const history = useHistory()
 
@@ -93,14 +97,24 @@ const WidgetLeft = ({
 
     const createAssignment = async ({ assignment, idTimeline }) => {
         notifySuccess(t('success'), t('add_quiz_assign'))
-        let timelineUpdate = timelinesList.filter(({ _id }) => _id === idTimeline)
+        let timelineUpdate = detailSubject.filter(({ _id }) => _id === idTimeline)
         console.log('createAssignment', timelineUpdate)
         head(timelineUpdate).assignments.push(assignment)
 
 
         //console.log(timelineUpdate)
 
-        setTimelinesList([])
+        setTimeout(() => {
+
+            setDetailSubject([...detailSubject])
+        }, 3000)
+
+        setTimeout(() => {
+            setTimelinesIndex([...detailSubject])
+            onCloseModalAction();
+        }, 3000)
+
+
         // setState({
         //     timelines: [...timelines],
         // }, () => {
@@ -108,7 +122,7 @@ const WidgetLeft = ({
         //         timelinesIndex: timelines
         //     })
         //     //console.log(timelines)
-        //     closeDrawerCreate();
+        //     onCloseModalAction();
         // })
     }
 
@@ -131,12 +145,12 @@ const WidgetLeft = ({
         //     })
         //     //console.log(timelines)
 
-        //     closeDrawerCreate();
+        //     onCloseModalAction();
         // })
     }
 
     const createInformation = async ({ information, idTimeline }) => {
-        this.setState({ isLoading: true });
+        // this.setState({ isLoading: true });
         const data = {
             idSubject: location.state._id,
             idTimeline: idTimeline,
@@ -148,10 +162,10 @@ const WidgetLeft = ({
                 if (!res.hasError) {
                     notifySuccess(t('success'), t('add_quiz_information'))
                     //console.log('information', res)
-                    let timelineUpdate = timelinesList.filter(({ _id }) => _id === data.idTimeline)
+                    let timelineUpdate = detailSubject.filter(({ _id }) => _id === data.idTimeline)
                     head(timelineUpdate).information.push(res.data.information)
-                    setTimelinesList([...timelinesList])
-                    setTimeout(() => setTimelinesIndex(timelinesList), 1000)
+                    setTimelinesList([...detailSubject])
+                    setTimeout(() => setTimelinesIndex(detailSubject), 1000)
                     setOpenCreateContent(false);
                 } else {
                     notifyError(t('failure'), res.data.message);
@@ -179,16 +193,26 @@ const WidgetLeft = ({
         //     this.setState({
         //         timelinesIndex: timelinesList
         //     })
-        //     this.closeDrawerCreate();
+        //     this.onCloseModalAction();
         // })
     }
 
     const createForum = async ({ forum, idTimeline }) => {
         notifySuccess(t('success'), t('add_forum_timeline'))
 
-        let timelineUpdate = timelinesList.filter(({ _id }) => _id === idTimeline)
+        let timelineUpdate = detailSubject.filter(({ _id }) => _id === idTimeline)
 
         head(timelineUpdate).forums.push(forum)
+
+        setTimeout(() => {
+
+            setDetailSubject([...detailSubject])
+        }, 3000)
+
+        setTimeout(() => {
+            setTimelinesIndex([...detailSubject])
+            onCloseModalAction();
+        }, 3000)
 
         // this.setState({
         //     timelines: [...timelinesList],
@@ -196,7 +220,7 @@ const WidgetLeft = ({
         //     this.setState({
         //         timelinesIndex: timelinesList
         //     })
-        //     this.closeDrawerCreate();
+        //     this.onCloseModalAction();
         // })
     }
 
@@ -215,7 +239,7 @@ const WidgetLeft = ({
                     //     timelinesIndex: res.data.timelines
                     // });
                     notifySuccess(t('success'), res.data.message);
-                    // this.closeDrawerCreate();
+                    // this.onCloseModalAction();
                 } else {
                     notifyError(t('failure'), res.data.message);
                 }
@@ -250,7 +274,7 @@ const WidgetLeft = ({
                     //         timelinesIndex: timelinesList
                     //     })
                     // });
-                    // this.closeDrawerCreate();
+                    // this.onCloseModalAction();
 
                 } else {
                     notifyError(t('failure'), res.data.message);
@@ -262,11 +286,20 @@ const WidgetLeft = ({
 
         notifySuccess(t('success'), t('add_document_success'))
 
-        let timelineUpdate = timelinesList.filter(({ _id }) => _id === idTimeline)
+        let timelineUpdate = detailSubject.filter(({ _id }) => _id === idTimeline)
 
         head(timelineUpdate).files.push(file)
 
         //console.log(timelineUpdate)
+
+        setTimeout(() => {
+            setDetailSubject([...detailSubject])
+        }, 3000)
+
+        setTimeout(() => {
+            setTimelinesIndex([...detailSubject])
+            onCloseModalAction()
+        }, 3000)
 
         // this.setState({
         //     timelines: [...timelinesList],
@@ -275,7 +308,7 @@ const WidgetLeft = ({
         //     this.setState({
         //         timelinesIndex: timelinesList
         //     })
-        //     this.closeDrawerCreate();
+        //     this.onCloseModalAction();
         // })
     }
 
@@ -293,7 +326,7 @@ const WidgetLeft = ({
         //     this.setState({
         //         timelinesIndex: timelinesList
         //     })
-        //     this.closeDrawerCreate();
+        //     this.onCloseModalAction();
         // })
     }
 
@@ -301,13 +334,21 @@ const WidgetLeft = ({
     const createQuiz = ({ exam, idTimeline }) => {
 
         notifySuccess(t('success'), t('add_quiz_success'))
-        let timelineUpdate = timelinesList.filter(({ _id }) => _id === idTimeline)
+        let timelineUpdate = detailSubject.filter(({ _id }) => _id === idTimeline)
 
-        //console.log('timelineUpdate', timelineUpdate)
+        console.log('timelineUpdate', timelineUpdate, exam, idTimeline)
         head(timelineUpdate).exams.push(exam)
 
 
         //console.log(timelineUpdate)
+
+        setTimeout(() => {
+            setTimelinesList([...timelinesList])
+        }, 3000)
+
+        setTimeout(() => {
+            setTimelinesIndex(timelinesList)
+        }, 3000)
 
         // this.setState({
         //     timelines: [...timelinesList],
@@ -316,13 +357,13 @@ const WidgetLeft = ({
         //     this.setState({
         //         timelinesIndex: timelinesList
         //     })
-        //     this.closeDrawerCreate();
+        //     this.onCloseModalAction();
         // })
     }
 
     const updateQuiz = ({ exam, idTimeline }) => {
         notifySuccess(t('success'), t('update_quiz_success'))
-        let timelineUpdate = timelinesList.filter(({ _id }) => _id === idTimeline)
+        let timelineUpdate = detailSubject.filter(({ _id }) => _id === idTimeline)
 
         //console.log('timelineUpdate', timelineUpdate)
         //console.log('updateExam', exam);
@@ -339,7 +380,7 @@ const WidgetLeft = ({
         //     this.setState({
         //         timelinesIndex: timelinesList
         //     })
-        //     this.closeDrawerCreate();
+        //     this.onCloseModalAction();
         // })
     }
 
@@ -347,11 +388,19 @@ const WidgetLeft = ({
     const createSurvey = ({ survey, idTimeline }) => {
 
         notifySuccess(t('success'), t('add_quiz_survey'))
-        let timelineUpdate = timelinesList.filter(({ _id }) => _id === idTimeline)
+        let timelineUpdate = detailSubject.filter(({ _id }) => _id === idTimeline)
 
         //console.log('timelineUpdate', timelineUpdate)
         head(timelineUpdate).surveys.push(survey)
 
+        setTimeout(() => {
+            setTimelinesList([...timelinesList])
+        }, 3000)
+
+        setTimeout(() => {
+            setTimelinesIndex(timelinesList)
+            onCloseModalAction()
+        }, 3000)
 
         //console.log(timelineUpdate)
 
@@ -362,7 +411,7 @@ const WidgetLeft = ({
         //     this.setState({
         //         timelinesIndex: timelinesList
         //     })
-        //     this.closeDrawerCreate();
+        //     this.onCloseModalAction();
         // })
 
     }
@@ -388,7 +437,7 @@ const WidgetLeft = ({
         //     this.setState({
         //         timelinesIndex: timelinesList
         //     })
-        //     this.closeDrawerCreate();
+        //     this.onCloseModalAction();
         // })
     }
 
@@ -416,7 +465,10 @@ const WidgetLeft = ({
                 <i><FontAwesomeIcon icon="sort-amount-up" /> </i>
                 <span>{t('arrange')}</span>
             </a>
-            <a>
+            <a onClick={(e) => {
+                e.preventDefault();
+                setIsOnEdit(!isOnEdit)
+            }}>
                 <i><FontAwesomeIcon icon="edit" /></i>
                 <span>{t('update')}</span>
             </a>

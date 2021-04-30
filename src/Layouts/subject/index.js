@@ -16,7 +16,7 @@ import AddAssignment from '../addAssignment/addAssignment.jsx';
 import WidgeRight from '../../components/widget-right';
 import { notifyError, notifySuccess } from '../../assets/common/core/notify';
 
-
+import { ReactComponent as DashManage } from '../../assets/images/contents/dashboard.svg'
 const Subject = () => {
     const { t } = useTranslation()
     const { authFlag, token } = useContext(StoreTrading)
@@ -32,6 +32,7 @@ const Subject = () => {
     const [isSubmitAssignment, setIsSubmitAssignment] = useState(false)
     const [isTodoModal, setIsTodoModal] = useState(false)
     const [isCommentAssignment, setIsCommentAssignment] = useState(false)
+    const [isOnEdit, setIsOnEdit] = useState(false)
     const history = useHistory()
     const restClient = new RestClient({ token })
 
@@ -177,11 +178,29 @@ const Subject = () => {
         history.push('topic', obj)
     }
 
+    const directExams = (obj) => {
+        history.push('quiz', obj)
+    }
+
+    const directManageStudent = () => {
+        history.push('manage-student', { idSubject: location.state._id })
+    }
+
+    const directSurvey = (obj) => {
+        history.push('survey', obj)
+    }
+
     if (loadingSubject) {
         return <ModalLoadingLogin visible={loadingSubject} content={t("loading_class")} />
     }
 
     return <>
+        <div className="subject-container">
+            <div className="subject-wrapper" style={{ display: 'flex', alignItems: 'center', color: '#f9f9f9', cursor: 'pointer' }}>
+                <DashManage />
+                <div onClick={() => directManageStudent()}>{t('manage_student')}</div>
+            </div>
+        </div>
         <DragDropContext onDragEnd={handleOnDragEnd}>
             <Droppable droppableId="characters">
                 {(provided) => (
@@ -221,7 +240,7 @@ const Subject = () => {
                                                         !isEmpty(surveys) && (<>
                                                             {
                                                                 surveys.map((survey, index) => (
-                                                                    <div className="subject-body">
+                                                                    <div className="subject-body" onClick={() => directSurvey({ surveyId: survey._id, idSubject: location.state._id, timelineId: _id })}>
                                                                         <div className="subject-main">
                                                                             <div className="subject-icon">
                                                                                 {/* <FontAwesomeIcon icon='file-powerpoint' style={{ width: 30, height: 30, color: '#d04424' }} /> */}
@@ -230,16 +249,25 @@ const Subject = () => {
                                                                             <div className="subject-content">{survey.name}</div>
                                                                         </div>
                                                                         <div className="subject-action">
-                                                                            <div>
-                                                                                <Tooltip title={t('edit_file')}>
-                                                                                    <a>
-                                                                                        <FontAwesomeIcon icon="edit" />
-                                                                                    </a>
-                                                                                </Tooltip>
-                                                                            </div>
-                                                                            <div>
-                                                                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                                                                            </div>
+                                                                            {
+                                                                                isOnEdit && <div>
+                                                                                    <Tooltip title={t('edit_file')}>
+                                                                                        <a>
+                                                                                            <FontAwesomeIcon icon="edit" />
+                                                                                        </a>
+                                                                                    </Tooltip>
+                                                                                </div>
+                                                                            }
+                                                                            {
+                                                                                !survey.isDeleted ?
+                                                                                    <div>
+                                                                                        <FontAwesomeIcon icon="lock-open" style={{ color: '#e84118' }} />
+                                                                                    </div>
+                                                                                    :
+                                                                                    <div>
+                                                                                        <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
+                                                                                    </div>
+                                                                            }
                                                                         </div>
                                                                     </div>
                                                                 ))
@@ -294,16 +322,25 @@ const Subject = () => {
                                                                             <div className="subject-content">{file.name}</div>
                                                                         </div>
                                                                         <div className="subject-action">
-                                                                            <div>
-                                                                                <Tooltip title={t('edit_file')}>
-                                                                                    <a>
-                                                                                        <FontAwesomeIcon icon="edit" />
-                                                                                    </a>
-                                                                                </Tooltip>
-                                                                            </div>
-                                                                            <div>
-                                                                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                                                                            </div>
+                                                                            {
+                                                                                isOnEdit && <div>
+                                                                                    <Tooltip title={t('edit_file')}>
+                                                                                        <a>
+                                                                                            <FontAwesomeIcon icon="edit" />
+                                                                                        </a>
+                                                                                    </Tooltip>
+                                                                                </div>
+                                                                            }
+                                                                            {
+                                                                                !file.isDeleted ?
+                                                                                    <div>
+                                                                                        <FontAwesomeIcon icon="lock-open" style={{ color: '#e84118' }} />
+                                                                                    </div>
+                                                                                    :
+                                                                                    <div>
+                                                                                        <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
+                                                                                    </div>
+                                                                            }
                                                                         </div>
                                                                     </div>
                                                                 ))
@@ -324,16 +361,25 @@ const Subject = () => {
                                                                             <div className="subject-content">{assignment.name}</div>
                                                                         </div>
                                                                         <div className="subject-action">
-                                                                            <div>
-                                                                                <Tooltip title={t('edit_file')}>
-                                                                                    <a>
-                                                                                        <FontAwesomeIcon icon="edit" />
-                                                                                    </a>
-                                                                                </Tooltip>
-                                                                            </div>
-                                                                            <div>
-                                                                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                                                                            </div>
+                                                                            {
+                                                                                isOnEdit && <div>
+                                                                                    <Tooltip title={t('edit_file')}>
+                                                                                        <a>
+                                                                                            <FontAwesomeIcon icon="edit" />
+                                                                                        </a>
+                                                                                    </Tooltip>
+                                                                                </div>
+                                                                            }
+                                                                            {
+                                                                                !assignment.isDeleted ?
+                                                                                    <div>
+                                                                                        <FontAwesomeIcon icon="lock-open" style={{ color: '#e84118' }} />
+                                                                                    </div>
+                                                                                    :
+                                                                                    <div>
+                                                                                        <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
+                                                                                    </div>
+                                                                            }
                                                                         </div>
                                                                     </div>
                                                                 ))
@@ -347,7 +393,7 @@ const Subject = () => {
                                                         !isEmpty(forums) && (<>
                                                             {
                                                                 forums.map((forum, index) => (
-                                                                    <div className="subject-body" onClick={() => directForum({forumId: forum._id, idSubject: location.state._id, idTimeline: _id})}>
+                                                                    <div className="subject-body" onClick={() => directForum({ forumId: forum._id, idSubject: location.state._id, idTimeline: _id })}>
                                                                         <div className="subject-main">
                                                                             <div className="subject-icon">
                                                                                 <img src={FORUM} width={30} />
@@ -355,16 +401,25 @@ const Subject = () => {
                                                                             <div className="subject-content">{forum.name}</div>
                                                                         </div>
                                                                         <div className="subject-action">
-                                                                            <div>
-                                                                                <Tooltip title={t('edit_file')}>
-                                                                                    <a>
-                                                                                        <FontAwesomeIcon icon="edit" />
-                                                                                    </a>
-                                                                                </Tooltip>
-                                                                            </div>
-                                                                            <div>
-                                                                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                                                                            </div>
+                                                                            {
+                                                                                isOnEdit && <div>
+                                                                                    <Tooltip title={t('edit_file')}>
+                                                                                        <a>
+                                                                                            <FontAwesomeIcon icon="edit" />
+                                                                                        </a>
+                                                                                    </Tooltip>
+                                                                                </div>
+                                                                            }
+                                                                            {
+                                                                                !forum.isDeleted ?
+                                                                                    <div>
+                                                                                        <FontAwesomeIcon icon="lock-open" style={{ color: '#e84118' }} />
+                                                                                    </div>
+                                                                                    :
+                                                                                    <div>
+                                                                                        <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
+                                                                                    </div>
+                                                                            }
                                                                         </div>
                                                                     </div>
                                                                 ))
@@ -378,7 +433,7 @@ const Subject = () => {
                                                         !isEmpty(exams) && (<>
                                                             {
                                                                 exams.map((exam, index) => (
-                                                                    <div className="subject-body">
+                                                                    <div className="subject-body" onClick={() => directExams({ examId: exam._id, idSubject: location.state._id, idTimeline: _id })}>
                                                                         <div className="subject-main">
                                                                             <div className="subject-icon">
                                                                                 <FontAwesomeIcon icon="spell-check" style={{ width: 40, height: 40, color: '#F79F1F' }} />
@@ -386,16 +441,27 @@ const Subject = () => {
                                                                             <div className="subject-content">{exam.name}</div>
                                                                         </div>
                                                                         <div className="subject-action">
-                                                                            <div>
-                                                                                <Tooltip title={t('edit_file')}>
-                                                                                    <a>
-                                                                                        <FontAwesomeIcon icon="edit" />
-                                                                                    </a>
-                                                                                </Tooltip>
-                                                                            </div>
-                                                                            <div>
-                                                                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                                                                            </div>
+                                                                            {
+                                                                                isOnEdit && <div>
+                                                                                    <Tooltip title={t('edit_file')}>
+                                                                                        <a>
+                                                                                            <FontAwesomeIcon icon="edit" />
+                                                                                        </a>
+                                                                                    </Tooltip>
+                                                                                </div>
+                                                                            }
+
+                                                                            {
+                                                                                !exam.isDeleted ?
+                                                                                    <div>
+                                                                                        <FontAwesomeIcon icon="lock-open" style={{ color: '#e84118' }} />
+                                                                                    </div>
+                                                                                    :
+                                                                                    <div>
+                                                                                        <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
+                                                                                    </div>
+                                                                            }
+
                                                                         </div>
                                                                     </div>
                                                                 ))
@@ -418,9 +484,27 @@ const Subject = () => {
                 )}
             </Droppable>
         </DragDropContext>
-        <WidgetLeft timelinesList={timelinesList} setTimelinesList={setTimelinesList} quizList={quizList} setQuizList={setQuizList} surveyList={surveyList} setSurveyList={setSurveyList} />
+        <WidgetLeft
+            timelinesList={timelinesList}
+            setTimelinesList={setTimelinesList}
+            quizList={quizList} setQuizList={setQuizList}
+            surveyList={surveyList} setSurveyList={setSurveyList}
+            detailSubject={detailSubject}
+            setDetailSubject={setDetailSubject}
+            isOnEdit={isOnEdit}
+            setIsOnEdit={setIsOnEdit}
+        />
         <WidgeRight />
-        <AssignmentModal isTodoModal={isTodoModal} isSubmitAssignment={isSubmitAssignment} isCommentAssignment={isCommentAssignment} commentAssignmentGrade={commentAssignmentGrade} assignment={assignmentRequirement} handleCancelModal={closeTodoModal} submitAssignment={submissionFile} onSubmitAssignment={onSubmitAssignment} onCancelSubmitAssignment={onCancelSubmitAssignment} />
+        <AssignmentModal
+            isTodoModal={isTodoModal}
+            isSubmitAssignment={isSubmitAssignment}
+            isCommentAssignment={isCommentAssignment}
+            commentAssignmentGrade={commentAssignmentGrade}
+            assignment={assignmentRequirement}
+            handleCancelModal={closeTodoModal}
+            submitAssignment={submissionFile}
+            onSubmitAssignment={onSubmitAssignment}
+            onCancelSubmitAssignment={onCancelSubmitAssignment} />
 
     </>
 }

@@ -130,9 +130,6 @@ const Discussion = () => {
 
     return <div>
         <ModalWrapper style={{ width: '90%', margin: '0 auto' }} className="mt-4">
-            <Row style={{ width: '100%' }}>
-                {/* <Col span={24} style={{ padding: '25px', fontSize: '2em' }}>{nameSubject.toUpperCase()}</Col> */}
-            </Row>
             <div style={{ margin: '0 auto' }}>
                 <div style={{ display: 'flex' }}>
                     <Tooltip title="Thoát hội thảo">
