@@ -11,6 +11,7 @@ import ModalWrapper from '../../components/basic/modal-wrapper'
 import './zoom.scss'
 import { get } from 'lodash'
 import moment from 'moment'
+import { useLocation } from 'react-router'
 
 const { TextArea } = Input;
 const CommentList = ({ t, comments }) => (
@@ -67,7 +68,9 @@ const ZoomMeeting = () => {
     const [commentInput, setCommentInput] = useState('')
     const [comments, setComments] = useState([])
     const [profile, setProfile] = useState({})
-    const [submitting, setSubmitting] = useState(false)
+    const [submitting, setSubmitting] = useState(false);
+    const location = useLocation()
+    const { idSubject } = location.state;
 
 
     const onCloseModalAction = () => {
@@ -146,7 +149,7 @@ const ZoomMeeting = () => {
                             columnGap: '0.5rem',
                             flexWrap: 'wrap',
                             rowGap: '0.5rem',
-                            justifyContent: 'space-between',
+                            justifyContent: 'flex-start',
                             width: '100%',
                             display: 'flex',
                             position: 'relative'

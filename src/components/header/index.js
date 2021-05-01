@@ -99,7 +99,7 @@ const HeaderLayout = ({ setOpen }) => {
             </Col>
         </Col>
         <Col span={12} style={{ height: '64px' }} className="header-layout-right">
-            <Col>
+            {/* <Col>
                 <div style={{ display: 'flex' }} onClick={() => changeLanguage({ key: 'vi' })}>
                     <div>
                         <img src={en} />
@@ -109,7 +109,7 @@ const HeaderLayout = ({ setOpen }) => {
                         <img src={ArrowDown} />
                     </div>
                 </div>
-            </Col>
+            </Col> */}
             <Col className="header-message cursor-act ml-2 mr-2">
                 <div>
                     <img src={IC_NOTIFICATION} width="20px" />

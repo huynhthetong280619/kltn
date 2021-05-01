@@ -33,6 +33,24 @@ const Subject = () => {
     const [isTodoModal, setIsTodoModal] = useState(false)
     const [isCommentAssignment, setIsCommentAssignment] = useState(false)
     const [isOnEdit, setIsOnEdit] = useState(false)
+
+    const [openCreateContent, setOpenCreateContent] = useState(false)
+
+    const [notificationState, setNotificationState] = useState(false)
+    const [documentState, setDocumentState] = useState(false)
+    const [todosState, setTodosState] = useState(false)
+    const [quizState, setQuizState] = useState(false)
+    const [surveyState, setSurveyState] = useState(false)
+    const [timelineState, setTimelineState] = useState(false)
+    const [forumState, setForumState] = useState(false)
+    const [importState, setImportState] = useState(false)
+    const [exportState, setExportState] = useState(false)
+    const [isOpenModalFunction, setIsOpenModalFunction] = useState(false)
+
+    const [surveyIdEdit, setSurveyIdEdit] = useState('')
+    const [timelineIdEdit, setTimelineIdEdit] = useState('')
+    const [focusSurveyEdit, setFocusSurveyEdit] = useState(false)
+
     const history = useHistory()
     const restClient = new RestClient({ token })
 
@@ -190,6 +208,12 @@ const Subject = () => {
         history.push('survey', obj)
     }
 
+    const focusEditSurvey = (surveyId, timelineId) => {
+        setSurveyIdEdit(surveyId);
+        setTimelineIdEdit(timelineId)
+        setFocusSurveyEdit(true)
+    }
+
     if (loadingSubject) {
         return <ModalLoadingLogin visible={loadingSubject} content={t("loading_class")} />
     }
@@ -253,7 +277,7 @@ const Subject = () => {
                                                                                 isOnEdit && <div>
                                                                                     <Tooltip title={t('edit_file')}>
                                                                                         <a>
-                                                                                            <FontAwesomeIcon icon="edit" />
+                                                                                            <FontAwesomeIcon icon="edit" onClick={() => focusEditSurvey(survey._id, _id)} />
                                                                                         </a>
                                                                                     </Tooltip>
                                                                                 </div>
@@ -493,6 +517,33 @@ const Subject = () => {
             setDetailSubject={setDetailSubject}
             isOnEdit={isOnEdit}
             setIsOnEdit={setIsOnEdit}
+
+            openCreateContent={openCreateContent}
+            setOpenCreateContent={setOpenCreateContent}
+            notificationState={notificationState}
+            setNotificationState={setNotificationState}
+            documentState={documentState}
+            setDocumentState={setDocumentState}
+            todosState={todosState}
+            setTodosState={setTodosState}
+            quizState={quizState}
+            setQuizState={setQuizState}
+            surveyState={surveyState}
+            setSurveyState={setSurveyState}
+            timelineState={timelineState}
+            setTimelineState={setTimelineState}
+            forumState={forumState}
+            setForumState={setForumState}
+            importState={importState}
+            setImportState={setImportState}
+            exportState={exportState}
+            setExportState={setExportState}
+            isOpenModalFunction={isOpenModalFunction}
+            setIsOpenModalFunction={setIsOpenModalFunction}
+
+            surveyIdEdit={surveyIdEdit}
+            timelineIdEdit={timelineIdEdit}
+            focusSurveyEdit={focusSurveyEdit}
         />
         <WidgeRight />
         <AssignmentModal

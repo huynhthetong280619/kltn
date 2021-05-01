@@ -33,20 +33,47 @@ const WidgetLeft = ({
     detailSubject,
     setDetailSubject,
     isOnEdit,
-    setIsOnEdit }) => {
-    const { t } = useTranslation()
-    const [openCreateContent, setOpenCreateContent] = useState(false)
+    setIsOnEdit,
+    notificationState,
+    setNotificationState,
+    documentState,
+    setDocumentState,
+    todosState,
+    setTodosState,
+    quizState,
+    setQuizState,
+    surveyState,
+    setSurveyState,
+    timelineState,
+    setTimelineState,
+    forumState,
+    setForumState,
+    importState,
+    setImportState,
+    exportState,
+    setExportState,
+    isOpenModalFunction,
+    setIsOpenModalFunction,
+    openCreateContent,
+    setOpenCreateContent,
 
-    const [notificationState, setNotificationState] = useState(false)
-    const [documentState, setDocumentState] = useState(false)
-    const [todosState, setTodosState] = useState(false)
-    const [quizState, setQuizState] = useState(false)
-    const [surveyState, setSurveyState] = useState(false)
-    const [timelineState, setTimelineState] = useState(false)
-    const [forumState, setForumState] = useState(false)
-    const [importState, setImportState] = useState(false)
-    const [exportState, setExportState] = useState(false)
-    const [isOpenModalFunction, setIsOpenModalFunction] = useState(false)
+    surveyIdEdit,
+    timelineIdEdit,
+    focusSurveyEdit
+}) => {
+    const { t } = useTranslation()
+    // const [openCreateContent, setOpenCreateContent] = useState(false)
+
+    // const [notificationState, setNotificationState] = useState(false)
+    // const [documentState, setDocumentState] = useState(false)
+    // const [todosState, setTodosState] = useState(false)
+    // const [quizState, setQuizState] = useState(false)
+    // const [surveyState, setSurveyState] = useState(false)
+    // const [timelineState, setTimelineState] = useState(false)
+    // const [forumState, setForumState] = useState(false)
+    // const [importState, setImportState] = useState(false)
+    // const [exportState, setExportState] = useState(false)
+    // const [isOpenModalFunction, setIsOpenModalFunction] = useState(false)
     const [timelinesIndex, setTimelinesIndex] = useState(detailSubject)
     const [currentTitle, setCurrentTitle] = useState('')
     const history = useHistory()
@@ -472,7 +499,7 @@ const WidgetLeft = ({
                 <i><FontAwesomeIcon icon="edit" /></i>
                 <span>{t('update')}</span>
             </a>
-            <a onClick={() => history.push('zoom-meeting')}>
+            <a onClick={() => history.push('zoom-meeting', { idSubject: location.state._id })}>
                 <i><FontAwesomeIcon icon="video" /></i>
                 <span>{t('call_video')}</span>
             </a>
