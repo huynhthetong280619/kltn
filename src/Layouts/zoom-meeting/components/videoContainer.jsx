@@ -31,7 +31,7 @@ const VideoContainer = ({ id, stream, user }) => {
                     <i className="full-screen-widget__icon"></i>
                 </div>
                 <video id={id}></video>
-                <div style={{ textAlign: 'center', color: '#f9f9f9' }}>{user.firstName + " " + user.lastName}</div>
+                <div style={{ textAlign: 'center', color: '#f9f9f9', position: 'absolute', bottom: '0' }}>{user.firstName + " " + user.lastName}</div>
             </div>
         </>
     )

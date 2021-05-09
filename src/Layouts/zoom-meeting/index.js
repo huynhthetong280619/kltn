@@ -88,7 +88,6 @@ const ZoomMeeting = () => {
     const peer = new Peer();
     let peers = {};
     const [videoGrid, setVideoGrid] = useState([]);
-    const zoomId = '607ed25c51de952650cddd76';
     const [videoStream, setVideoStream] = useState(null);
     const [isMute, setMute] = React.useState(false);
     const [isCamera, setCamera] = React.useState(false);
@@ -137,7 +136,6 @@ const ZoomMeeting = () => {
     }
 
     const addVideoStream = (id, stream, user) => {
-        console.log(arrayStream);
         const index = arrayStream.findIndex(value => value.id === id)
         if (index < 0) {
             arrayStream.push({ id, stream, user });
@@ -172,7 +170,6 @@ const ZoomMeeting = () => {
 
                             socket.on('user-connected', (peerId, user) => {
                                 connectToNewUser(peerId, stream, user)
-                                alert('Somebody connected', peerId)
                             });
 
                             peer.on('call', (call) => {
@@ -293,10 +290,10 @@ const ZoomMeeting = () => {
                 {
                     openChatTab && <div style={{ width: '40%' }}>
                         <ModalWrapper style={{ height: '100%', position: 'relative' }} className="zoom-list">
-                            
+
 
                             {comments.length > 0 && <CommentList t={t} comments={comments} />}
-                            
+
                             <Comment
                                 style={{
                                     position: 'absolute',
