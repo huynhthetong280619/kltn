@@ -19,7 +19,6 @@ import { SERVER_SOCKET } from "../../assets/constants/const";
 import * as localStorage from "../../assets/common/core/localStorage";
 import * as notify from "../../assets/common/core/notify";
 import Peer from "peerjs";
-import $ from "jquery";
 import VideoContainer from "./components/videoContainer";
 
 const { TextArea } = Input;
@@ -60,7 +59,11 @@ const Editor = ({ t, onChange, onSubmit, submitting, value }) => (
         columnGap: '1rem'
     }}>
         <Form.Item>
-            <Input onChange={onChange} value={value} placeholder="Nội dung thảo luận..." />
+            <Input onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                    onSubmit();
+                }
+            }} onChange={onChange} value={value} placeholder="Nội dung thảo luận..." />
         </Form.Item>
         <Form.Item>
             <Button htmlType="submit" loading={submitting} onClick={onSubmit} type="primary">
@@ -77,7 +80,6 @@ const ZoomMeeting = () => {
     const [openChatTab, setOpenChatTab] = useState(false)
     const [commentInput, setCommentInput] = useState('')
     const [comments, setComments] = useState([])
-    const [profile, setProfile] = useState({})
     const [submitting, setSubmitting] = useState(false);
     const location = useLocation()
     const { idSubject } = location.state;
@@ -91,6 +93,7 @@ const ZoomMeeting = () => {
     const [isMute, setMute] = React.useState(false);
     const [isCamera, setCamera] = React.useState(false);
 
+    const currentUser = JSON.parse(localStorage.getLocalStorage('user'));
     let arrayStream = [];
     let arrayComments = [];
 
@@ -115,13 +118,13 @@ const ZoomMeeting = () => {
         setupSocket();
     }, []);
 
-    const connectToNewUser = (userId, stream) => {
-        const call = peer.call(userId, stream)
+    const connectToNewUser = (peerId, stream, user) => {
+        const call = peer.call(peerId, stream)
         call.on('stream', (userVideoStream) => {
-            addVideoStream(userId, userVideoStream);
-        })
+            addVideoStream(peerId, userVideoStream, user);
+        });
 
-        peers[userId] = call
+        peers[peerId] = call
     }
 
     const removeVideoStream = (id) => {
@@ -133,18 +136,18 @@ const ZoomMeeting = () => {
         displayVideoStream();
     }
 
-    const addVideoStream = (id, stream) => {
+    const addVideoStream = (id, stream, user) => {
         console.log(arrayStream);
         const index = arrayStream.findIndex(value => value.id === id)
         if (index < 0) {
-            arrayStream.push({ id, stream });
-        } 
+            arrayStream.push({ id, stream, user });
+        }
         displayVideoStream();
     }
 
     const displayVideoStream = () => {
-        const container = arrayStream.map((value) => {
-            return <VideoContainer key={value.id} stream={value.stream} id={value.id} />
+        const container = arrayStream.map(({ id, stream, user }) => {
+            return <VideoContainer key={id} stream={stream} id={id} user={user} />
         })
 
         setVideoGrid(container);
@@ -153,38 +156,46 @@ const ZoomMeeting = () => {
     useEffect(() => {
         if (socket) {
             peer.on('open', (id) => {
-                socket.emit('join-zoom', zoomId, id);
-                navigator.mediaDevices
-                    .getUserMedia({
-                        video: true,
-                        audio: true,
+                socket.emit('join-zoom', idSubject, id);
+                socket.on('403', (message) => {
+                    alert(message);
+                })
+                socket.on('200', () => {
+                    navigator.mediaDevices
+                        .getUserMedia({
+                            video: true,
+                            audio: true,
+                        })
+                        .then((stream) => {
+                            setVideoStream(stream);
+                            addVideoStream(peer._id, stream, currentUser);
+
+                            socket.on('user-connected', (peerId, user) => {
+                                connectToNewUser(peerId, stream, user)
+                                alert('Somebody connected', peerId)
+                            });
+
+                            peer.on('call', (call) => {
+                                call.answer(stream)
+                                call.on('stream', (userVideoStream) => {
+                                    socket.emit('get-user', call.peer);
+                                    socket.on('receive-user', (user) => {
+                                        addVideoStream(call.peer, userVideoStream, user);
+                                    })
+                                })
+                            });
+                        })
+                    socket.on('user-disconnected', (peerId) => {
+                        if (peers[peerId]) peers[peerId].close()
+                        removeVideoStream(peerId);
+                    });
+
+                    socket.on('newMessage', (message) => {
+                        arrayComments.push(message);
+                        setComments([...comments, ...arrayComments]);
                     })
-                    .then((stream) => {
-                        setVideoStream(stream);
-                        addVideoStream(peer._id, stream);
-
-                        socket.on('user-connected', (userId) => {
-                            connectToNewUser(userId, stream)
-                            alert('Somebody connected', userId)
-                        });
-
-                        peer.on('call', (call) => {
-                            call.answer(stream)
-                            call.on('stream', (userVideoStream) => {
-                                addVideoStream(call.peer, userVideoStream);
-                            })
-                        });
-                    })
+                });
             });
-            socket.on('user-disconnected', (userId) => {
-                if (peers[userId]) peers[userId].close()
-                removeVideoStream(userId);
-            });
-
-            socket.on('createMessage', (message) => {
-                arrayComments.push(message);
-                setComments([...comments, ...arrayComments]);
-            })
         }
         return () => {
             //Component Unmount
@@ -282,7 +293,10 @@ const ZoomMeeting = () => {
                 {
                     openChatTab && <div style={{ width: '40%' }}>
                         <ModalWrapper style={{ height: '100%', position: 'relative' }} className="zoom-list">
+                            
+
                             {comments.length > 0 && <CommentList t={t} comments={comments} />}
+                            
                             <Comment
                                 style={{
                                     position: 'absolute',
@@ -291,8 +305,8 @@ const ZoomMeeting = () => {
                                 }}
                                 avatar={
                                     <Avatar
-                                        src={profile.urlAvatar}
-                                        alt="Han Solo"
+                                        src={currentUser.urlAvatar}
+                                        alt="Avatar"
                                     />
                                 }
                                 content={
