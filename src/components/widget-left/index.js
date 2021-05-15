@@ -21,6 +21,7 @@ import RestClient from '../../utils/restClient';
 import Modal from 'antd/lib/modal/Modal';
 import ModalWrapper from '../basic/modal-wrapper';
 import { ReactComponent as IC_CLOSE } from '../../assets/images/contents/ic_close.svg'
+import { get } from 'lodash';
 
 
 const WidgetLeft = ({
@@ -59,7 +60,24 @@ const WidgetLeft = ({
 
     surveyIdEdit,
     timelineIdEdit,
-    focusSurveyEdit
+    focusSurveyEdit,
+    setFocusSurveyEdit,
+
+    fileIdEdit,
+    focusFileEdit,
+    setFocusFileEdit,
+
+    assignmentIdEdit,
+    focusAssignmentEdit,
+    setFocusAssignmentEdit,
+
+    forumIdEdit,
+    focusForumEdit,
+    setFocusForumEdit,
+
+    examIdEdit,
+    focusExamEdit,
+    setFocusExamEdit
 }) => {
     const { t } = useTranslation()
     // const [openCreateContent, setOpenCreateContent] = useState(false)
@@ -129,33 +147,19 @@ const WidgetLeft = ({
         head(timelineUpdate).assignments.push(assignment)
 
 
-        //console.log(timelineUpdate)
 
-        setTimeout(() => {
-
-            setDetailSubject([...detailSubject])
-        }, 3000)
-
-        setTimeout(() => {
-            setTimelinesIndex([...detailSubject])
-            onCloseModalAction();
-        }, 3000)
+        setDetailSubject([...detailSubject])
+        setTimelinesIndex([...detailSubject])
 
 
-        // setState({
-        //     timelines: [...timelines],
-        // }, () => {
-        //     setState({
-        //         timelinesIndex: timelines
-        //     })
-        //     //console.log(timelines)
-        //     onCloseModalAction();
-        // })
+        setIsOpenModalFunction(false)
+        setTodosState(false)
+        setOpenCreateContent(false)
     }
 
     const updateAssignment = ({ assignment, idTimeline }) => {
         notifySuccess(t('success'), t('update_assign_success'))
-        let timelineUpdate = timelinesList.filter(({ _id }) => _id === idTimeline)
+        let timelineUpdate = detailSubject.filter(({ _id }) => _id === idTimeline)
 
         //console.log('timelineUpdate', timelineUpdate)
         let target = head(timelineUpdate).assignments.find(({ _id }) => _id === assignment._id);
@@ -163,6 +167,10 @@ const WidgetLeft = ({
         let index = head(timelineUpdate).assignments.indexOf(target);
 
         head(timelineUpdate).assignments.splice(index, 1, assignment);
+
+        setIsOpenModalFunction(false)
+        setFocusAssignmentEdit(false)
+        setOpenCreateContent(false)
 
         // setState({
         //     timelines: [...timelines],
@@ -184,16 +192,20 @@ const WidgetLeft = ({
             data: information
         }
         //console.log('createInformation', data);
-        await restClient.asyncPost('/information', data)
+        await restClient.asyncPost(`/announcement`, data)
             .then(res => {
+                console.log('Res', res)
                 if (!res.hasError) {
                     notifySuccess(t('success'), t('add_quiz_information'))
                     //console.log('information', res)
                     let timelineUpdate = detailSubject.filter(({ _id }) => _id === data.idTimeline)
-                    head(timelineUpdate).information.push(res.data.information)
-                    setTimelinesList([...detailSubject])
+                    console.log('Timeline update', timelineUpdate, res.data)
+                    head(timelineUpdate).announcements.push(res.data.announcement)
+                    setDetailSubject([...detailSubject])
                     setTimeout(() => setTimelinesIndex(detailSubject), 1000)
                     setOpenCreateContent(false);
+                    setIsOpenModalFunction(false)
+                    setNotificationState(false)
                 } else {
                     notifyError(t('failure'), res.data.message);
                 }
@@ -203,7 +215,7 @@ const WidgetLeft = ({
     const updateForum = ({ forum, idTimeline }) => {
 
         notifySuccess(t('success'), t('update_forum_success'))
-        let timelineUpdate = timelinesList.filter(({ _id }) => _id === idTimeline)
+        let timelineUpdate = detailSubject.filter(({ _id }) => _id === idTimeline)
 
         let target = head(timelineUpdate).forums.find(({ _id }) => _id === forum._id);
         //console.log('targetForum', target);
@@ -211,6 +223,9 @@ const WidgetLeft = ({
 
         head(timelineUpdate).forums.splice(index, 1, forum);
 
+        setFocusForumEdit(false)
+        setOpenCreateContent(false)
+        setOpenCreateContent(false)
         //console.log(timelineUpdate)
 
         // this.setState({
@@ -231,15 +246,16 @@ const WidgetLeft = ({
 
         head(timelineUpdate).forums.push(forum)
 
-        setTimeout(() => {
 
-            setDetailSubject([...detailSubject])
-        }, 3000)
+        setDetailSubject([...detailSubject])
 
-        setTimeout(() => {
-            setTimelinesIndex([...detailSubject])
-            onCloseModalAction();
-        }, 3000)
+
+
+        setTimelinesIndex([...detailSubject])
+        setOpenCreateContent(false)
+        setIsOpenModalFunction(false)
+        setForumState(false)
+
 
         // this.setState({
         //     timelines: [...timelinesList],
@@ -252,26 +268,7 @@ const WidgetLeft = ({
     }
 
 
-    const handleImportSubject = async (data) => {
-        await restClient.asyncPost(`/subject/${location.state._id}/import-teacher`, data)
-            .then(res => {
-                this.setState({ isLoading: false });
-                //console.log('res', res);
-                if (!res.hasError) {
-                    // this.setState({
-                    //     lstTimelines: res.data.timelines.map(value => { return { _id: value._id, name: value.name } }),
-                    //     lstSurveys: res.data.surveyBank,
-                    //     lstQuizzes: res.data.quizBank,
-                    //     timelines: res.data.timelines,
-                    //     timelinesIndex: res.data.timelines
-                    // });
-                    notifySuccess(t('success'), res.data.message);
-                    // this.onCloseModalAction();
-                } else {
-                    notifyError(t('failure'), res.data.message);
-                }
-            });
-    }
+
 
     const createTimeline = async (timeline) => {
         // this.setState({
@@ -288,6 +285,11 @@ const WidgetLeft = ({
                 // this.setState({ isLoading: false });
                 if (!res.hasError) {
                     notifySuccess(t('success'), t('add_quiz_timeline'))
+                    setDetailSubject([...detailSubject, get(res, 'data')?.timeline])
+                    setTimelinesIndex([...detailSubject, get(res, 'data')?.timeline])
+                    setOpenCreateContent(false)
+                    setIsOpenModalFunction(false)
+                    setTimelineState(false)
                     // this.setState({
                     //     timelines: [...timelinesList, get(res, 'data').timeline],
                     //     lstTimelines: [...this.state.lstTimelines, {
@@ -319,14 +321,13 @@ const WidgetLeft = ({
 
         //console.log(timelineUpdate)
 
-        setTimeout(() => {
-            setDetailSubject([...detailSubject])
-        }, 3000)
+        setDetailSubject([...detailSubject])
 
-        setTimeout(() => {
-            setTimelinesIndex([...detailSubject])
-            onCloseModalAction()
-        }, 3000)
+        setTimelinesIndex([...detailSubject])
+
+        setIsOpenModalFunction(false)
+        setOpenCreateContent(false)
+        setDocumentState(false)
 
         // this.setState({
         //     timelines: [...timelinesList],
@@ -341,11 +342,15 @@ const WidgetLeft = ({
 
     const updateFile = ({ file, idTimeline }) => {
         notifySuccess(t('success'), t('update_document_success'))
-        let timelineUpdate = timelinesList.filter(({ _id }) => _id === idTimeline)
+        let timelineUpdate = detailSubject.filter(({ _id }) => _id === idTimeline)
         let target = head(timelineUpdate).files.find(({ _id }) => _id === file._id);
         //console.log('targetFile', target);
         let index = head(timelineUpdate).files.indexOf(target);
         head(timelineUpdate).files.splice(index, 1, file);
+
+        setIsOpenModalFunction(false)
+        setOpenCreateContent(false)
+        setFocusFileEdit(false)
         // this.setState({
         //     timelines: [...timelinesList],
         // }, () => {
@@ -363,29 +368,16 @@ const WidgetLeft = ({
         notifySuccess(t('success'), t('add_quiz_success'))
         let timelineUpdate = detailSubject.filter(({ _id }) => _id === idTimeline)
 
-        console.log('timelineUpdate', timelineUpdate, exam, idTimeline)
         head(timelineUpdate).exams.push(exam)
 
+        setDetailSubject([...detailSubject])
+        setTimelinesIndex(timelinesList)
 
-        //console.log(timelineUpdate)
+        setOpenCreateContent(false)
+        setIsOpenModalFunction(false)
+        setQuizState(false)
 
-        setTimeout(() => {
-            setTimelinesList([...timelinesList])
-        }, 3000)
 
-        setTimeout(() => {
-            setTimelinesIndex(timelinesList)
-        }, 3000)
-
-        // this.setState({
-        //     timelines: [...timelinesList],
-        // }, () => {
-        //     //console.log(timelinesList)
-        //     this.setState({
-        //         timelinesIndex: timelinesList
-        //     })
-        //     this.onCloseModalAction();
-        // })
     }
 
     const updateQuiz = ({ exam, idTimeline }) => {
@@ -400,6 +392,9 @@ const WidgetLeft = ({
 
         head(timelineUpdate).exams.splice(index, 1, exam);
 
+        setFocusExamEdit(false)
+        setOpenCreateContent(false)
+        setOpenCreateContent(false)
         // this.setState({
         //     timelines: [...timelinesList],
         // }, () => {
@@ -420,15 +415,14 @@ const WidgetLeft = ({
         //console.log('timelineUpdate', timelineUpdate)
         head(timelineUpdate).surveys.push(survey)
 
-        setTimeout(() => {
-            setTimelinesList([...timelinesList])
-        }, 3000)
+        setDetailSubject([...detailSubject])
 
-        setTimeout(() => {
-            setTimelinesIndex(timelinesList)
-            onCloseModalAction()
-        }, 3000)
+        setTimelinesIndex(timelinesList)
 
+
+        setIsOpenModalFunction(false)
+        setOpenCreateContent(false)
+        setSurveyState(false)
         //console.log(timelineUpdate)
 
         // this.setState({
@@ -445,16 +439,19 @@ const WidgetLeft = ({
     const updateSurvey = ({ survey, idTimeline }) => {
 
         notifySuccess(t('success'), t('add_quiz_survey'))
-        let timelineUpdate = timelinesList.filter(({ _id }) => _id === idTimeline)
+        let timelineUpdate = detailSubject.filter(({ _id }) => _id === idTimeline)
 
         //console.log('timelineUpdate', timelineUpdate)
+        console.log( head(timelineUpdate))
         let target = head(timelineUpdate).surveys.find(({ _id }) => _id === survey._id);
         //console.log('targetSurvey', target);
         let index = head(timelineUpdate).surveys.indexOf(target);
 
         head(timelineUpdate).surveys.splice(index, 1, survey);
 
-
+        setIsOpenModalFunction(false)
+        setOpenCreateContent(false)
+        setFocusSurveyEdit(false)
         //console.log(timelineUpdate)
 
         // this.setState({
@@ -469,8 +466,19 @@ const WidgetLeft = ({
     }
 
     const onCloseModalAction = () => {
+        if (focusSurveyEdit || focusFileEdit || focusAssignmentEdit || focusForumEdit || focusExamEdit) {
+            setOpenCreateContent(false)
+            setFocusSurveyEdit(false)
+            setFocusFileEdit(false)
+            setFocusAssignmentEdit(false)
+            setFocusForumEdit(false)
+            setFocusExamEdit(false)
+        } else if (importState || exportState) {
+            setOpenCreateContent(false)
+        } else {
+            setOpenCreateContent(true)
+        }
         setIsOpenModalFunction(false);
-        setOpenCreateContent(true)
         setNotificationState(false)
         setDocumentState(false)
         setTodosState(false)
@@ -482,15 +490,32 @@ const WidgetLeft = ({
         setExportState(false)
     }
 
+    const handleImportSubject = async (data) => {
+        await restClient.asyncPost(`/subject/${location.state._id}/import-teacher`, data)
+            .then(res => {
+                this.setState({ isLoading: false });
+                //console.log('res', res);
+                if (!res.hasError) {
+                    // this.setState({
+                    //     lstTimelines: res.data.timelines.map(value => { return { _id: value._id, name: value.name } }),
+                    //     lstSurveys: res.data.surveyBank,
+                    //     lstQuizzes: res.data.quizBank,
+                    //     timelines: res.data.timelines,
+                    //     timelinesIndex: res.data.timelines
+                    // });
+                    notifySuccess(t('success'), res.data.message);
+                    // this.onCloseModalAction();
+                } else {
+                    notifyError(t('failure'), res.data.message);
+                }
+            });
+    }
+
     return (<>
         <div className="container-left">
             <a onClick={() => setOpenCreateContent(true)}>
                 <i><FontAwesomeIcon icon="wrench" /></i>
                 <span>{t('setting')}</span>
-            </a>
-            <a>
-                <i><FontAwesomeIcon icon="sort-amount-up" /> </i>
-                <span>{t('arrange')}</span>
             </a>
             <a onClick={(e) => {
                 e.preventDefault();
@@ -615,6 +640,7 @@ const WidgetLeft = ({
                 </Col>
 
 
+
             </Row>
 
             <Row style={{ justifyContent: 'space-around', marginTop: '10px' }}>
@@ -635,8 +661,80 @@ const WidgetLeft = ({
                 </Col>
             </Row>
 
+            <Row style={{ justifyContent: 'space-around', marginTop: '10px' }}>
+                <Col span={6} className="action-select-add-content" style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    background: '#0c2461',
+                    color: '#fff',
+                    padding: '0.5rem',
+                    borderRadius: '0.5rem',
+                    cursor: 'pointer'
+                }} onClick={() => {
+                    openModalFunction('create_forum');
+                    focusForum();
+                }} >
+                    {t('Export data class')}
+                </Col>
+            </Row>
+
+            <Row style={{ justifyContent: 'space-around', marginTop: '10px' }}>
+                <Col span={6} className="action-select-add-content" style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    background: '#0c2461',
+                    color: '#fff',
+                    padding: '0.5rem',
+                    borderRadius: '0.5rem',
+                    cursor: 'pointer'
+                }} onClick={() => {
+                    openModalFunction('create_forum');
+                    focusForum();
+                }} >
+                    {t('Import data class')}
+                </Col>
+            </Row>
+
+            <Row style={{ justifyContent: 'space-around', marginTop: '10px' }}>
+                <Col span={6} className="action-select-add-content" style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    background: '#0c2461',
+                    color: '#fff',
+                    padding: '0.5rem',
+                    borderRadius: '0.5rem',
+                    cursor: 'pointer'
+                }} onClick={() => {
+                    openModalFunction('create_forum');
+                    focusForum();
+                }} >
+                    {t('Quiz Bank')}
+                </Col>
+            </Row>
+
+            <Row style={{ justifyContent: 'space-around', marginTop: '10px' }}>
+                <Col span={6} className="action-select-add-content" style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    background: '#0c2461',
+                    color: '#fff',
+                    padding: '0.5rem',
+                    borderRadius: '0.5rem',
+                    cursor: 'pointer'
+                }} onClick={() => {
+                    openModalFunction('create_forum');
+                    focusForum();
+                }} >
+                    {t('Survey bank')}
+                </Col>
+            </Row>
+
         </Drawer>
-        <Modal className="modal-function-customize"
+        {isOpenModalFunction && <Modal className="modal-function-customize"
             onCancel={() => onCloseModalAction()}
             visible={isOpenModalFunction}
             closable={false}
@@ -655,17 +753,17 @@ const WidgetLeft = ({
             footer={null}
         >
             <ModalWrapper>
-                {todosState && (<AddAssignment timelinesList={timelinesList} createAssignment={createAssignment} updateAssignment={updateAssignment} idSubject={location.state._id} idTimeline={null} idAssignment={null} />)}
-                {quizState && (<AddQuiz quizList={quizList} timelinesList={timelinesList} createQuiz={createQuiz} updateQuiz={updateQuiz} idSubject={location.state._id} idTimeline={null} idExam={null} />)}
-                {surveyState && (<AddSurvey timelinesList={timelinesList} surveyList={surveyList} createSurvey={createSurvey} updateSurvey={updateSurvey} idSubject={location.state._id} idTimeline={null} idSurvey={null} />)}
-                {documentState && (<AddFile timelinesList={timelinesList} createFile={createFile} updateFile={updateFile} idSubject={location.state._id} idTimeline={null} idFile={null} />)}
+                {(todosState || focusAssignmentEdit) && (<AddAssignment timelinesList={timelinesList} createAssignment={createAssignment} updateAssignment={updateAssignment} idSubject={location.state._id} idTimeline={timelineIdEdit} idAssignment={assignmentIdEdit} />)}
+                {(quizState || focusExamEdit) && (<AddQuiz quizList={quizList} timelinesList={timelinesList} createQuiz={createQuiz} updateQuiz={updateQuiz} idSubject={location.state._id} idTimeline={timelineIdEdit} idExam={examIdEdit} />)}
+                {(surveyState || focusSurveyEdit) && (<AddSurvey timelinesList={timelinesList} surveyList={surveyList} createSurvey={createSurvey} updateSurvey={updateSurvey} idSubject={location.state._id} idTimeline={timelineIdEdit} idSurvey={surveyIdEdit} />)}
+                {(documentState || focusFileEdit) && (<AddFile timelinesList={timelinesList} createFile={createFile} updateFile={updateFile} idSubject={location.state._id} idTimeline={timelineIdEdit} idFile={fileIdEdit} />)}
                 {notificationState && (<AddInformation timelinesList={timelinesList} isLoading={null} createInformation={createInformation} idSubject={location.state._id} idTimeline={null} idInformation={null} />)}
                 {timelineState && (<AddTimeline createTimeline={createTimeline} isLoading={null} />)}
+                {(forumState || focusForumEdit) && (<AddForum timelinesList={timelinesList} createForum={createForum} updateForum={updateForum} idSubject={location.state._id} idTimeline={timelineIdEdit} idForum={forumIdEdit} />)}
                 {importState && (<ImportSubject isLoading={null} handleImportSubject={handleImportSubject} />)}
-                {forumState && (<AddForum timelinesList={timelinesList} createForum={createForum} updateForum={updateForum} idSubject={location.state._id} idTimeline={null} idForum={null} />)}
                 {exportState && (<ExportSubject idSubject={location.state._id} nameSubject={null} />)}
             </ModalWrapper>
-        </Modal>
+        </Modal>}
     </>
     )
 }

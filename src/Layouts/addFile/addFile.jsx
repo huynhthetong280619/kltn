@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { withTranslation } from 'react-i18next';
-import { Input, Select, Button, Form, Checkbox } from 'antd'
+import { Input, Select, Button, Form, Checkbox, Skeleton } from 'antd'
 // import Loading from '../../loading/loading.jsx';
 import downloadFile from '../../assets/common/core/downloadFile.js';
 import word from '../../assets/images/contents/word.png'
@@ -11,7 +11,7 @@ import { notifyError, notifyWarning } from '../../assets/common/core/notify.js';
 import { useTranslation } from 'react-i18next';
 const { Option } = Select;
 
-const AddFile = ({timelinesList, createFile, updateFile, idSubject, idTimeline, idFile, token }) => {
+const AddFile = ({ timelinesList, createFile, updateFile, idSubject, idTimeline, idFile, token }) => {
 
     const [form] = Form.useForm();
     const [fileAttach, setFileAttach] = useState(null);
@@ -19,7 +19,7 @@ const AddFile = ({timelinesList, createFile, updateFile, idSubject, idTimeline, 
     const [isLoading, setLoading] = useState(false);
 
     const [file, setFile] = useState(null);
-    const {t} = useTranslation()
+    const { t } = useTranslation()
     const restClient = new RestClient({ token: '' })
 
     useEffect(() => {
@@ -59,7 +59,7 @@ const AddFile = ({timelinesList, createFile, updateFile, idSubject, idTimeline, 
             idTimeline: idTimelineAdd,
             data: file
         }
-        await restClient.asyncPost(`/timeline/upload/`, data, token)
+        await restClient.asyncPost(`/timeline/${idTimelineAdd}/upload?idSubject=${idSubject}`, data)
             .then(res => {
                 //console.log('handleCreateFile', res)
                 setLoading(false);
@@ -131,7 +131,7 @@ const AddFile = ({timelinesList, createFile, updateFile, idSubject, idTimeline, 
         <>
             {
                 (idFile && !file) ?
-                    <div>Loading</div>
+                    <Skeleton />
                     : (<Form
                         onFinish={onFinish}
                         form={form}
@@ -184,7 +184,7 @@ const AddFile = ({timelinesList, createFile, updateFile, idSubject, idTimeline, 
                             label={t('display')}
                             name={['file', 'isDeleted']}
                             valuePropName="checked"
-                            style={{flexDirection: 'row', alignItems: 'baseline'}}
+                            style={{ flexDirection: 'row', alignItems: 'baseline' }}
                         >
                             <Checkbox />
                         </Form.Item>

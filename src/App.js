@@ -7,6 +7,7 @@ import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n'
 import Login from './Layouts/login';
 import StoreTrading from './store-trading'
+import CreateAccount from './Layouts/createAccount';
 
 
 function App() {
@@ -28,15 +29,16 @@ function App() {
     <>
       <I18nextProvider i18n={i18n}>
         {/* <Router> */}
-          <Suspense fallback={<LoadingView />}>
-            <StoreTrading>
-              <Switch>
-                <Route path="/login" component={Login} />
-                <Route exact path="/" component={Pages} />
-                <Route path="/home" component={Pages} />
-              </Switch>
-            </StoreTrading>
-          </Suspense>
+        <Suspense fallback={<LoadingView />}>
+          <StoreTrading>
+            <Switch>
+              <Route path="/login" component={Login} />
+              <Route path="/create-account" component={CreateAccount} />
+              <Route exact path="/" component={Pages} />
+              <Route path="/home" component={Pages} />
+            </Switch>
+          </StoreTrading>
+        </Suspense>
         {/* </Router> */}
       </I18nextProvider>
     </>

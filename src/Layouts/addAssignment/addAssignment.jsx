@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslation, withTranslation } from 'react-i18next';
 import formatTime from '../../assets/common/core/formatTime';
-import { Input, Select, Button, Checkbox, Form, DatePicker } from 'antd'
+import { Input, Select, Button, Checkbox, Form, DatePicker, Skeleton } from 'antd'
 import downloadFile from '../../assets/common/core/downloadFile.js';
 import { notifyError } from '../../assets/common/core/notify.js';
 // import Loading from '../../loading/loading.jsx';
@@ -179,7 +179,7 @@ const AddAssignment = ({ timelinesList, createAssignment, updateAssignment, idSu
             {
                 (idAssignment && !assignment) ?
                     // <Loading />
-                    <div></div>
+                    <Skeleton />
                     : (<Form
                         onFinish={onFinish}
                         form={form}
@@ -242,7 +242,7 @@ const AddAssignment = ({ timelinesList, createAssignment, updateAssignment, idSu
                                         message: t('req_begin_time'),
                                     }
                                 ]}
-                                style={{width: '30%'}}
+                                style={{ width: '30%' }}
                                 hasFeedback>
                                 <DatePicker className="alt-date-picker" showTime format="YYYY-MM-DD HH:mm:ss" />
                             </Form.Item>
@@ -251,7 +251,7 @@ const AddAssignment = ({ timelinesList, createAssignment, updateAssignment, idSu
                                 dependencies={['assignment', 'setting', 'startTime']}
                                 label={t('expireTime')}
                                 name={['assignment', 'setting', 'expireTime']}
-                                style={{width: '30%'}}
+                                style={{ width: '30%' }}
                                 hasFeedback
                                 rules={[
                                     {
@@ -273,27 +273,27 @@ const AddAssignment = ({ timelinesList, createAssignment, updateAssignment, idSu
                             </Form.Item>
 
                             <Form.Item
-                            label={t('fileSize')}
-                            name={['assignment', 'setting', 'fileSize']}
-                            style={{width: '30%'}}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: t('req_size_file')
-                                }
-                            ]}
-                            hasFeedback>
-                            <Select dropdownClassName="ant-customize-dropdown">
-                                <Option value="5">5</Option>
-                                <Option value="10">10</Option>
-                                <Option value="15">15</Option>
-                                <Option value="20">20</Option>
-                            </Select>
-                        </Form.Item>
+                                label={t('fileSize')}
+                                name={['assignment', 'setting', 'fileSize']}
+                                style={{ width: '30%' }}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: t('req_size_file')
+                                    }
+                                ]}
+                                hasFeedback>
+                                <Select dropdownClassName="ant-customize-dropdown">
+                                    <Option value="5">5</Option>
+                                    <Option value="10">10</Option>
+                                    <Option value="15">15</Option>
+                                    <Option value="20">20</Option>
+                                </Select>
+                            </Form.Item>
                         </div>
 
 
-                        
+
 
                         {assignment &&
                             (assignment.attachments.map(f => {
@@ -320,7 +320,7 @@ const AddAssignment = ({ timelinesList, createAssignment, updateAssignment, idSu
                         >
                             <Input type="file" style={{ overflow: 'hidden' }} onChange={e => handleProcessFile(e)} />
                         </Form.Item>
-                        <div style={{display: 'flex'}}>
+                        <div style={{ display: 'flex' }}>
                             <Form.Item
                                 label={t('isOverDue')}
                                 name={['assignment', 'setting', 'isOverDue']}
@@ -334,7 +334,7 @@ const AddAssignment = ({ timelinesList, createAssignment, updateAssignment, idSu
                                 label={t('display')}
                                 name={['assignment', 'isDeleted']}
                                 valuePropName="checked"
-                                style={{ flexDirection: 'row',width: '49%', alignItems: 'baseline' }}
+                                style={{ flexDirection: 'row', width: '49%', alignItems: 'baseline' }}
                             >
                                 <Checkbox />
                             </Form.Item>

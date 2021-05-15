@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { withTranslation } from 'react-i18next';
-import { Input, Select, Button, Form, DatePicker, Checkbox } from 'antd'
+import { Input, Select, Button, Form, DatePicker, Checkbox, Skeleton } from 'antd'
 // import Loading from '../../loading/loading.jsx';
 import moment from 'moment';
 import RestClient from '../../utils/restClient';
@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 const { Option } = Select;
 const { TextArea } = Input;
 
-const AddSurvey = ({ timelinesList, surveyList,  createSurvey, updateSurvey, idSubject, idTimeline, idSurvey, token }) => {
+const AddSurvey = ({ timelinesList, surveyList, createSurvey, updateSurvey, idSubject, idTimeline, idSurvey, token }) => {
 
     const [form] = Form.useForm();
 
@@ -20,7 +20,7 @@ const AddSurvey = ({ timelinesList, surveyList,  createSurvey, updateSurvey, idS
 
     const [isLoading, setLoading] = useState(false);
 
-    const {t} = useTranslation()
+    const { t } = useTranslation()
 
     const restClient = new RestClient({ token: '' })
 
@@ -34,10 +34,11 @@ const AddSurvey = ({ timelinesList, surveyList,  createSurvey, updateSurvey, idS
         }
     }, [survey])
 
-    useEffect(() => {
+    useEffect(async () => {
         if (idSurvey) {
-            restClient.asyncGet(`/survey/${idSurvey}/update/?idSubject=${idSubject}&idTimeline=${idTimeline}`, token)
+            await restClient.asyncGet(`/survey/${idSurvey}/update/?idSubject=${idSubject}&idTimeline=${idTimeline}`)
                 .then(res => {
+                    console.log('Survey', res)
                     if (!res.hasError) {
                         setSurvey({
                             ...res.data.survey,
@@ -118,7 +119,7 @@ const AddSurvey = ({ timelinesList, surveyList,  createSurvey, updateSurvey, idS
     return (<>
         {
             (idSurvey && !survey) ?
-                <div>Loading</div>
+                <Skeleton />
                 : (<Form
                     onFinish={onFinish}
                     form={form}

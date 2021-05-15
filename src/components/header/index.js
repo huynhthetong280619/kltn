@@ -17,6 +17,7 @@ import { Link, Redirect, useHistory } from 'react-router-dom'
 import Message from '../message'
 import { StoreTrading } from '../../store-trading'
 import { DownOutlined } from '@ant-design/icons'
+import { isEmpty } from 'lodash'
 const { Text } = Typography;
 
 const HeaderLayout = ({ setOpen }) => {
@@ -24,6 +25,7 @@ const HeaderLayout = ({ setOpen }) => {
     const { authFlag, setAuth } = useContext(StoreTrading)
 
     const [openMessage, setOpenMessage] = useState(false)
+    const [profile, setProfile] = useState({});
     const history = useHistory()
 
     const [language, setLanguage] = useState('vi')
@@ -43,7 +45,15 @@ const HeaderLayout = ({ setOpen }) => {
         if (!lang) {
             localStorage.setItem(STORE_KEY.LANGUAGE, language)
         }
-    })
+
+        const usrObj = JSON.parse(localStorage.getItem('user'))
+
+        if (!usrObj) {
+            return
+        }
+
+        setProfile(usrObj);
+    }, [])
 
     const changeLanguage = ({ key }) => {
         console.log(key)
@@ -252,9 +262,13 @@ const HeaderLayout = ({ setOpen }) => {
             <Col className="header-user-login cursor-act ml-2 mr-4">
                 <div onClick={() => !authFlag ? handleLogIn() : handleLogout()} style={{ display: 'flex' }}>
                     <div>
-                        <img src={IC_USER} width="20px" />
+                        <img src={!isEmpty(profile) ? profile.urlAvatar : IC_USER} width="20px" style={{
+                            borderRadius: '0.25rem',
+                            width: '25px',
+                            height: '25px'
+                        }}/>
                     </div>
-                    <div className="user-login-text" >{authFlag ? t('title_logout') : t('title_login')}</div>
+                    <div className="user-login-text" >{authFlag ? profile?.firstName : t('title_login')}</div>
                 </div>
             </Col>
         </Col>

@@ -23,6 +23,7 @@ const Quiz = () => {
     const location = useLocation()
     const history = useHistory()
     const { examId, idSubject, idTimeline } = location.state
+    const [isLoading, setIsLoading] = useState(false)
 
     const transTime = (time) => {
         //console.log('transTime', time)
@@ -42,15 +43,22 @@ const Quiz = () => {
 
         }
 
+        setIsLoading(true)
 
         restClient.asyncGet(`/exam/${examId}?idSubject=${idSubject}&idTimeline=${idTimeline}`)
             .then(res => {
+                console.log(res)
                 if (!res.hasError) {
                     setRequirementExam(get(res, 'data').exam)
+                    setSubmissions(get(get(res, 'data').exam, 'submissions'))
+                    setIsLoading(false)
                 }
             })
     }, [])
 
+    const directJoinQuiz = (obj) => {
+        history.push('take-quiz', obj)
+    }
 
     // joinExam = async () => {
     //     await restClient.asyncGet(`/exam/${idExam}/attempt?idSubject=lthdt01&idTimeline=${idTimeline}`, token)
@@ -70,7 +78,7 @@ const Quiz = () => {
                 key: 'student',
                 render: (data) => {
                     //console.log(data);
-                    return (<span> {get(data, 'surName') + " " + get(data, 'firstName')}</span>)
+                    return (<span> {get(data, 'firstName') + " " + get(data, 'lastName')}</span>)
                 }
             },
             {
@@ -111,7 +119,7 @@ const Quiz = () => {
                 title: t('action'),
                 dataIndex: 'isContinue',
                 key: 'isContinue',
-                render: (data) => data ? <a href={`/exams/${examId}?idSubject=${idSubject}&idTimeline=${idTimeline}`}>{t('continue')}</a> : null
+                render: (data) => data ? <a onClick={(e) => {e.preventDefault(); directJoinQuiz({examId, idSubject, idTimeline})}}>{t('continue')}</a> : null
             }
         ]
     }
@@ -124,7 +132,7 @@ const Quiz = () => {
                 <ModalWrapper style={{ textAlign: 'center', background: '#494949' }} className="color-default">
 
                     {
-                        isEmpty(requirementExam) ? <Skeleton /> : <><div style={{ position: 'absolute', cursor: 'pointer' }} onClick={() => history.go(-1)}>
+                        isLoading ? <Skeleton /> : <><div style={{ position: 'absolute', cursor: 'pointer' }} onClick={() => history.go(-1)}>
                             <Logout />
                         </div><div>
                                 <i>
@@ -134,22 +142,22 @@ const Quiz = () => {
                                 <div>
                                     <div><span style={{ fontWeight: 700 }}>{t('attempt_allowed')} </span> {get(get(requirementExam, 'setting'), 'attemptCount')}</div>
                                     {!isTeacherPrivilege && (<div><span style={{ fontWeight: 700 }}>{t('attempt_available')}</span> {get(requirementExam, 'attemptAvailable')}</div>)}
-                                    <div><span style={{ fontWeight: 700 }}>{t('quiz_open')}</span> {transTime(get(requirementExam, 'startTime'))}</div>
-                                    <div><span style={{ fontWeight: 700 }}>{t('quiz_close')}</span> {transTime(get(requirementExam, 'expireTime'))}</div>
+                                    <div><span style={{ fontWeight: 700 }}>{t('quiz_open')}</span> {transTime(get(requirementExam, 'setting')?.startTime)}</div>
+                                    <div><span style={{ fontWeight: 700 }}>{t('quiz_close')}</span> {transTime(get(requirementExam, 'setting')?.expireTime)}</div>
                                     <div><span style={{ fontWeight: 700 }}>{t('quiz_time_remaining')}</span> {get(requirementExam, 'timingRemain')}</div>
                                     <div><span style={{ fontWeight: 700 }}>{t('quiz_status')}</span>{get(requirementExam, 'isOpen') ? <span style={{ color: '#44bd32', fontWeight: 900 }}>{t('opening')}</span> : <span style={{ color: '#e84118', fontWeight: 900 }}>{t('closed')}</span>}</div>
                                     <div><span style={{ fontWeight: 700 }}>{t('quiz_grade_method')}</span>{t('quiz_highest_grade')}</div>
                                 </div>
                                 {!isTeacherPrivilege && (<div>
-                                    {(get(requirementExam, 'attemptAvailable') > 0 && get(requirementExam, 'isAttempt') == true) && <Button type="primary" href={`/exams/${examId}?idSubject=${idSubject}&idTimeline=${idTimeline}`} style={{ marginTop: 25 }}>{t('take_quiz')}</Button>}
+                                    {(get(requirementExam, 'attemptAvailable') > 0 && get(requirementExam, 'isAttempt') == true) && <Button type="primary" onClick={() => directJoinQuiz({examId, idSubject, idTimeline})} style={{ marginTop: 25 }}>{t('take_quiz')}</Button>}
                                     {(get(requirementExam, 'attemptAvailable') == 0) && <div style={{ color: '#ff4000', fontStyle: 'italic', fontWeight: 900 }}>{t('quiz_join_run_out')}</div>}
                                     {(!get(requirementExam, 'isOpen')) && (get(requirementExam, 'isRemain')) && <div style={{ color: '#ff4000', fontStyle: 'italic', fontWeight: 900 }}>{t('quiz_not_time')}</div>}
                                 </div>)}
                             </div></>
                     }
                 </ModalWrapper>
-                <ModalWrapper style={{ background: '#494949' }}>
-                    <Table pagination={false} columns={columns} dataSource={submissions} rowKey='key' scroll={{ y: 240 }} />
+                <ModalWrapper style={{ background: '#494949', width: '100%' }}>
+                  {!isLoading ? <Table pagination={false} columns={columns} dataSource={submissions} rowKey='key' scroll={{ y: 240 }} /> : <Skeleton />}  
                 </ModalWrapper>
 
             </ModalWrapper>

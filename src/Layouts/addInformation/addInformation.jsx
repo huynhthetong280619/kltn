@@ -17,13 +17,13 @@ const AddInformation = ({ timelinesList, isLoading, createInformation, idSubject
 
     useEffect(() => {
         if (idInformation) {
-            restClient.asyncGet(`/information/${idInformation}?idSubject=${idSubject}&idTimeline=${idTimeline}`, token)
+            restClient.asyncGet(`/announcement/${idInformation}?idSubject=${idSubject}&idTimeline=${idTimeline}`)
                 .then(res => {
                     if (!res.hasError) {
-                        setInformation(res.data.information);
+                        setInformation(res.data.announcements);
                         form.setFieldsValue({
                             idTimeline: idTimeline,
-                            information: res.data.information
+                            information: res.data.announcements
                         })
                     } else {
                         notifyError(t('failure'), res.data.message );

@@ -16,6 +16,9 @@ import Discussion from '../discussion';
 import Quiz from '../quiz';
 import Student from '../manage/student';
 import Survey from '../survey';
+import TakeQuiz from '../take-quiz';
+import AssignmentCheck from '../assignment-check';
+import CreateAccount from '../createAccount';
 
 const { Header, Content, Footer } = Layout
 
@@ -49,6 +52,10 @@ function Child() {
             return <Survey />
         case 'manage-student':
             return <Student />
+        case 'take-quiz':
+            return <TakeQuiz />
+        case 'check-assignment':
+            return <AssignmentCheck />
         default:
             break
     }

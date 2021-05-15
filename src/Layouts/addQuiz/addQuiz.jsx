@@ -3,7 +3,7 @@ import { useTranslation, withTranslation } from 'react-i18next';
 // import Loading from '../../loading/loading.jsx';
 import moment from 'moment'
 import { notifyError } from '../../assets/common/core/notify.js';
-import { Input, Select, Button, InputNumber, DatePicker, Checkbox, Form } from 'antd'
+import { Input, Select, Button, InputNumber, DatePicker, Checkbox, Form, Skeleton } from 'antd'
 import RestClient from '../../utils/restClient';
 import formatTime from '../../assets/common/core/formatTime.js';
 const { Option } = Select;
@@ -32,16 +32,21 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
     }, [exam])
 
     useEffect(() => {
+        console.log('Exam id: ', idExam)
         if (idExam) {
             restClient.asyncGet(`/exam/${idExam}/update/?idSubject=${idSubject}&idTimeline=${idTimeline}`, token)
                 .then(res => {
                     if (!res.hasError) {
                         const ex = res.data.exam;
-                        //console.log('Exam', ex);
+                        console.log('Exam', ex);
                         setExam({
                             ...ex,
-                            startTime: moment(ex.startTime),
-                            expireTime: moment(ex.expireTime),
+                            setting: {
+                                ...ex?.setting,
+                                startTime: moment(ex.setting.startTime),
+                                expireTime: moment(ex.setting.expireTime),
+                            }
+
                         });
                     } else {
                         notifyError(t('failure'), res.data.message);
@@ -67,13 +72,15 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
     }, []);
 
     const handleCreateExam = async (ex, idTimelineAdd) => {
+        console.log(ex)
         const data = {
             idSubject: idSubject,
             idTimeline: idTimelineAdd,
             data: ex
         }
         setLoading(true);
-        await restClient.asyncPost('/exam', data, token)
+        console.log('data', data)
+        await restClient.asyncPost('/exam', data)
             .then(res => {
                 console.log('handleCreateExam', res)
                 setLoading(false);
@@ -131,7 +138,7 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
         <>
             {
                 (idExam && !exam) ?
-                    <div>Loading</div>
+                    <Skeleton />
                     : (<Form
                         onFinish={onFinish}
                         form={form}
@@ -185,7 +192,7 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <Form.Item
                                 label={t('startTime')}
-                                name={['exam', 'startTime']}
+                                name={['exam', 'setting', 'startTime']}
                                 rules={[
                                     {
                                         required: true,
@@ -199,7 +206,7 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
                             <Form.Item
                                 dependencies={['exam', 'startTime']}
                                 label={t('expireTime')}
-                                name={['exam', 'expireTime']}
+                                name={['exam', 'setting', 'expireTime']}
                                 hasFeedback
                                 style={{ width: '30%' }}
                                 rules={[
@@ -291,20 +298,20 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
 
                             </Form.Item>
 
-                            
+
 
                         </div>
 
 
 
                         <Form.Item
-                                label={t('display')}
-                                name={['exam', 'isDeleted']}
-                                valuePropName="checked"
-                                style={{ flexDirection: 'row', alignItems: 'baseline'}}
-                            >
-                                <Checkbox />
-                            </Form.Item>
+                            label={t('display')}
+                            name={['exam', 'isDeleted']}
+                            valuePropName="checked"
+                            style={{ flexDirection: 'row', alignItems: 'baseline' }}
+                        >
+                            <Checkbox />
+                        </Form.Item>
 
                         <Form.Item>
                             <Button type="primary" loading={isLoading} htmlType="submit" className="lms-btn">

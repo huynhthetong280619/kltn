@@ -30,6 +30,7 @@
                 justify-content: space-between;
                 column-gap: 10px;
                 align-items: center;
+                cursor: pointer;
     
                 padding: 10px 5px;
                 .announce-wrapper{
@@ -46,7 +47,9 @@
 
                     .announce-content{
                         font-size: 0.75rem;
-                        color: #444B55
+                        color: #444B55;
+                        white-space:pre-line;
+                        padding-left: 0.75rem;
                     }
                 }
                 .subject-main{
@@ -61,6 +64,17 @@
             .subject-action{
                 display: flex;
                 column-gap: 0.625rem;
+                .btn-action-tools{
+                    padding: 4px 8px;
+                    border-radius: 0.25rem;
+                    border: 1px solid #494949;
+                    background-color: #232323;
+                    &:hover{
+                        background-color: #494949;
+                        border: 1px solid #232323;
+                        cursor: pointer;
+                    }
+                }
             }
         }
         

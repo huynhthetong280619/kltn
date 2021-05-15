@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation, withTranslation } from 'react-i18next';
 import { Input, Button, Form, Row } from 'antd'
 import { notifyWarning } from '../../assets/common/core/notify.js';
 
-const ImportSubject = ({ t, isLoading, handleImportSubject }) => {
+const ImportSubject = ({ isLoading, handleImportSubject }) => {
 
     const [form] = Form.useForm();
     const [fileAttach, setFileAttach] = useState(null);
+    const {t} = useTranslation()
 
 
     const handleProcessFile = (e) => {
@@ -77,8 +78,8 @@ const ImportSubject = ({ t, isLoading, handleImportSubject }) => {
                     <Input type="file" accept='.json' style={{ overflow: 'hidden' }} onChange={e => handleProcessFile(e)} />
                 </Form.Item>
 
-                <Form.Item wrapperCol={{ ...formItemLayout.wrapperCol, offset: 6 }}>
-                    <Button type="primary" loading={isLoading} htmlType="submit">
+                <Form.Item>
+                    <Button type="primary" >
                         {t('import_subject')}</Button>
                 </Form.Item>
 

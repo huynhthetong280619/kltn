@@ -19,10 +19,12 @@ const Topic = () => {
     const [isModalCreateTopic, setIsModalCreateTopic] = useState(false)
     const [detailForum, setDetailForum] = useState([])
     const [forum, setForum] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
     const { forumId, idSubject, idTimeline } = location.state
 
 
     useEffect(async () => {
+        setIsLoading(true)
         await restClient.asyncGet(`/forum/${forumId}?idSubject=${idSubject}&idTimeline=${idTimeline}`)
             .then(res => {
                 if (!res.hasError) {
@@ -30,6 +32,7 @@ const Topic = () => {
                     setForum(get(res, 'data'))
                     setDetailForum(get(get(res, 'data'), 'topics'))
                 }
+                setIsLoading(false)
             })
     }, [])
 
@@ -51,8 +54,9 @@ const Topic = () => {
                 content: topic.content
             }
         }
+        console.log(data)
 
-        await restClient.asyncPost('/topic', data)
+        await restClient.asyncPost(`/topic?idSubject=${idSubject}&idTimeline=${idTimeline}&idForum=${forumId}`, data)
             .then(res => {
                 if (!res.hasError) {
                     notifySuccess(t('success'), t('add_topic_success'))
@@ -115,7 +119,7 @@ const Topic = () => {
         <div >
             <ModalWrapper style={{ background: '#494949', display: 'flex', justifyContent: 'center' }}>
                 {
-                    !detailForum.length ? <Skeleton avatar paragraph={{ rows: 4 }} /> : detailForum.map(({ _id, create, name, description, replies }) => {
+                    isLoading ? <Skeleton avatar paragraph={{ rows: 4 }} /> : detailForum.map(({ _id, create, name, description, replies }) => {
                         return (
                             <div style={{ display: 'grid', justifyContent: 'center' }} key={_id}>
                                 <Badge.Ribbon text={`${t('replies_in_topic')}${replies ? replies : 0}`}

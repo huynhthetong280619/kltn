@@ -4,13 +4,15 @@ import { Button, Form, Row, Checkbox } from 'antd'
 import { notifyError } from '../../assets/common/core/notify.js';
 import fileDownload from 'js-file-download';
 import RestClient from '../../utils/restClient.js';
-const ExportSubject = ({ t, idSubject, token, nameSubject }) => {
+import { useTranslation } from 'react-i18next';
+
+const ExportSubject = ({ idSubject,  nameSubject }) => {
 
     const [form] = Form.useForm();
 
     const [isLoading, setLoading] = useState(false);
-    const restClient = new RestClient({token: ''})
-
+    const restClient = new RestClient({ token: '' })
+    const { t } = useTranslation()
     const formItemLayout = {
         labelCol: {
             span: 8,
@@ -35,11 +37,12 @@ const ExportSubject = ({ t, idSubject, token, nameSubject }) => {
         }
     }
 
-    const onFinish = async (values) => {
-        //console.log('values', values);
+    const onFinish = (values) => {
+        console.log('values', values);
         setLoading(true);
-        await restClient.asyncPost(`/subject/${idSubject}/export-teacher`, values, token)
+         restClient.asyncPost(`/subject/${idSubject}/export`, values)
             .then(res => {
+                console.log(res)
                 setLoading(false);
                 if (!res.hasError) {
                     //console.log('res', res);
@@ -81,11 +84,11 @@ const ExportSubject = ({ t, idSubject, token, nameSubject }) => {
                     <Checkbox onChange={(e) => onChangeSelect(e.target)} />
                 </Form.Item>
 
-                <Form.Item wrapperCol={{ ...formItemLayout.wrapperCol, offset: 7 }}>
+                <Form.Item >
                     <Button type="primary" loading={isLoading} htmlType="submit">
-                        {t('export_data')}</Button>
+                        {t('export_data')}
+                        </Button>
                 </Form.Item>
-
             </Form>
             <Row>
                 <div style={{
@@ -112,4 +115,4 @@ const ExportSubject = ({ t, idSubject, token, nameSubject }) => {
 }
 
 
-export default withTranslation('translations')(ExportSubject)
+export default ExportSubject

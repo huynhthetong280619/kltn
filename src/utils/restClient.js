@@ -17,7 +17,7 @@ const parseResponse = async response => {
     return null;
 };
 
-const URL_DEFAULT = 'https://spkt-server.herokuapp.com'
+const URL_DEFAULT = 'https://lms-api-server.herokuapp.com/'
 
 class RestClient {
     constructor(props) {

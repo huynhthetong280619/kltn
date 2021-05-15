@@ -831,3 +831,29 @@ h5.ant-typography{
         overflow: auto;
     }
 }
+
+.ant-radio-wrapper span{
+    color: #f9f9f9
+}
+
+.timeout-quiz{
+    padding: 1.3rem;
+    background: #ff4000;
+    color: #f9f9f9f9;
+    text-transform: uppercase;
+    width: 158px;
+    display: flex;
+    justify-content: center;
+}
+
+.logout-action{
+    display: inline-flex;
+    justify-content: center;
+    border-radius: 0.25rem;
+    border: 1px solid #232323;
+    padding: 2px 8px;
+    background: #232323;
+    &:hover{
+        background-color: #494949;
+    }
+}

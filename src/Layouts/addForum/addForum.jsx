@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Input, Select, Button, Form, Checkbox } from 'antd'
+import { Input, Select, Button, Form, Checkbox, Skeleton } from 'antd'
 // import Loading from '../../loading/loading.jsx';
 import { notifyError } from '../../assets/common/core/notify.js';
 import RestClient from '../../utils/restClient.js';
@@ -104,7 +104,7 @@ const AddForum = ({timelinesList, createForum, updateForum, idSubject, idTimelin
         <>
             {
                 (idForum && !forum) ?
-                    <div>Loading</div>
+                    <Skeleton />
                     :
                     (<Form
                         onFinish={onFinish}

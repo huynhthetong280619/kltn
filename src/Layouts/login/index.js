@@ -36,7 +36,6 @@ const Login = () => {
                         setAuth(true);
                         setToken(token);
                         setUserInfo(user)
-                        setLoadingLogin(false)
 
                         localStorage.setItem('API_TOKEN', token)
 
@@ -45,6 +44,8 @@ const Login = () => {
                     })
 
                 }
+                setLoadingLogin(false)
+
             })
 
     }
@@ -165,7 +166,7 @@ const Login = () => {
                     <Form.Item
                         style={{ textAlign: 'center' }}
                     >
-                        <Button className="btn-login" type="primary" size='large' htmlType="submit">
+                        <Button className="btn-login" type="primary" size='large' htmlType="submit" style={{fontSize: 'initial'}}>
                             Đăng nhập</Button>
                     </Form.Item>
                 </Form>
@@ -196,7 +197,7 @@ const Login = () => {
                     </Col>
                 </div>
 
-                <div className="register-account"><div>Bạn chưa có tài khoản?</div> <a style={{ cursor: 'pointer' }} className="ml-2">Tạo tài khoản</a></div>
+                <div className="register-account"><div>Bạn chưa có tài khoản?</div> <a style={{ cursor: 'pointer' }} className="ml-2" onClick={(e) => {e.preventDefault(); history.push('/create-account')}}>Tạo tài khoản</a></div>
             </div>
         </div>
 

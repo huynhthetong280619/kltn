@@ -68,6 +68,7 @@ const AssignmentModal = (props) => {
 
 
     return <Modal
+        closable={false}
         className="modal-function-customize"
         title={<div
             style={{
