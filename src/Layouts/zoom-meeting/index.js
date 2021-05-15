@@ -91,6 +91,7 @@ const ZoomMeeting = () => {
     const [videoStream, setVideoStream] = useState(null);
     const [isMute, setMute] = React.useState(false);
     const [isCamera, setCamera] = React.useState(false);
+    const [isOpenShare, setIsOpenShare] = React.useState(false);
 
     const currentUser = JSON.parse(localStorage.getLocalStorage('user'));
     let arrayStream = [];
@@ -343,7 +344,7 @@ const ZoomMeeting = () => {
                         </div>
                     </Tooltip>
                     <Tooltip title="Share screen">
-                        <div className="zm-center" style={{ cursor: 'pointer' }}>
+                        <div className="zm-center" style={{ cursor: 'pointer' }} onClick={() => setIsOpenShare(true)}>
                             <div className="footer-button__share-icon" ></div>
                         </div>
                     </Tooltip>
@@ -399,6 +400,27 @@ const ZoomMeeting = () => {
                     </div>
                 </div> */}
             </div>
+        </Modal>
+        <Modal className="modal-function-customize screen-share"
+            onCancel={() => setIsOpenShare(false)}
+            visible={isOpenShare}
+            closable={false}
+            title={<div
+                style={{
+                    padding: '1rem 0.625rem 0.625rem 0',
+                    alignItems: 'center',
+                }}
+
+            >
+                <div style={{ color: '#f9f9f9' }}>{t(currentTitle)}</div>
+                <div className="close-icon-modal" onClick={() => setIsOpenShare(false)}>
+                    <IC_CLOSE />
+                </div>
+            </div>}
+            footer={null}>
+<div style={{ height: 470}}>
+
+</div>
         </Modal>
     </div>
 }
