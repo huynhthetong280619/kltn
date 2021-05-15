@@ -7,14 +7,27 @@ import { ReactComponent as IC_SETTING } from '../../assets/images/ic_set.svg'
 import { ReactComponent as IC_CLASS } from '../../assets/images/ic_class.svg'
 import { useHistory } from 'react-router';
 import { StoreTrading } from '../../store-trading';
+import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography;
 
 const LeftBar = ({ isOpen, setOpen }) => {
-
+    const {t} = useTranslation()
     const history = useHistory()
     const { token } = useContext(StoreTrading)
-    
+    const [isTeacherFlag, setIsTeacherFlag] = useState(false)
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user?.idPrivilege == 'student') {
+            setIsTeacherFlag(false)
+        }
+
+        if (user?.idPrivilege == 'teacher') {
+            setIsTeacherFlag(true)
+        }
+    }, [])
+
 
     const onClose = () => {
         setOpen(false);
@@ -41,19 +54,29 @@ const LeftBar = ({ isOpen, setOpen }) => {
                 <div className="drawer-item__i">
                     <IC_CLASS />
                 </div>
-                <div className="drawer-item__c color-default">Lớp học</div>
+                <div className="drawer-item__c color-default">{t('class')}</div>
             </div>
             <Divider />
-            <Title level={5} style={{color: '#f9f9f9'}}>Giảng dạy</Title>
-            <div className="drawer-item-app">
+            {
+                isTeacherFlag ? <>
+                    {/* <Title level={5} style={{ color: '#f9f9f9' }}>Giảng dạy</Title>
+                    <div className="drawer-item-app">
+                        <div className="mask-hover"></div>
+                        <div className="drawer-item__i">
+                            <IC_FOLDER />
+                        </div>
+                        <div className="drawer-item__c color-default">Để đánh giá</div>
+                    </div>
+                    <Divider /> */}
+                    {/* <div className="drawer-item-app">
                 <div className="mask-hover"></div>
                 <div className="drawer-item__i">
-                    <IC_FOLDER />
+                    <IC_STORAGE />
                 </div>
-                <div className="drawer-item__c color-default">Để đánh giá</div>
-            </div>
-            <Divider />
-            <Title level={5} style={{color: '#f9f9f9'}}>Đã đăng ký</Title>
+                <div className="drawer-item__c color-default">Lớp học đã lưu trữ</div>
+            </div> */}
+                </>  : <>
+                <Title level={5} style={{ color: '#f9f9f9' }}>Đã đăng ký</Title>
             <div className="drawer-item-app" onClick={() => navigationTo('/home/todo-list')}>
                 <div className="mask-hover"></div>
                 <div className="drawer-item__i">
@@ -62,19 +85,17 @@ const LeftBar = ({ isOpen, setOpen }) => {
                 <div className="drawer-item__c color-default">Việc cần làm</div>
             </div>
             <Divider />
-            <div className="drawer-item-app">
-                <div className="mask-hover"></div>
-                <div className="drawer-item__i">
-                    <IC_STORAGE />
-                </div>
-                <div className="drawer-item__c color-default">Lớp học đã lưu trữ</div>
-            </div>
+                </>
+            }
+
+            
+            
             <div className="drawer-item-app" onClick={() => navigationTo('/home/setting')}>
                 <div className="mask-hover"></div>
                 <div className="drawer-item__i">
-                <IC_SETTING />
+                    <IC_SETTING />
                 </div>
-                <div className="drawer-item__c color-default">Cài đặt</div>
+                <div className="drawer-item__c color-default">{t('setting')}</div>
             </div>
         </Drawer>
     )

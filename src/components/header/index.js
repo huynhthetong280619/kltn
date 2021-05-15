@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Col, Dropdown, Row, Typography, } from 'antd'
+import { Col, Dropdown, Row, Switch, Typography, } from 'antd'
 // import IC_MENU from '../../assets/images/ic_menu_bar.png'
 import Menu from '../../assets/images/ic_menu.svg'
 import IC_SETTING from '../../assets/images/ic_setting.svg'
@@ -18,6 +18,9 @@ import Message from '../message'
 import { StoreTrading } from '../../store-trading'
 import { DownOutlined } from '@ant-design/icons'
 import { isEmpty } from 'lodash'
+import { ReactComponent as Logout } from '../../assets/images/contents/logout.svg'
+
+
 const { Text } = Typography;
 
 const HeaderLayout = ({ setOpen }) => {
@@ -28,7 +31,7 @@ const HeaderLayout = ({ setOpen }) => {
     const [profile, setProfile] = useState({});
     const history = useHistory()
 
-    const [language, setLanguage] = useState('vi')
+    const [language, setLanguage] = useState('VI')
 
 
     useEffect(() => {
@@ -55,9 +58,7 @@ const HeaderLayout = ({ setOpen }) => {
         setProfile(usrObj);
     }, [])
 
-    const changeLanguage = ({ key }) => {
-        console.log(key)
-        if (language === key) return
+    const changeLanguage = (key) => {
         i18n.changeLanguage(key)
         localStorage.setItem(STORE_KEY.LANGUAGE, key)
         setLanguage(key)
@@ -73,28 +74,6 @@ const HeaderLayout = ({ setOpen }) => {
         history.push('/login')
     }
 
-    const menu = (
-        <Menu>
-            <Menu.Item>
-                <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-                    1st menu item
-      </a>
-            </Menu.Item>
-            <Menu.Item icon={<DownOutlined />} disabled>
-                <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-                    2nd menu item
-      </a>
-            </Menu.Item>
-            <Menu.Item disabled>
-                <a target="_blank" rel="noopener noreferrer" href="https://www.luohanacademy.com">
-                    3rd menu item
-      </a>
-            </Menu.Item>
-            <Menu.Item danger>a danger item</Menu.Item>
-        </Menu>
-    )
-
-
     return <div className="header-layout ant-col-24">
         <Col span={12} className="header-layout-left">
             <Col span={4} className="header-layout--element__first" onClick={() => setOpen(true)}>
@@ -109,6 +88,20 @@ const HeaderLayout = ({ setOpen }) => {
             </Col>
         </Col>
         <Col span={12} style={{ height: '64px' }} className="header-layout-right">
+            <div className="mr-2">
+                <Switch style={{
+                    minWidth: 85,
+                    height: 22
+                }}
+                    className=""
+                    checkedChildren={'Tiếng Việt'}
+                    unCheckedChildren={'English'}
+                    onChange={(e) => {
+                        changeLanguage(language === 'VI' ? 'EN' : 'VI')
+                    }}
+                    checked={language === 'EN'}
+                />
+            </div>
             {/* <Col>
                 <div style={{ display: 'flex' }} onClick={() => changeLanguage({ key: 'vi' })}>
                     <div>
@@ -260,8 +253,8 @@ const HeaderLayout = ({ setOpen }) => {
                 <div className="user-setting">{t('title_setting')}</div>
             </Col> */}
             <Col className="header-user-login cursor-act ml-2 mr-4">
-                <div onClick={() => !authFlag ? handleLogIn() : handleLogout()} style={{ display: 'flex' }}>
-                    <div>
+                <div style={{ display: 'flex' }} onClick={() => !authFlag ? handleLogIn() : history.push('/home/profile')}>
+                    <div >
                         <img src={!isEmpty(profile) ? profile.urlAvatar : IC_USER} width="20px" style={{
                             borderRadius: '0.25rem',
                             width: '25px',
@@ -273,9 +266,18 @@ const HeaderLayout = ({ setOpen }) => {
                         border: '1px solid rgb(15, 112, 184)',
                         padding: '5px 16px',
                         borderRadius: '0.5rem',
-                    }}>{authFlag ? profile?.firstName + ' ' + profile?.lastName : t('title_login')}</div></div>
+                    }}>{authFlag ? profile?.firstName + ' ' + profile?.lastName : t('title_login')}</div>
+                    </div>
                 </div>
+                {
+                    authFlag && <div className="ml-2" style={{ display: 'flex', alignItems: 'center', }}>
+                        <div style={{ display: 'flex', padding: '7px 9px' }} onClick={() => handleLogout()}>
+                            <Logout />
+                        </div>
+                    </div>
+                }
             </Col>
+
         </Col>
 
         {/* <Message /> */}
