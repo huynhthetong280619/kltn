@@ -5,6 +5,7 @@ html{
 
 .main-layout{
     .main-header-layout{
+        filter: drop-shadow(2px 0px 3px black);
         height: 64px;
         background-color: #232323;
         display: flex;
@@ -180,17 +181,23 @@ background-color: #2D2E30;
     align-items: center;
     height: 100vh;
     background: #171A1F;
-    background: url('../assets/images/bg-login.jpeg');
+    background: url('../assets/images/banner2.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     .form-login{
-        width: 330px;
-        height: 631px;
+        border: 1px solid #232323;
+        border-radius: 0.5rem;
+        background: #232323;
+        width: 430px;
+        height: 531px;
         // background: url('../assets/images/background.svg');
         background-size: cover;
-        padding: 10px;
+        padding: 1rem;
         border-radius: 8px;
+        filter: drop-shadow(2px 4px 6px black);
         .login-logo{
+            padding: 1rem;
+    filter: drop-shadow(2px 4px 6px black);
             text-align: center;
             margin-bottom: 27px;
         }
@@ -226,9 +233,15 @@ background-color: #2D2E30;
             display: flex;
             .facebook-login{
                 text-align: center;
+                button{
+                    filter: drop-shadow(2px 4px 6px black);
+                }
             }
             .google-login{
                 text-align: center;
+                button{
+                    filter: drop-shadow(2px 4px 6px black);
+                }
             }
         }
 
@@ -248,8 +261,9 @@ background-color: #2D2E30;
     padding: 10px;
     justify-content: center;
     .course-card{
+        filter: drop-shadow(2px 4px 6px black);
         width: 350px;
-        border-radius: 1rem;
+        border-radius: 0.25rem;
         margin: 10px;
     }
 }
@@ -669,7 +683,7 @@ h5.ant-typography{
 }
 
 .ant-card-actions{
-    border-radius: 1rem;
+    border-radius: 0.25rem;
 }
 
 
@@ -731,7 +745,7 @@ h5.ant-typography{
 }
 
 .ant-form-item {
-    margin-bottom: 0.25rem !important;
+    margin-bottom: 0.75rem !important;
 }
 
 .ant-modal{

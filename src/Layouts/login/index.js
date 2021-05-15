@@ -5,7 +5,7 @@ import { UserOutlined, KeyOutlined } from '@ant-design/icons';
 import { GOOGLE_CLIENT_ID, FACEBOOK_CLIENT_ID } from '../../assets/constants/const'
 import Facebook from '../../assets/images/facebook.svg'
 import Google from '../../assets/images/google.svg'
-import Logo from '../../assets/images/logo.svg'
+import Logo from '../../assets/images/logo-utex.png'
 import { StoreTrading } from '../../store-trading';
 import { useHistory } from 'react-router';
 import RestClient from '../../utils/restClient';
@@ -158,7 +158,7 @@ const Login = () => {
                             <Checkbox onChange={onChange} />
                             <div style={{ marginLeft: 10, cursor: 'pointer' }}>Lưu tên đăng nhập</div>
                         </Col>
-                        <Col span={12} className="forget-pass">
+                        <Col span={12} className="forget-pass" onClick={() => history.push('forget')}>
                             <div style={{ cursor: 'pointer' }}>Quên mật khẩu ?</div>
                         </Col>
                     </div>

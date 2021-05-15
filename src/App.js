@@ -8,6 +8,7 @@ import i18n from './i18n'
 import Login from './Layouts/login';
 import StoreTrading from './store-trading'
 import CreateAccount from './Layouts/createAccount';
+import ForgetPassword from './Layouts/forgetPassword';
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
             <Switch>
               <Route path="/login" component={Login} />
               <Route path="/create-account" component={CreateAccount} />
+              <Route path="/forget" component={ForgetPassword} />
               <Route exact path="/" component={Pages} />
               <Route path="/home" component={Pages} />
             </Switch>

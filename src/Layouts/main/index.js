@@ -74,7 +74,7 @@ const MainAppLayout = () => {
                     key={index}
                     className="course-card"
                     cover={
-                        <div style={{ background: generateColor(), width: '100%', height: 50, borderRadius: '8px 8px 0 0' }}></div>
+                        <div style={{ background: generateColor(), width: '100%', height: 50, borderRadius: '0.25rem 0.25rem 0 0' }}></div>
                     }
                     actions={[
                         <Dropdown overlay={menu} trigger={['click']} placement="topCenter">
