@@ -270,7 +270,7 @@ const HeaderLayout = ({ setOpen }) => {
                     </div>
                     <div className="user-login-text" ><div style={{
                         display: 'inline',
-                        border: '1px solid #494949',
+                        border: '1px solid rgb(15, 112, 184)',
                         padding: '5px 16px',
                         borderRadius: '0.5rem',
                     }}>{authFlag ? profile?.firstName + ' ' + profile?.lastName : t('title_login')}</div></div>
