@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ReactComponent as Join_Meeting } from '../../assets/images/contents/join_meeting.svg'
 import { ReactComponent as New_Meeting } from '../../assets/images/contents/new_meeting.svg'
@@ -82,8 +82,7 @@ const ZoomMeeting = () => {
     const [comments, setComments] = useState([])
     const [submitting, setSubmitting] = useState(false);
     const location = useLocation()
-    const { idSubject } = location.state;
-
+    const idSubject = useRef('')
     const [socket, setSocket] = useState(null)
     const peer = new Peer();
     let peers = {};
@@ -115,6 +114,8 @@ const ZoomMeeting = () => {
     };
 
     useEffect(() => {
+        idSubject.current = location.search.slice(1).split("&")[0].split("=")[1]
+        console.log('Idsubject', idSubject.current)
         setupSocket();
     }, []);
 
@@ -155,7 +156,7 @@ const ZoomMeeting = () => {
     useEffect(() => {
         if (socket) {
             peer.on('open', (id) => {
-                socket.emit('join-zoom', idSubject, id);
+                socket.emit('join-zoom', idSubject.current, id);
                 socket.on('403', (message) => {
                     alert(message);
                 })
@@ -248,6 +249,7 @@ const ZoomMeeting = () => {
     const handleChange = (e) => {
         setCommentInput(e.target.value)
     }
+
 
     return <div className="mt-4" style={{
         justifyContent: 'center',
@@ -418,9 +420,9 @@ const ZoomMeeting = () => {
                 </div>
             </div>}
             footer={null}>
-<div style={{ height: 470}}>
+            <div style={{ height: 470 }}>
 
-</div>
+            </div>
         </Modal>
     </div>
 }

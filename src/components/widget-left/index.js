@@ -77,7 +77,9 @@ const WidgetLeft = ({
 
     examIdEdit,
     focusExamEdit,
-    setFocusExamEdit
+    setFocusExamEdit,
+
+    isTeacherFlag
 }) => {
     const { t } = useTranslation()
     // const [openCreateContent, setOpenCreateContent] = useState(false)
@@ -442,7 +444,7 @@ const WidgetLeft = ({
         let timelineUpdate = detailSubject.filter(({ _id }) => _id === idTimeline)
 
         //console.log('timelineUpdate', timelineUpdate)
-        console.log( head(timelineUpdate))
+        console.log(head(timelineUpdate))
         let target = head(timelineUpdate).surveys.find(({ _id }) => _id === survey._id);
         //console.log('targetSurvey', target);
         let index = head(timelineUpdate).surveys.indexOf(target);
@@ -513,18 +515,21 @@ const WidgetLeft = ({
 
     return (<>
         <div className="container-left">
-            <a onClick={() => setOpenCreateContent(true)}>
-                <i><FontAwesomeIcon icon="wrench" /></i>
-                <span>{t('setting')}</span>
-            </a>
-            <a onClick={(e) => {
-                e.preventDefault();
-                setIsOnEdit(!isOnEdit)
-            }}>
-                <i><FontAwesomeIcon icon="edit" /></i>
-                <span>{t('update')}</span>
-            </a>
-            <a onClick={() => history.push('zoom-meeting', { idSubject: location.state._id })}>
+            {
+                isTeacherFlag && <><a onClick={() => setOpenCreateContent(true)}>
+                    <i><FontAwesomeIcon icon="wrench" /></i>
+                    <span>{t('setting')}</span>
+                </a>
+                    <a onClick={(e) => {
+                        e.preventDefault();
+                        setIsOnEdit(!isOnEdit)
+                    }}>
+                        <i><FontAwesomeIcon icon="edit" /></i>
+                        <span>{t('update')}</span>
+                    </a></>
+            }
+
+            <a onClick={() => history.push(`zoom-meeting?idSubject=${location.state._id}`, { idSubject: location.state._id })}>
                 <i><FontAwesomeIcon icon="video" /></i>
                 <span>{t('call_video')}</span>
             </a>

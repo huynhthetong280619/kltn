@@ -603,62 +603,7 @@ const Subject = () => {
                     </Droppable>
                 </DragDropContext>
 
-                <WidgetLeft
-                    timelinesList={timelinesList}
-                    setTimelinesList={setTimelinesList}
-                    quizList={quizList} setQuizList={setQuizList}
-                    surveyList={surveyList} setSurveyList={setSurveyList}
-                    detailSubject={detailSubject}
-                    setDetailSubject={setDetailSubject}
-                    isOnEdit={isOnEdit}
-                    setIsOnEdit={setIsOnEdit}
-
-                    openCreateContent={openCreateContent}
-                    setOpenCreateContent={setOpenCreateContent}
-                    notificationState={notificationState}
-                    setNotificationState={setNotificationState}
-                    documentState={documentState}
-                    setDocumentState={setDocumentState}
-                    todosState={todosState}
-                    setTodosState={setTodosState}
-                    quizState={quizState}
-                    setQuizState={setQuizState}
-                    surveyState={surveyState}
-                    setSurveyState={setSurveyState}
-                    timelineState={timelineState}
-                    setTimelineState={setTimelineState}
-                    forumState={forumState}
-                    setForumState={setForumState}
-
-                    isOpenModalFunction={isOpenModalFunction}
-                    setIsOpenModalFunction={setIsOpenModalFunction}
-
-                    surveyIdEdit={surveyIdEdit}
-                    timelineIdEdit={timelineIdEdit}
-                    focusSurveyEdit={focusSurveyEdit}
-                    setFocusSurveyEdit={setFocusSurveyEdit}
-
-                    fileIdEdit={fileIdEdit}
-                    focusFileEdit={focusFileEdit}
-                    setFocusFileEdit={setFocusFileEdit}
-
-                    assignmentIdEdit={assignmentIdEdit}
-                    focusAssignmentEdit={focusAssignmentEdit}
-                    setFocusAssignmentEdit={setFocusAssignmentEdit}
-
-                    forumIdEdit={forumIdEdit}
-                    focusForumEdit={focusForumEdit}
-                    setFocusForumEdit={setFocusForumEdit}
-
-                    examIdEdit={examIdEdit}
-                    focusExamEdit={focusExamEdit}
-                    setFocusExamEdit={setFocusExamEdit}
-
-                    setImportState={setImportState}
-                    setExportState={setExportState}
-                    importState={importState}
-                    exportState={exportState}
-                />
+                
                 <WidgeRight
 
                     isOpenModalFunction={isOpenModalFunction}
@@ -839,6 +784,63 @@ const Subject = () => {
                 })
             )
         }
+<WidgetLeft
+                    timelinesList={timelinesList}
+                    setTimelinesList={setTimelinesList}
+                    quizList={quizList} setQuizList={setQuizList}
+                    surveyList={surveyList} setSurveyList={setSurveyList}
+                    detailSubject={detailSubject}
+                    setDetailSubject={setDetailSubject}
+                    isOnEdit={isOnEdit}
+                    setIsOnEdit={setIsOnEdit}
+
+                    openCreateContent={openCreateContent}
+                    setOpenCreateContent={setOpenCreateContent}
+                    notificationState={notificationState}
+                    setNotificationState={setNotificationState}
+                    documentState={documentState}
+                    setDocumentState={setDocumentState}
+                    todosState={todosState}
+                    setTodosState={setTodosState}
+                    quizState={quizState}
+                    setQuizState={setQuizState}
+                    surveyState={surveyState}
+                    setSurveyState={setSurveyState}
+                    timelineState={timelineState}
+                    setTimelineState={setTimelineState}
+                    forumState={forumState}
+                    setForumState={setForumState}
+
+                    isOpenModalFunction={isOpenModalFunction}
+                    setIsOpenModalFunction={setIsOpenModalFunction}
+
+                    surveyIdEdit={surveyIdEdit}
+                    timelineIdEdit={timelineIdEdit}
+                    focusSurveyEdit={focusSurveyEdit}
+                    setFocusSurveyEdit={setFocusSurveyEdit}
+
+                    fileIdEdit={fileIdEdit}
+                    focusFileEdit={focusFileEdit}
+                    setFocusFileEdit={setFocusFileEdit}
+
+                    assignmentIdEdit={assignmentIdEdit}
+                    focusAssignmentEdit={focusAssignmentEdit}
+                    setFocusAssignmentEdit={setFocusAssignmentEdit}
+
+                    forumIdEdit={forumIdEdit}
+                    focusForumEdit={focusForumEdit}
+                    setFocusForumEdit={setFocusForumEdit}
+
+                    examIdEdit={examIdEdit}
+                    focusExamEdit={focusExamEdit}
+                    setFocusExamEdit={setFocusExamEdit}
+
+                    setImportState={setImportState}
+                    setExportState={setExportState}
+                    importState={importState}
+                    exportState={exportState}
+                    isTeacherFlag={isTeacherFlag}
+                />
 
         <AssignmentModal
             isTodoModal={isTodoModal}

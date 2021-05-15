@@ -19,6 +19,7 @@ import Survey from '../survey';
 import TakeQuiz from '../take-quiz';
 import AssignmentCheck from '../assignment-check';
 import CreateAccount from '../createAccount';
+import FooterLayout from '../footer-layout';
 
 const { Header, Content, Footer } = Layout
 
@@ -87,9 +88,9 @@ const PagesView = () => {
                     </Switch>
                 </Suspense>
             </Content>
-            {/* <Footer className="main-footer-layout">
-
-            </Footer> */}
+            <Footer className="main-footer-layout">
+                <FooterLayout />
+            </Footer>
             <LeftBar isOpen={isOpen} setOpen={setOpen} />
         </Layout>
     )

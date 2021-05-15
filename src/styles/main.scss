@@ -254,6 +254,12 @@ background-color: #2D2E30;
         }
     }
 }
+.wrapper-main-app{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
+    justify-content: center;
+}
 
 .main-app-layout{
     display: flex;
@@ -455,10 +461,13 @@ h5.ant-typography{
 }
 
 .ant-modal-loading{
+    top: 150px !important;
+    filter: drop-shadow(2px 4px 6px black);
     .ant-modal-content{
+        padding: 0.5rem 0;
         border-radius: 0.5rem;
-    background: #121418;
-    color: #fff;
+        background: #121418;
+        color: #fff;
     }
 }
 
@@ -874,4 +883,9 @@ h5.ant-typography{
     &:hover{
         background-color: #494949;
     }
+}
+
+.ant-tabs-nav-wrap{
+    display: flex;
+    justify-content: center;
 }
