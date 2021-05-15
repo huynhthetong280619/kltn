@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import "./videoContainer.css"
-const VideoContainer = ({id, stream }) => {
+const VideoContainer = ({ id, stream, user }) => {
 
     const fullScreen = (e) => {
         const currentElement = e.currentTarget
@@ -18,6 +18,9 @@ const VideoContainer = ({id, stream }) => {
                 video.play()
             });
         }
+        return () => {
+
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [stream])
 
@@ -28,7 +31,7 @@ const VideoContainer = ({id, stream }) => {
                     <i className="full-screen-widget__icon"></i>
                 </div>
                 <video id={id}></video>
-                <div style={{textAlign: 'center', color: '#f9f9f9'}}>Usr name</div>
+                <div style={{ textAlign: 'center', color: '#f9f9f9', position: 'absolute', bottom: '0' }}>{user.firstName + " " + user.lastName}</div>
             </div>
         </>
     )
