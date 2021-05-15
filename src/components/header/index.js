@@ -120,12 +120,12 @@ const HeaderLayout = ({ setOpen }) => {
                     </div>
                 </div>
             </Col> */}
-            <Col className="header-message cursor-act ml-2 mr-2">
+            {/* <Col className="header-message cursor-act ml-2 mr-2">
                 <div>
                     <img src={IC_NOTIFICATION} width="20px" />
                 </div>
                 <div className="user-message">{t('title_notification')}</div>
-            </Col>
+            </Col> */}
             {/* <Col className="header-message cursor-act ml-2 mr-2" >
                 <div style={{ display: 'inline-flex' }} className="cursor-act" onClick={() => setOpenMessage(!openMessage)}>
                     <div>
@@ -266,9 +266,14 @@ const HeaderLayout = ({ setOpen }) => {
                             borderRadius: '0.25rem',
                             width: '25px',
                             height: '25px'
-                        }}/>
+                        }} />
                     </div>
-                    <div className="user-login-text" >{authFlag ? profile?.firstName : t('title_login')}</div>
+                    <div className="user-login-text" ><div style={{
+                        display: 'inline',
+                        border: '1px solid #494949',
+                        padding: '5px 16px',
+                        borderRadius: '0.5rem',
+                    }}>{authFlag ? profile?.firstName + ' ' + profile?.lastName : t('title_login')}</div></div>
                 </div>
             </Col>
         </Col>

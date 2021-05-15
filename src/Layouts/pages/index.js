@@ -88,9 +88,6 @@ const PagesView = () => {
                     </Switch>
                 </Suspense>
             </Content>
-            <Footer className="main-footer-layout">
-                <FooterLayout />
-            </Footer>
             <LeftBar isOpen={isOpen} setOpen={setOpen} />
         </Layout>
     )

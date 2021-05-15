@@ -9,6 +9,8 @@ import { StoreTrading } from '../../store-trading';
 import RestClient from '../../utils/restClient';
 import ModalLoadingLogin from '../login/modal-loading-login';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Footer } from 'antd/lib/layout/layout';
+import FooterLayout from '../footer-layout';
 
 const { Meta } = Card;
 const { TabPane } = Tabs;
@@ -66,7 +68,7 @@ const MainAppLayout = () => {
         return <ModalLoadingLogin visible={loadingCourse} content={t("loading_subject")} />
     }
 
-    return (<div className="wrapper-main-app">
+    return (<><div className="wrapper-main-app">
         <Tabs defaultActiveKey="1" type='card' style={{ width: '92%' }}>
             <TabPane
                 tab={
@@ -124,6 +126,7 @@ const MainAppLayout = () => {
         </Tabs>
 
     </div>
+    </>
     )
 }
 
