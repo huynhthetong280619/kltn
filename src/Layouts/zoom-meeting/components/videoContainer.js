@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import "./videoContainer.css"
+import * as localStorage from "../../../assets/common/core/localStorage";
+
 const VideoContainer = ({ id, stream, user }) => {
 
-    const [isMute, setIsMute] = useState(false)
+    const currentUser = JSON.parse(localStorage.getLocalStorage('user'));
 
     const fullScreen = (e) => {
         const currentElement = e.currentTarget
@@ -15,13 +17,14 @@ const VideoContainer = ({ id, stream, user }) => {
     useEffect(() => {
         if (stream) {
             const video = document.getElementById(id);
+            if (user._id === currentUser._id) {
+                video.muted = true;
+            }
+            
             video.srcObject = stream
             video.addEventListener('loadedmetadata', () => {
                 video.play()
             });
-        }
-        return () => {
-
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [stream])
@@ -35,7 +38,7 @@ const VideoContainer = ({ id, stream, user }) => {
                 <video id={id}></video>
                 <div>
                     <div className="user-stream">{user.firstName + " " + user.lastName}</div>
-                    <div className={isMute ? 'mic-video-unmute' : 'mic-video-mute'} onClick={(e) => { e.stopPropagation(); setIsMute(!isMute)}}></div>
+                    <div className={stream.getAudioTracks()[0]?.enabled ? 'mic-video-unmute' : 'mic-video-mute'} onClick={(e) => { e.stopPropagation(); }}></div>
                 </div>
             </div>
         </>

@@ -87,15 +87,16 @@ const ZoomMeeting = () => {
     const peer = new Peer();
 
     const [myVideoStream, setVideoStream] = useState(null);
+
+    const [myShareScreen, setShareScreen] = useState(null);
+
     const [isMute, setMute] = React.useState(false);
-    const [isCamera, setCamera] = React.useState(false);
+    const [isHideCamera, setCamera] = React.useState(false);
     const [isOpenShare, setIsOpenShare] = React.useState(false);
 
     const currentUser = JSON.parse(localStorage.getLocalStorage('user'));
 
     const [arrayStream, setArrayStream] = useState([]);
-
-    const [isShareScreen, setShareScreen] = useState(false);
 
     const setupSocket = () => {
         const token = localStorage.getCookie("token");
@@ -154,17 +155,17 @@ const ZoomMeeting = () => {
 
     const replaceVideoStream = (stream) => {
         // Replace video stream of person in call
-        let videoTrack = stream.getVideoTracks()[0];
+        const videoTrack = stream.getVideoTracks()[0];
         for (var key in peers) {
             const peerConnection = peers[key].peerConnection;
-            var sender = peerConnection.getSenders().find(function (s) {
+            var videoSender = peerConnection.getSenders().find(function (s) {
                 return s.track.kind === videoTrack.kind;
             });
-            sender.replaceTrack(videoTrack);
+            videoSender.replaceTrack(videoTrack);
         }
 
         //Replace video of current user
-        console.log(arrayStream);
+
         setArrayStream(arrayStream.map(video => {
             if (video.user._id === currentUser._id) {
                 video.stream = stream;
@@ -173,18 +174,41 @@ const ZoomMeeting = () => {
         }))
     }
 
+    const stopShareScreen = () => {
+        if (myShareScreen) {
+            myShareScreen.getVideoTracks()[0].stop();
+            setShareScreen(null);
+            replaceVideoStream(myVideoStream);
+        }
+    }
+
     const shareScreen = () => {
-        navigator.mediaDevices.getDisplayMedia().then(mediaStream => {
+        navigator.mediaDevices.getDisplayMedia(
+            {
+                video: true,
+            }
+        ).then(mediaStream => {
+            if (myShareScreen) {
+                myShareScreen.getVideoTracks()[0].stop();
+                setShareScreen(null);
+            }
 
             // Handle display share screen
             replaceVideoStream(mediaStream);
-            setShareScreen(true);
+            setShareScreen(mediaStream);
 
             mediaStream.getVideoTracks()[0].onended = function () {
                 // doWhatYouNeedToDo();
-                setShareScreen(false);
+                setShareScreen(null);
                 replaceVideoStream(myVideoStream);
             };
+        }).catch(err => {
+            if (err.message === 'Permission denied') {
+                if (myShareScreen) {
+                    myShareScreen.getVideoTracks()[0].stop();
+                    replaceVideoStream(myVideoStream);
+                }
+            }
         })
     }
 
@@ -199,7 +223,6 @@ const ZoomMeeting = () => {
     }
 
     const addVideoStream = (id, stream, user) => {
-        console.log({ id, stream, user });
         setArrayStream(preState => {
             const index = preState.findIndex(value => value.id === id)
             if (index < 0) {
@@ -209,9 +232,9 @@ const ZoomMeeting = () => {
         });
     }
 
-     const handleWhenHasAlreadyJoinInAnotherPlace=(message)=>{
-         notify.notifyError("Error!",message);
-     }
+    const handleWhenHasAlreadyJoinInAnotherPlace = (message) => {
+        notify.notifyError("Error!", message);
+    }
 
     useEffect(() => {
         if (socket) {
@@ -359,21 +382,24 @@ const ZoomMeeting = () => {
                             }
 
                         </div>
-                        
+
                     </ModalWrapper>
-                   
+
                 </div>
-                <div className="sharing-screen">
-                            <div style={{display: 'flex'}}>
-                                <div className="status-sharing">
-                                    You are screen sharing
-                                    <div className="ic_checked"></div>
-                                    </div>
-                                <div className="action-sharing">
-                                    <div className="ic-stop"></div>
-                                    Stop share</div>
+                {myShareScreen &&
+                    <div className="sharing-screen">
+                        <div style={{ display: 'flex' }}>
+                            <div className="status-sharing">
+                                You are screen sharing
+                                               <div className="ic_checked"></div>
                             </div>
+                            <div className="action-sharing">
+                                <div className="ic-stop" onClick={() => stopShareScreen()} ></div>
+                                               Stop share</div>
                         </div>
+                    </div>
+                }
+
                 {
                     openChatTab && <div style={{ width: '40%' }}>
                         <ModalWrapper style={{ height: '100%', position: 'relative' }} className="zoom-list">
@@ -412,12 +438,12 @@ const ZoomMeeting = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                     <Tooltip title="Join Audio">
                         <div className="zm-center" onClick={muteMic}>
-                            <i className={`zm-icon ${true ? 'zm-icon-join-audio' : true ? 'zm-icon-phone-unmuted' : 'zm-icon-phone-muted'}`} style={{ cursor: 'pointer' }}></i>
+                            <i className={`zm-icon ${isMute ? 'zm-icon-phone-unmuted' : 'zm-icon-phone-muted'}`} style={{ cursor: 'pointer' }}></i>
                         </div>
                     </Tooltip>
                     <Tooltip title="Turn on/off video">
                         <div className="zm-center" onClick={hideCamera}>
-                            <i className={`zm-icon ${true ? 'zm-icon-stop-video' : 'zm-icon-start-video'}`} style={{ cursor: 'pointer' }}></i>
+                            <i className={`zm-icon ${isHideCamera ? 'zm-icon-stop-video' : 'zm-icon-start-video'}`} style={{ cursor: 'pointer' }}></i>
                         </div>
                     </Tooltip>
                     <Tooltip title="Participant">
@@ -430,7 +456,7 @@ const ZoomMeeting = () => {
                         </div>
                     </Tooltip>
                     <Tooltip title="Share screen">
-                        <div className="zm-center" style={{ cursor: 'pointer' }} onClick={() => { if (!isShareScreen) { shareScreen() } }}>
+                        <div className="zm-center" style={{ cursor: 'pointer' }} onClick={() => shareScreen()}>
                             <div className="footer-button__share-icon" ></div>
                         </div>
                     </Tooltip>
