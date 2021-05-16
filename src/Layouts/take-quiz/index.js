@@ -29,7 +29,7 @@ const TakeQuiz = () => {
 
 
     useEffect(() => {
-        restClient.asyncGet(`/exam/${examId}/attempt/${idSubmission}?idSubject=${idSubject}&idTimeline=${idTimeline}`)
+        restClient.asyncGet(`/exam/${examId}/attempt${idSubmission ? `/${idSubmission}` : ''}?idSubject=${idSubject}&idTimeline=${idTimeline}`)
             .then(res => {
                 console.log('setExamQuestions', res)
                 if (!res.hasError) {
@@ -67,8 +67,8 @@ const TakeQuiz = () => {
         let convert = []
         questionId.map(key => {
             convert.push({
-                ['questionId']: key,
-                ['answerId']: answer[key]
+                ['idQuestion']: key,
+                ['idAnswer']: answer[key]
             })
         })
 
@@ -81,6 +81,8 @@ const TakeQuiz = () => {
             idTimeline: idTimeline,
             data: convert
         }
+
+        console.log(data)
         await restClient.asyncPost(`/exam/${examId}/submit/${idSubmission}?idSubject=${idSubject}&idTimeline=${idTimeline}`, data)
             .then(res => {
                 if (!res.hasError) {

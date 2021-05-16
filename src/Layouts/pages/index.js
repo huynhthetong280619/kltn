@@ -54,6 +54,8 @@ function Child() {
             return <Survey />
         case 'manage-student':
             return <Student />
+            case 'manage-score':
+                return <Student />
         case 'take-quiz':
             return <TakeQuiz />
         case 'check-assignment':
