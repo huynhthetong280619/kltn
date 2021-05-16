@@ -21,6 +21,7 @@ import AssignmentCheck from '../assignment-check';
 import CreateAccount from '../createAccount';
 import FooterLayout from '../footer-layout';
 import SurveyTake from '../survey-take';
+import ManageScore from '../manage-score';
 
 const { Header, Content, Footer } = Layout
 
@@ -55,7 +56,7 @@ function Child() {
         case 'manage-student':
             return <Student />
             case 'manage-score':
-                return <Student />
+                return <ManageScore />
         case 'take-quiz':
             return <TakeQuiz />
         case 'check-assignment':

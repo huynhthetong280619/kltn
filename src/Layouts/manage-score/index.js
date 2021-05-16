@@ -1,14 +1,20 @@
+import React, { useState, useEffect } from 'react'
 import { useTranslation, withTranslation } from 'react-i18next'
 import { Row, Col, Table, Typography } from 'antd'
-import statisticsPoint from '../../../assets/images/contents/statistics-point.png'
-import { useState } from 'react';
+import statisticsPoint from '../../assets/images/contents/statistics-point.png'
+import RestClient from '../../utils/restClient';
+import { useLocation } from 'react-router';
+import { get } from 'lodash'
+import ModalWrapper from '../../components/basic/modal-wrapper';
 const { Text } = Typography;
 
 const ManageScore = () => {
 
     const { t } = useTranslation()
-
+    const location = useLocation()
+    const { idSubject } = location.state;
     const [lstSubmissionCore, setLstSubmissionCore] = useState([])
+    const restClient = new RestClient({ token: '' })
 
 
     useEffect(() => {
@@ -16,6 +22,13 @@ const ManageScore = () => {
         // this.setState({
         //     lstSubmissionCore: this.props.lstSubmissionCore,
         // })
+        restClient.asyncGet(`/subject/${idSubject}/score`)
+            .then(res => {
+                console.log(res);
+                if (!res.hasError) {
+                    setLstSubmissionCore(get(res, 'data')?.transcript)
+                }
+            })
     }, [])
 
 
@@ -41,22 +54,12 @@ const ManageScore = () => {
     ]
 
     return <>
-        <Row style={{
-            width: '80%',
-            textAlign: 'center',
-            background: '#fff',
-            minHeight: '20px', justifyContent: 'center',
-            margin: '0 auto'
-        }}>
-            <Row style={{ width: '100%' }}>
-                {/* <Col span={24} style={{ padding: '25px', fontSize: '2em' }}>{this.props.nameSubject.toUpperCase()}</Col> */}
-            </Row>
-            <div style={{ width: '90%' }}>
+        <ModalWrapper style={{ width: '90%', margin: '0 auto'}}>
                 <div style={{ textAlign: 'left', width: '100%', padding: '10px 0' }}>
                     <span>
                         <img src={statisticsPoint} width="80px" />
                     </span>
-                    <span style={{ fontWeight: '700' }}>[Statistics] {t('student_score_statictis')}</span>
+                    <span style={{ fontWeight: '700', color: '#f9f9f9' }}>[Statistics] {t('student_score_statictis')}</span>
                 </div>
                 <div style={{ width: '100%', minHeight: '150px' }}>
                     <div style={{
@@ -69,14 +72,12 @@ const ManageScore = () => {
                     }}>
 
                         <Row style={{ border: '2px solid #cacaca' }}>
-                            <Table rowKey="name" pagination={false} columns={columnsGrade} dataSource={this.state.lstSubmissionCore} scroll={{ y: 240 }} style={{ width: '100%' }} />
+                            <Table rowKey="name" pagination={false} columns={columnsGrade} dataSource={lstSubmissionCore} scroll={{ y: 240 }} style={{ width: '100%' }} />
                         </Row>
 
                     </div>
                 </div>
-            </div>
-        </Row>
-
+        </ModalWrapper>
     </>
 }
 
