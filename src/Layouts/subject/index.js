@@ -24,7 +24,7 @@ const Subject = () => {
     const location = useLocation()
 
     const [detailSubject, setDetailSubject] = useState([])
-    const [loadingSubject, setLoadingSubject] = useState(false)
+    const [loadingSubject, setLoadingSubject] = useState(true)
     const [timelinesList, setTimelinesList] = useState([])
     const [quizList, setQuizList] = useState([])
     const [surveyList, setSurveyList] = useState([])
@@ -302,558 +302,559 @@ const Subject = () => {
 
     if (loadingSubject) {
         return <ModalLoadingLogin visible={loadingSubject} content={t("loading_class")} />
-    }
+    } else {
 
-    console.log('detailSubject', detailSubject)
 
-    return <>
-        <div className="subject-container">
+
+        return <>
+            <div className="subject-container">
+                {
+                    isTeacherFlag ? <div className="subject-wrapper" style={{ display: 'flex', alignItems: 'center', color: '#f9f9f9', cursor: 'pointer' }}>
+                        <DashManage />
+                        <div onClick={() => directManageStudent()}>{t('manage_student')}</div>
+                    </div>
+                        : <div className="subject-wrapper" style={{ display: 'flex', alignItems: 'center', color: '#f9f9f9', cursor: 'pointer' }}>Quản lý điểm</div>
+                }
+
+            </div>
             {
-                isTeacherFlag ? <div className="subject-wrapper" style={{ display: 'flex', alignItems: 'center', color: '#f9f9f9', cursor: 'pointer' }}>
-                    <DashManage />
-                    <div onClick={() => directManageStudent()}>{t('manage_student')}</div>
-                </div>
-                    : <div className="subject-wrapper" style={{ display: 'flex', alignItems: 'center', color: '#f9f9f9', cursor: 'pointer' }}>Quản lý điểm</div>
-            }
+                isTeacherFlag ? (<>
+                    <DragDropContext onDragEnd={handleOnDragEnd}>
+                        <Droppable droppableId="characters">
+                            {(provided) => (
+                                <div  {...provided.droppableProps}
+                                    ref={provided.innerRef}>
+                                    {
+                                        detailSubject.map(({ _id, name, description, assignments, exams, forums, announcements, files, surveys }, index) => {
+                                            return <Draggable key={_id.toString()} draggableId={_id} index={index}>
+                                                {(provided) => (
+                                                    <div className="subject-container" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} key={index.toString()}>
+                                                        <div className="subject-wrapper">
+                                                            <div className="subject-header">
+                                                                <div className="text-center">{`${t('week')} ${index < 9 ? ('0' + (index + 1)) : (index + 1)}: ${name}`}</div>
+                                                                <div className="description text-center">{description}</div>
+                                                            </div>
+                                                            <div className="wrapper-body">
 
-        </div>
-        {
-            isTeacherFlag ? (<>
-                <DragDropContext onDragEnd={handleOnDragEnd}>
-                    <Droppable droppableId="characters">
-                        {(provided) => (
-                            <div  {...provided.droppableProps}
-                                ref={provided.innerRef}>
-                                {
-                                    detailSubject.map(({ _id, name, description, assignments, exams, forums, announcements, files, surveys }, index) => {
-                                        return <Draggable key={_id.toString()} draggableId={_id} index={index}>
-                                            {(provided) => (
-                                                <div className="subject-container" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} key={index.toString()}>
-                                                    <div className="subject-wrapper">
-                                                        <div className="subject-header">
-                                                            <div className="text-center">{`${t('week')} ${index < 9 ? ('0' + (index + 1)) : (index + 1)}: ${name}`}</div>
-                                                            <div className="description text-center">{description}</div>
-                                                        </div>
-                                                        <div className="wrapper-body">
+                                                                {
 
-                                                            {
-
-                                                                !isEmpty(announcements) && (
-                                                                    <div className="subject-body">
-                                                                        <div className="announce-wrapper">
-                                                                            {announcements.map((info, indexAnnounce) => {
-                                                                                return (<div key={indexAnnounce}>
-                                                                                    <div className="announce-name">{info.name}</div>
-                                                                                    <div className="announce-content">{info.content}</div>
-                                                                                </div>
-                                                                                )
-                                                                            })}
-                                                                        </div>
-                                                                    </div>
-                                                                )
-                                                            }
-
-                                                            {
-
-                                                                !isEmpty(surveys) && (<>
-                                                                    {
-                                                                        surveys.map((survey, index) => (
-                                                                            <div className="subject-body" onClick={() => directSurvey({ surveyId: survey._id, idSubject: location.state._id, timelineId: _id })}>
-                                                                                <div className="subject-main">
-                                                                                    <div className="subject-icon">
-                                                                                        {/* <FontAwesomeIcon icon='file-powerpoint' style={{ width: 30, height: 30, color: '#d04424' }} /> */}
-                                                                                        <FontAwesomeIcon icon="poll" style={{ width: 30, height: 30, color: '#ff4000' }} />
+                                                                    !isEmpty(announcements) && (
+                                                                        <div className="subject-body">
+                                                                            <div className="announce-wrapper">
+                                                                                {announcements.map((info, indexAnnounce) => {
+                                                                                    return (<div key={indexAnnounce}>
+                                                                                        <div className="announce-name">{info.name}</div>
+                                                                                        <div className="announce-content">{info.content}</div>
                                                                                     </div>
-                                                                                    <div className="subject-content">{survey.name}</div>
-                                                                                </div>
-                                                                                <div className="subject-action">
-                                                                                    {
-                                                                                        isOnEdit && <div>
-                                                                                            <Tooltip title={t('edit_file')}>
-                                                                                                <a>
-                                                                                                    <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditSurvey(survey._id, _id) }} />
-                                                                                                </a>
-                                                                                            </Tooltip>
-                                                                                        </div>
-                                                                                    }
-                                                                                    {
-                                                                                        !survey.isDeleted ?
-                                                                                            <div>
-                                                                                                <FontAwesomeIcon icon="lock-open" style={{ color: '#e84118' }} />
-                                                                                            </div>
-                                                                                            :
-                                                                                            <div>
-                                                                                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                                                                                            </div>
-                                                                                    }
-                                                                                </div>
+                                                                                    )
+                                                                                })}
                                                                             </div>
-                                                                        ))
-                                                                    }
-                                                                </>
-                                                                )
-                                                            }
+                                                                        </div>
+                                                                    )
+                                                                }
 
-                                                            {
+                                                                {
 
-                                                                !isEmpty(files) && (<>
-                                                                    {
-                                                                        files.map((file, index) => (
-                                                                            <div className="subject-body">
-                                                                                <div className="subject-main">
-                                                                                    <div className="subject-icon">
-                                                                                        {file.type.includes('doc') && (
-                                                                                            <i>
-                                                                                                <FontAwesomeIcon icon='file-word' style={{ width: 30, height: 30, color: '#2d5898' }} />
-                                                                                            </i>
-                                                                                        )}
-                                                                                        {file.type.includes('pdf') && (
-                                                                                            <i>
-                                                                                                <FontAwesomeIcon icon='file-pdf' style={{ width: 30, height: 30, color: '#f44236' }} />
-                                                                                            </i>
-                                                                                        )}
-                                                                                        {file.type.includes('ppt') && (
-                                                                                            <i>
-                                                                                                <FontAwesomeIcon icon='file-powerpoint' style={{ width: 30, height: 30, color: '#d04424' }} />
-                                                                                            </i>
-                                                                                        )}
-                                                                                        {(file.type.includes('xls') || file.type.includes('csv')) && (
-                                                                                            <i>
-                                                                                                <FontAwesomeIcon icon='file-excel' style={{ width: 30, height: 30, color: '#1a7243' }} />
-                                                                                            </i>
-                                                                                        )}
+                                                                    !isEmpty(surveys) && (<>
+                                                                        {
+                                                                            surveys.map((survey, index) => (
+                                                                                <div className="subject-body" onClick={() => directSurvey({ surveyId: survey._id, idSubject: location.state._id, timelineId: _id })}>
+                                                                                    <div className="subject-main">
+                                                                                        <div className="subject-icon">
+                                                                                            {/* <FontAwesomeIcon icon='file-powerpoint' style={{ width: 30, height: 30, color: '#d04424' }} /> */}
+                                                                                            <FontAwesomeIcon icon="poll" style={{ width: 30, height: 30, color: '#ff4000' }} />
+                                                                                        </div>
+                                                                                        <div className="subject-content">{survey.name}</div>
+                                                                                    </div>
+                                                                                    <div className="subject-action">
+                                                                                        {
+                                                                                            isOnEdit && <div>
+                                                                                                <Tooltip title={t('edit_file')}>
+                                                                                                    <a>
+                                                                                                        <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditSurvey(survey._id, _id) }} />
+                                                                                                    </a>
+                                                                                                </Tooltip>
+                                                                                            </div>
+                                                                                        }
+                                                                                        {
+                                                                                            !survey.isDeleted ?
+                                                                                                <div>
+                                                                                                    <FontAwesomeIcon icon="lock-open" style={{ color: '#e84118' }} />
+                                                                                                </div>
+                                                                                                :
+                                                                                                <div>
+                                                                                                    <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
+                                                                                                </div>
+                                                                                        }
+                                                                                    </div>
+                                                                                </div>
+                                                                            ))
+                                                                        }
+                                                                    </>
+                                                                    )
+                                                                }
 
-                                                                                        {(file.type.includes('rar') || (file.type.includes('zip')) && (
-                                                                                            <i>
-                                                                                                <FontAwesomeIcon icon='archive' style={{ width: 30, height: 30, color: '#9e6fb2' }} />
-                                                                                            </i>
-                                                                                        ))}
+                                                                {
 
-                                                                                        {!(file.type.includes('ppt')) && !(file.type.includes('doc')) && !(file.type.includes('pdf'))
-                                                                                            && !(file.type.includes('xls')) && !(file.type.includes('csv')) && !(file.type.includes('rar')) && !(file.type.includes('zip'))
-                                                                                            && (
+                                                                    !isEmpty(files) && (<>
+                                                                        {
+                                                                            files.map((file, index) => (
+                                                                                <div className="subject-body">
+                                                                                    <div className="subject-main">
+                                                                                        <div className="subject-icon">
+                                                                                            {file.type.includes('doc') && (
                                                                                                 <i>
-                                                                                                    <FontAwesomeIcon icon='file-alt' style={{ width: 30, height: 30, color: '#273c75' }} />
+                                                                                                    <FontAwesomeIcon icon='file-word' style={{ width: 30, height: 30, color: '#2d5898' }} />
                                                                                                 </i>
                                                                                             )}
-                                                                                    </div>
-                                                                                    <div className="subject-content">{file.name}</div>
-                                                                                </div>
-                                                                                <div className="subject-action">
-                                                                                    {
-                                                                                        isOnEdit && <div>
-                                                                                            <Tooltip title={t('edit_file')}>
-                                                                                                <a>
-                                                                                                    <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditFile(file._id, _id) }} />
-                                                                                                </a>
-                                                                                            </Tooltip>
+                                                                                            {file.type.includes('pdf') && (
+                                                                                                <i>
+                                                                                                    <FontAwesomeIcon icon='file-pdf' style={{ width: 30, height: 30, color: '#f44236' }} />
+                                                                                                </i>
+                                                                                            )}
+                                                                                            {file.type.includes('ppt') && (
+                                                                                                <i>
+                                                                                                    <FontAwesomeIcon icon='file-powerpoint' style={{ width: 30, height: 30, color: '#d04424' }} />
+                                                                                                </i>
+                                                                                            )}
+                                                                                            {(file.type.includes('xls') || file.type.includes('csv')) && (
+                                                                                                <i>
+                                                                                                    <FontAwesomeIcon icon='file-excel' style={{ width: 30, height: 30, color: '#1a7243' }} />
+                                                                                                </i>
+                                                                                            )}
+
+                                                                                            {(file.type.includes('rar') || (file.type.includes('zip')) && (
+                                                                                                <i>
+                                                                                                    <FontAwesomeIcon icon='archive' style={{ width: 30, height: 30, color: '#9e6fb2' }} />
+                                                                                                </i>
+                                                                                            ))}
+
+                                                                                            {!(file.type.includes('ppt')) && !(file.type.includes('doc')) && !(file.type.includes('pdf'))
+                                                                                                && !(file.type.includes('xls')) && !(file.type.includes('csv')) && !(file.type.includes('rar')) && !(file.type.includes('zip'))
+                                                                                                && (
+                                                                                                    <i>
+                                                                                                        <FontAwesomeIcon icon='file-alt' style={{ width: 30, height: 30, color: '#273c75' }} />
+                                                                                                    </i>
+                                                                                                )}
                                                                                         </div>
-                                                                                    }
-                                                                                    {
-                                                                                        !file.isDeleted ?
-                                                                                            <div>
-                                                                                                <FontAwesomeIcon icon="lock-open" style={{ color: '#e84118' }} />
-                                                                                            </div>
-                                                                                            :
-                                                                                            <div>
-                                                                                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                                                                                            </div>
-                                                                                    }
-                                                                                </div>
-                                                                            </div>
-                                                                        ))
-                                                                    }
-                                                                </>
-                                                                )
-                                                            }
-
-                                                            {
-                                                                !isEmpty(assignments) && (<>
-                                                                    {
-                                                                        assignments.map((assignment, index) => (
-                                                                            <div className="subject-body" onClick={() => getRequirementTodo({ idTodo: assignment._id, idTimeline: _id })}>
-                                                                                <div className="subject-main">
-                                                                                    <div className="subject-icon">
-                                                                                        <FontAwesomeIcon icon="tasks" style={{ width: 30, height: 30, color: '#009432' }} />
+                                                                                        <div className="subject-content">{file.name}</div>
                                                                                     </div>
-                                                                                    <div className="subject-content">{assignment.name}</div>
-                                                                                </div>
-                                                                                <div className="subject-action">
-                                                                                    {
-                                                                                        isOnEdit && <div>
-                                                                                            <Tooltip title={t('edit_file')}>
-                                                                                                <a>
-                                                                                                    <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditAssignment(assignment._id, _id) }} />
-                                                                                                </a>
-                                                                                            </Tooltip>
-                                                                                        </div>
-                                                                                    }
-                                                                                    {
-                                                                                        !assignment.isDeleted ?
-                                                                                            <div>
-                                                                                                <FontAwesomeIcon icon="lock-open" style={{ color: '#e84118' }} />
+                                                                                    <div className="subject-action">
+                                                                                        {
+                                                                                            isOnEdit && <div>
+                                                                                                <Tooltip title={t('edit_file')}>
+                                                                                                    <a>
+                                                                                                        <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditFile(file._id, _id) }} />
+                                                                                                    </a>
+                                                                                                </Tooltip>
                                                                                             </div>
-                                                                                            :
-                                                                                            <div>
-                                                                                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                                                                                            </div>
-                                                                                    }
-                                                                                </div>
-                                                                            </div>
-                                                                        ))
-                                                                    }
-                                                                </>
-                                                                )
-                                                            }
-
-
-                                                            {
-                                                                !isEmpty(forums) && (<>
-                                                                    {
-                                                                        forums.map((forum, index) => (
-                                                                            <div className="subject-body" onClick={() => directForum({ forumId: forum._id, idSubject: location.state._id, idTimeline: _id })}>
-                                                                                <div className="subject-main">
-                                                                                    <div className="subject-icon">
-                                                                                        <img src={FORUM} width={30} />
+                                                                                        }
+                                                                                        {
+                                                                                            !file.isDeleted ?
+                                                                                                <div>
+                                                                                                    <FontAwesomeIcon icon="lock-open" style={{ color: '#e84118' }} />
+                                                                                                </div>
+                                                                                                :
+                                                                                                <div>
+                                                                                                    <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
+                                                                                                </div>
+                                                                                        }
                                                                                     </div>
-                                                                                    <div className="subject-content">{forum.name}</div>
                                                                                 </div>
-                                                                                <div className="subject-action">
-                                                                                    {
-                                                                                        isOnEdit && <div>
-                                                                                            <Tooltip title={t('edit_file')}>
-                                                                                                <a>
-                                                                                                    <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditForum(forum._id, _id) }} />
-                                                                                                </a>
-                                                                                            </Tooltip>
+                                                                            ))
+                                                                        }
+                                                                    </>
+                                                                    )
+                                                                }
+
+                                                                {
+                                                                    !isEmpty(assignments) && (<>
+                                                                        {
+                                                                            assignments.map((assignment, index) => (
+                                                                                <div className="subject-body" onClick={() => getRequirementTodo({ idTodo: assignment._id, idTimeline: _id })}>
+                                                                                    <div className="subject-main">
+                                                                                        <div className="subject-icon">
+                                                                                            <FontAwesomeIcon icon="tasks" style={{ width: 30, height: 30, color: '#009432' }} />
                                                                                         </div>
-                                                                                    }
-                                                                                    {
-                                                                                        !forum.isDeleted ?
-                                                                                            <div>
-                                                                                                <FontAwesomeIcon icon="lock-open" style={{ color: '#e84118' }} />
-                                                                                            </div>
-                                                                                            :
-                                                                                            <div>
-                                                                                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                                                                                            </div>
-                                                                                    }
-                                                                                </div>
-                                                                            </div>
-                                                                        ))
-                                                                    }
-                                                                </>
-                                                                )
-                                                            }
-
-
-                                                            {
-                                                                !isEmpty(exams) && (<>
-                                                                    {
-                                                                        exams.map((exam, index) => (
-                                                                            <div className="subject-body" onClick={() => directExams({ examId: exam._id, idSubject: location.state._id, idTimeline: _id })}>
-                                                                                <div className="subject-main">
-                                                                                    <div className="subject-icon">
-                                                                                        <FontAwesomeIcon icon="spell-check" style={{ width: 40, height: 40, color: '#F79F1F' }} />
+                                                                                        <div className="subject-content">{assignment.name}</div>
                                                                                     </div>
-                                                                                    <div className="subject-content">{exam.name}</div>
+                                                                                    <div className="subject-action">
+                                                                                        {
+                                                                                            isOnEdit && <div>
+                                                                                                <Tooltip title={t('edit_file')}>
+                                                                                                    <a>
+                                                                                                        <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditAssignment(assignment._id, _id) }} />
+                                                                                                    </a>
+                                                                                                </Tooltip>
+                                                                                            </div>
+                                                                                        }
+                                                                                        {
+                                                                                            !assignment.isDeleted ?
+                                                                                                <div>
+                                                                                                    <FontAwesomeIcon icon="lock-open" style={{ color: '#e84118' }} />
+                                                                                                </div>
+                                                                                                :
+                                                                                                <div>
+                                                                                                    <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
+                                                                                                </div>
+                                                                                        }
+                                                                                    </div>
                                                                                 </div>
-                                                                                <div className="subject-action">
-                                                                                    {
-                                                                                        isOnEdit && <div>
-                                                                                            <Tooltip title={t('edit_file')}>
-                                                                                                <a>
-                                                                                                    <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditExams(exam._id, _id) }} />
-                                                                                                </a>
-                                                                                            </Tooltip>
+                                                                            ))
+                                                                        }
+                                                                    </>
+                                                                    )
+                                                                }
+
+
+                                                                {
+                                                                    !isEmpty(forums) && (<>
+                                                                        {
+                                                                            forums.map((forum, index) => (
+                                                                                <div className="subject-body" onClick={() => directForum({ forumId: forum._id, idSubject: location.state._id, idTimeline: _id })}>
+                                                                                    <div className="subject-main">
+                                                                                        <div className="subject-icon">
+                                                                                            <img src={FORUM} width={30} />
                                                                                         </div>
-                                                                                    }
-
-                                                                                    {
-                                                                                        !exam.isDeleted ?
-                                                                                            <div>
-                                                                                                <FontAwesomeIcon icon="lock-open" style={{ color: '#e84118' }} />
+                                                                                        <div className="subject-content">{forum.name}</div>
+                                                                                    </div>
+                                                                                    <div className="subject-action">
+                                                                                        {
+                                                                                            isOnEdit && <div>
+                                                                                                <Tooltip title={t('edit_file')}>
+                                                                                                    <a>
+                                                                                                        <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditForum(forum._id, _id) }} />
+                                                                                                    </a>
+                                                                                                </Tooltip>
                                                                                             </div>
-                                                                                            :
-                                                                                            <div>
-                                                                                                <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
-                                                                                            </div>
-                                                                                    }
-
+                                                                                        }
+                                                                                        {
+                                                                                            !forum.isDeleted ?
+                                                                                                <div>
+                                                                                                    <FontAwesomeIcon icon="lock-open" style={{ color: '#e84118' }} />
+                                                                                                </div>
+                                                                                                :
+                                                                                                <div>
+                                                                                                    <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
+                                                                                                </div>
+                                                                                        }
+                                                                                    </div>
                                                                                 </div>
-                                                                            </div>
-                                                                        ))
-                                                                    }
-                                                                </>
-                                                                )
-                                                            }
-
-                                                        </div>
+                                                                            ))
+                                                                        }
+                                                                    </>
+                                                                    )
+                                                                }
 
 
-                                                    </div>
+                                                                {
+                                                                    !isEmpty(exams) && (<>
+                                                                        {
+                                                                            exams.map((exam, index) => (
+                                                                                <div className="subject-body" onClick={() => directExams({ examId: exam._id, idSubject: location.state._id, idTimeline: _id })}>
+                                                                                    <div className="subject-main">
+                                                                                        <div className="subject-icon">
+                                                                                            <FontAwesomeIcon icon="spell-check" style={{ width: 40, height: 40, color: '#F79F1F' }} />
+                                                                                        </div>
+                                                                                        <div className="subject-content">{exam.name}</div>
+                                                                                    </div>
+                                                                                    <div className="subject-action">
+                                                                                        {
+                                                                                            isOnEdit && <div>
+                                                                                                <Tooltip title={t('edit_file')}>
+                                                                                                    <a>
+                                                                                                        <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditExams(exam._id, _id) }} />
+                                                                                                    </a>
+                                                                                                </Tooltip>
+                                                                                            </div>
+                                                                                        }
 
-                                                </div>
-                                            )}
-                                        </Draggable>
-                                    })
-                                }
-                            </div>
-                        )}
-                    </Droppable>
-                </DragDropContext>
+                                                                                        {
+                                                                                            !exam.isDeleted ?
+                                                                                                <div>
+                                                                                                    <FontAwesomeIcon icon="lock-open" style={{ color: '#e84118' }} />
+                                                                                                </div>
+                                                                                                :
+                                                                                                <div>
+                                                                                                    <FontAwesomeIcon icon="lock" style={{ color: '#e84118' }} />
+                                                                                                </div>
+                                                                                        }
 
-                
-                <WidgeRight
+                                                                                    </div>
+                                                                                </div>
+                                                                            ))
+                                                                        }
+                                                                    </>
+                                                                    )
+                                                                }
 
-                    isOpenModalFunction={isOpenModalFunction}
-                    setIsOpenModalFunction={setIsOpenModalFunction}
-                    importState={importState}
-                    setImportState={setImportState}
-                    exportState={exportState}
-                    setExportState={setExportState} />
-            </>
-            ) : (
-                detailSubject.map(({ _id, name, description, assignments, exams, forums, information, files, surveys }, index) => {
-                    return (
-                        <div className="subject-container" key={index.toString()}>
-                            <div className="subject-wrapper">
-                                <div className="subject-header">
-                                    <div className="text-center">{`${t('week')} ${index < 9 ? ('0' + (index + 1)) : (index + 1)}: ${name}`}</div>
-                                    <div className="description text-center">{description}</div>
-                                </div>
-                                <div className="wrapper-body">
-
-                                    {
-
-                                        !isEmpty(information) && (
-                                            <div className="subject-body">
-                                                <div className="announce-wrapper">
-                                                    {information.map((info, indexAnnounce) => {
-                                                        return (<div key={indexAnnounce}>
-                                                            <div className="announce-name">{info.name}</div>
-                                                            <div className="announce-content">{info.content}</div>
-                                                        </div>
-                                                        )
-                                                    })}
-                                                </div>
-                                            </div>
-                                        )
-                                    }
-
-                                    {
-
-                                        !isEmpty(surveys) && (<>
-                                            {
-                                                surveys.map((survey, index) => (
-                                                    <div className="subject-body" onClick={() => directSurvey({ surveyId: survey._id, idSubject: location.state._id, timelineId: _id })}>
-                                                        <div className="subject-main">
-                                                            <div className="subject-icon">
-                                                                {/* <FontAwesomeIcon icon='file-powerpoint' style={{ width: 30, height: 30, color: '#d04424' }} /> */}
-                                                                <FontAwesomeIcon icon="poll" style={{ width: 30, height: 30, color: '#ff4000' }} />
                                                             </div>
-                                                            <div className="subject-content">{survey.name}</div>
+
+
                                                         </div>
 
                                                     </div>
-                                                ))
-                                            }
-                                        </>
-                                        )
+                                                )}
+                                            </Draggable>
+                                        })
                                     }
+                                </div>
+                            )}
+                        </Droppable>
+                    </DragDropContext>
 
-                                    {
 
-                                        !isEmpty(files) && (<>
-                                            {
-                                                files.map((file, index) => (
-                                                    <div className="subject-body">
-                                                        <div className="subject-main">
-                                                            <div className="subject-icon">
-                                                                {file.type.includes('doc') && (
-                                                                    <i>
-                                                                        <FontAwesomeIcon icon='file-word' style={{ width: 30, height: 30, color: '#2d5898' }} />
-                                                                    </i>
-                                                                )}
-                                                                {file.type.includes('pdf') && (
-                                                                    <i>
-                                                                        <FontAwesomeIcon icon='file-pdf' style={{ width: 30, height: 30, color: '#f44236' }} />
-                                                                    </i>
-                                                                )}
-                                                                {file.type.includes('ppt') && (
-                                                                    <i>
-                                                                        <FontAwesomeIcon icon='file-powerpoint' style={{ width: 30, height: 30, color: '#d04424' }} />
-                                                                    </i>
-                                                                )}
-                                                                {(file.type.includes('xls') || file.type.includes('csv')) && (
-                                                                    <i>
-                                                                        <FontAwesomeIcon icon='file-excel' style={{ width: 30, height: 30, color: '#1a7243' }} />
-                                                                    </i>
-                                                                )}
+                    <WidgeRight
 
-                                                                {(file.type.includes('rar') || (file.type.includes('zip')) && (
-                                                                    <i>
-                                                                        <FontAwesomeIcon icon='archive' style={{ width: 30, height: 30, color: '#9e6fb2' }} />
-                                                                    </i>
-                                                                ))}
+                        isOpenModalFunction={isOpenModalFunction}
+                        setIsOpenModalFunction={setIsOpenModalFunction}
+                        importState={importState}
+                        setImportState={setImportState}
+                        exportState={exportState}
+                        setExportState={setExportState} />
+                </>
+                ) : (
+                    detailSubject.map(({ _id, name, description, assignments, exams, forums, announcements, files, surveys }, index) => {
+                        return (
+                            <div className="subject-container" key={index.toString()}>
+                                <div className="subject-wrapper">
+                                    <div className="subject-header">
+                                        <div className="text-center">{`${t('week')} ${index < 9 ? ('0' + (index + 1)) : (index + 1)}: ${name}`}</div>
+                                        <div className="description text-center">{description}</div>
+                                    </div>
+                                    <div className="wrapper-body">
 
-                                                                {!(file.type.includes('ppt')) && !(file.type.includes('doc')) && !(file.type.includes('pdf'))
-                                                                    && !(file.type.includes('xls')) && !(file.type.includes('csv')) && !(file.type.includes('rar')) && !(file.type.includes('zip'))
-                                                                    && (
+                                        {
+
+                                            !isEmpty(announcements) && (
+                                                <div className="subject-body">
+                                                    <div className="announce-wrapper">
+                                                        {announcements.map((info, indexAnnounce) => {
+                                                            return (<div key={indexAnnounce}>
+                                                                <div className="announce-name">{info.name}</div>
+                                                                <div className="announce-content">{info.content}</div>
+                                                            </div>
+                                                            )
+                                                        })}
+                                                    </div>
+                                                </div>
+                                            )
+                                        }
+
+                                        {
+
+                                            !isEmpty(surveys) && (<>
+                                                {
+                                                    surveys.map((survey, index) => (
+                                                        <div className="subject-body" onClick={() => directSurvey({ surveyId: survey._id, idSubject: location.state._id, timelineId: _id })}>
+                                                            <div className="subject-main">
+                                                                <div className="subject-icon">
+                                                                    {/* <FontAwesomeIcon icon='file-powerpoint' style={{ width: 30, height: 30, color: '#d04424' }} /> */}
+                                                                    <FontAwesomeIcon icon="poll" style={{ width: 30, height: 30, color: '#ff4000' }} />
+                                                                </div>
+                                                                <div className="subject-content">{survey.name}</div>
+                                                            </div>
+
+                                                        </div>
+                                                    ))
+                                                }
+                                            </>
+                                            )
+                                        }
+
+                                        {
+
+                                            !isEmpty(files) && (<>
+                                                {
+                                                    files.map((file, index) => (
+                                                        <div className="subject-body">
+                                                            <div className="subject-main">
+                                                                <div className="subject-icon">
+                                                                    {file.type.includes('doc') && (
                                                                         <i>
-                                                                            <FontAwesomeIcon icon='file-alt' style={{ width: 30, height: 30, color: '#273c75' }} />
+                                                                            <FontAwesomeIcon icon='file-word' style={{ width: 30, height: 30, color: '#2d5898' }} />
                                                                         </i>
                                                                     )}
+                                                                    {file.type.includes('pdf') && (
+                                                                        <i>
+                                                                            <FontAwesomeIcon icon='file-pdf' style={{ width: 30, height: 30, color: '#f44236' }} />
+                                                                        </i>
+                                                                    )}
+                                                                    {file.type.includes('ppt') && (
+                                                                        <i>
+                                                                            <FontAwesomeIcon icon='file-powerpoint' style={{ width: 30, height: 30, color: '#d04424' }} />
+                                                                        </i>
+                                                                    )}
+                                                                    {(file.type.includes('xls') || file.type.includes('csv')) && (
+                                                                        <i>
+                                                                            <FontAwesomeIcon icon='file-excel' style={{ width: 30, height: 30, color: '#1a7243' }} />
+                                                                        </i>
+                                                                    )}
+
+                                                                    {(file.type.includes('rar') || (file.type.includes('zip')) && (
+                                                                        <i>
+                                                                            <FontAwesomeIcon icon='archive' style={{ width: 30, height: 30, color: '#9e6fb2' }} />
+                                                                        </i>
+                                                                    ))}
+
+                                                                    {!(file.type.includes('ppt')) && !(file.type.includes('doc')) && !(file.type.includes('pdf'))
+                                                                        && !(file.type.includes('xls')) && !(file.type.includes('csv')) && !(file.type.includes('rar')) && !(file.type.includes('zip'))
+                                                                        && (
+                                                                            <i>
+                                                                                <FontAwesomeIcon icon='file-alt' style={{ width: 30, height: 30, color: '#273c75' }} />
+                                                                            </i>
+                                                                        )}
+                                                                </div>
+                                                                <div className="subject-content">{file.name}</div>
                                                             </div>
-                                                            <div className="subject-content">{file.name}</div>
+
                                                         </div>
+                                                    ))
+                                                }
+                                            </>
+                                            )
+                                        }
 
-                                                    </div>
-                                                ))
-                                            }
-                                        </>
-                                        )
-                                    }
-
-                                    {
-                                        !isEmpty(assignments) && (<>
-                                            {
-                                                assignments.map((assignment, index) => (
-                                                    <div className="subject-body" onClick={() => getRequirementTodo({ idTodo: assignment._id, idTimeline: _id })}>
-                                                        <div className="subject-main">
-                                                            <div className="subject-icon">
-                                                                <FontAwesomeIcon icon="tasks" style={{ width: 30, height: 30, color: '#009432' }} />
+                                        {
+                                            !isEmpty(assignments) && (<>
+                                                {
+                                                    assignments.map((assignment, index) => (
+                                                        <div className="subject-body" onClick={() => getRequirementTodo({ idTodo: assignment._id, idTimeline: _id })}>
+                                                            <div className="subject-main">
+                                                                <div className="subject-icon">
+                                                                    <FontAwesomeIcon icon="tasks" style={{ width: 30, height: 30, color: '#009432' }} />
+                                                                </div>
+                                                                <div className="subject-content">{assignment.name}</div>
                                                             </div>
-                                                            <div className="subject-content">{assignment.name}</div>
+
                                                         </div>
-
-                                                    </div>
-                                                ))
-                                            }
-                                        </>
-                                        )
-                                    }
+                                                    ))
+                                                }
+                                            </>
+                                            )
+                                        }
 
 
-                                    {
-                                        !isEmpty(forums) && (<>
-                                            {
-                                                forums.map((forum, index) => (
-                                                    <div className="subject-body" onClick={() => directForum({ forumId: forum._id, idSubject: location.state._id, idTimeline: _id })}>
-                                                        <div className="subject-main">
-                                                            <div className="subject-icon">
-                                                                <img src={FORUM} width={30} />
+                                        {
+                                            !isEmpty(forums) && (<>
+                                                {
+                                                    forums.map((forum, index) => (
+                                                        <div className="subject-body" onClick={() => directForum({ forumId: forum._id, idSubject: location.state._id, idTimeline: _id })}>
+                                                            <div className="subject-main">
+                                                                <div className="subject-icon">
+                                                                    <img src={FORUM} width={30} />
+                                                                </div>
+                                                                <div className="subject-content">{forum.name}</div>
                                                             </div>
-                                                            <div className="subject-content">{forum.name}</div>
+
                                                         </div>
-
-                                                    </div>
-                                                ))
-                                            }
-                                        </>
-                                        )
-                                    }
+                                                    ))
+                                                }
+                                            </>
+                                            )
+                                        }
 
 
-                                    {
-                                        !isEmpty(exams) && (<>
-                                            {
-                                                exams.map((exam, index) => (
-                                                    <div className="subject-body" onClick={() => directExams({ examId: exam._id, idSubject: location.state._id, idTimeline: _id })}>
-                                                        <div className="subject-main">
-                                                            <div className="subject-icon">
-                                                                <FontAwesomeIcon icon="spell-check" style={{ width: 40, height: 40, color: '#F79F1F' }} />
+                                        {
+                                            !isEmpty(exams) && (<>
+                                                {
+                                                    exams.map((exam, index) => (
+                                                        <div className="subject-body" onClick={() => directExams({ examId: exam._id, idSubject: location.state._id, idTimeline: _id })}>
+                                                            <div className="subject-main">
+                                                                <div className="subject-icon">
+                                                                    <FontAwesomeIcon icon="spell-check" style={{ width: 40, height: 40, color: '#F79F1F' }} />
+                                                                </div>
+                                                                <div className="subject-content">{exam.name}</div>
                                                             </div>
-                                                            <div className="subject-content">{exam.name}</div>
-                                                        </div>
 
-                                                    </div>
-                                                ))
-                                            }
-                                        </>
-                                        )
-                                    }
+                                                        </div>
+                                                    ))
+                                                }
+                                            </>
+                                            )
+                                        }
+
+                                    </div>
+
 
                                 </div>
 
-
                             </div>
+                        )
+                    })
+                )
+            }
+            <WidgetLeft
+                timelinesList={timelinesList}
+                setTimelinesList={setTimelinesList}
+                quizList={quizList} setQuizList={setQuizList}
+                surveyList={surveyList} setSurveyList={setSurveyList}
+                detailSubject={detailSubject}
+                setDetailSubject={setDetailSubject}
+                isOnEdit={isOnEdit}
+                setIsOnEdit={setIsOnEdit}
 
-                        </div>
-                    )
-                })
-            )
-        }
-<WidgetLeft
-                    timelinesList={timelinesList}
-                    setTimelinesList={setTimelinesList}
-                    quizList={quizList} setQuizList={setQuizList}
-                    surveyList={surveyList} setSurveyList={setSurveyList}
-                    detailSubject={detailSubject}
-                    setDetailSubject={setDetailSubject}
-                    isOnEdit={isOnEdit}
-                    setIsOnEdit={setIsOnEdit}
+                openCreateContent={openCreateContent}
+                setOpenCreateContent={setOpenCreateContent}
+                notificationState={notificationState}
+                setNotificationState={setNotificationState}
+                documentState={documentState}
+                setDocumentState={setDocumentState}
+                todosState={todosState}
+                setTodosState={setTodosState}
+                quizState={quizState}
+                setQuizState={setQuizState}
+                surveyState={surveyState}
+                setSurveyState={setSurveyState}
+                timelineState={timelineState}
+                setTimelineState={setTimelineState}
+                forumState={forumState}
+                setForumState={setForumState}
 
-                    openCreateContent={openCreateContent}
-                    setOpenCreateContent={setOpenCreateContent}
-                    notificationState={notificationState}
-                    setNotificationState={setNotificationState}
-                    documentState={documentState}
-                    setDocumentState={setDocumentState}
-                    todosState={todosState}
-                    setTodosState={setTodosState}
-                    quizState={quizState}
-                    setQuizState={setQuizState}
-                    surveyState={surveyState}
-                    setSurveyState={setSurveyState}
-                    timelineState={timelineState}
-                    setTimelineState={setTimelineState}
-                    forumState={forumState}
-                    setForumState={setForumState}
+                isOpenModalFunction={isOpenModalFunction}
+                setIsOpenModalFunction={setIsOpenModalFunction}
 
-                    isOpenModalFunction={isOpenModalFunction}
-                    setIsOpenModalFunction={setIsOpenModalFunction}
+                surveyIdEdit={surveyIdEdit}
+                timelineIdEdit={timelineIdEdit}
+                focusSurveyEdit={focusSurveyEdit}
+                setFocusSurveyEdit={setFocusSurveyEdit}
 
-                    surveyIdEdit={surveyIdEdit}
-                    timelineIdEdit={timelineIdEdit}
-                    focusSurveyEdit={focusSurveyEdit}
-                    setFocusSurveyEdit={setFocusSurveyEdit}
+                fileIdEdit={fileIdEdit}
+                focusFileEdit={focusFileEdit}
+                setFocusFileEdit={setFocusFileEdit}
 
-                    fileIdEdit={fileIdEdit}
-                    focusFileEdit={focusFileEdit}
-                    setFocusFileEdit={setFocusFileEdit}
+                assignmentIdEdit={assignmentIdEdit}
+                focusAssignmentEdit={focusAssignmentEdit}
+                setFocusAssignmentEdit={setFocusAssignmentEdit}
 
-                    assignmentIdEdit={assignmentIdEdit}
-                    focusAssignmentEdit={focusAssignmentEdit}
-                    setFocusAssignmentEdit={setFocusAssignmentEdit}
+                forumIdEdit={forumIdEdit}
+                focusForumEdit={focusForumEdit}
+                setFocusForumEdit={setFocusForumEdit}
 
-                    forumIdEdit={forumIdEdit}
-                    focusForumEdit={focusForumEdit}
-                    setFocusForumEdit={setFocusForumEdit}
+                examIdEdit={examIdEdit}
+                focusExamEdit={focusExamEdit}
+                setFocusExamEdit={setFocusExamEdit}
 
-                    examIdEdit={examIdEdit}
-                    focusExamEdit={focusExamEdit}
-                    setFocusExamEdit={setFocusExamEdit}
+                setImportState={setImportState}
+                setExportState={setExportState}
+                importState={importState}
+                exportState={exportState}
+                isTeacherFlag={isTeacherFlag}
+            />
 
-                    setImportState={setImportState}
-                    setExportState={setExportState}
-                    importState={importState}
-                    exportState={exportState}
-                    isTeacherFlag={isTeacherFlag}
-                />
+            <AssignmentModal
+                isTodoModal={isTodoModal}
+                isSubmitAssignment={isSubmitAssignment}
+                isCommentAssignment={isCommentAssignment}
+                commentAssignmentGrade={commentAssignmentGrade}
+                assignment={assignmentRequirement}
+                handleCancelModal={closeTodoModal}
+                submitAssignment={submissionFile}
+                onSubmitAssignment={onSubmitAssignment}
+                onCancelSubmitAssignment={onCancelSubmitAssignment} />
 
-        <AssignmentModal
-            isTodoModal={isTodoModal}
-            isSubmitAssignment={isSubmitAssignment}
-            isCommentAssignment={isCommentAssignment}
-            commentAssignmentGrade={commentAssignmentGrade}
-            assignment={assignmentRequirement}
-            handleCancelModal={closeTodoModal}
-            submitAssignment={submissionFile}
-            onSubmitAssignment={onSubmitAssignment}
-            onCancelSubmitAssignment={onCancelSubmitAssignment} />
-
-    </>
+        </>
+    }
 }
 
 export default Subject;

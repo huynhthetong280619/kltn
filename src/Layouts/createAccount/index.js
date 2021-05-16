@@ -7,41 +7,11 @@ import {
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
-import Logo from '../../assets/images/logo.svg';
+import Logo from '../../assets/images/logo-utex.png'
 import RestClient from '../../utils/restClient';
 
 
 
-const formItemLayout = {
-    labelCol: {
-        xs: {
-            span: 24,
-        },
-        sm: {
-            span: 8,
-        },
-    },
-    wrapperCol: {
-        xs: {
-            span: 24,
-        },
-        sm: {
-            span: 16,
-        },
-    },
-};
-const tailFormItemLayout = {
-    wrapperCol: {
-        xs: {
-            span: 24,
-            offset: 0,
-        },
-        sm: {
-            span: 16,
-            offset: 8,
-        },
-    },
-};
 
 const CreateAccount = () => {
     const { t } = useTranslation()
@@ -61,94 +31,109 @@ const CreateAccount = () => {
             })
     };
 
+    const layout = {
+        labelCol: { span: 8 },
+        wrapperCol: { span: 16 },
+    };
+
+    const tailLayout = {
+        wrapperCol: { span: 24 },
+    };
+
     return (<div className="login-container">
         <div style={{
             display: 'flex', flexDirection: 'column', justifyContent: 'center', rowGap: '1rem'
         }}>
-            <div className="login-logo" style={{ textAlign: 'center' }}>
-                <img src={Logo} width={90} />
+            <div className="form-login">
+                <div className="login-logo" style={{ textAlign: 'center' }}>
+                    <img src={Logo} width={90} />
+                </div>
+                <Form
+                    {...layout}
+                    form={form}
+                    name="register"
+                    onFinish={onFinish}
+                    scrollToFirstError
+                >
+                    <Form.Item
+                        name="firstName"
+                        label="First name"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your E-mail!',
+                            },
+                        ]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        name="lastName"
+                        label="Last name"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your E-mail!',
+                            },
+                        ]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        name="username"
+                        label="User name"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your E-mail!',
+                            },
+                        ]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        name="emailAddress"
+                        label="E-mail"
+                        rules={[
+                            {
+                                type: 'email',
+                                message: 'The input is not valid E-mail!',
+                            },
+                            {
+                                required: true,
+                                message: 'Please input your E-mail!',
+                            },
+                        ]}
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                        name="password"
+                        label="Password"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your password!',
+                            },
+                        ]}
+                        hasFeedback
+                    >
+                        <Input.Password />
+                    </Form.Item>
+
+                    <Form.Item {...tailLayout}>
+                        <Button type="primary" htmlType="submit">
+                            Register
+                         </Button>
+                    </Form.Item>
+                    <Form.Item {...tailLayout}>
+                        <Button type="danger" onClick={() => history.go(-1)}>
+                            Back
+                        </Button>
+                    </Form.Item>
+                </Form>
             </div>
-            <Form
-                style={{ minWidth: 500 }}
-                {...formItemLayout}
-                form={form}
-                name="register"
-                onFinish={onFinish}
-                scrollToFirstError
-            >
-                <Form.Item
-                    name="firstName"
-                    label="First name"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your E-mail!',
-                        },
-                    ]}
-                >
-                    <Input />
-                </Form.Item>
-                <Form.Item
-                    name="lastName"
-                    label="Last name"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your E-mail!',
-                        },
-                    ]}
-                >
-                    <Input />
-                </Form.Item>
-                <Form.Item
-                    name="username"
-                    label="User name"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your E-mail!',
-                        },
-                    ]}
-                >
-                    <Input />
-                </Form.Item>
-                <Form.Item
-                    name="emailAddress"
-                    label="E-mail"
-                    rules={[
-                        {
-                            type: 'email',
-                            message: 'The input is not valid E-mail!',
-                        },
-                        {
-                            required: true,
-                            message: 'Please input your E-mail!',
-                        },
-                    ]}
-                >
-                    <Input />
-                </Form.Item>
-
-                <Form.Item
-                    name="password"
-                    label="Password"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your password!',
-                        },
-                    ]}
-                    hasFeedback
-                >
-                    <Input.Password />
-                </Form.Item>
-
-                <Form.Item {...tailFormItemLayout}>
-                    <Button type="primary" htmlType="submit">
-                        Register
-        </Button>
-                </Form.Item>
-            </Form>
         </div>
     </div>
     );

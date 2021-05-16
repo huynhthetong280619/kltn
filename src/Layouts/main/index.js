@@ -32,6 +32,10 @@ const MainAppLayout = () => {
 
     useEffect(() => {
 
+        if (!authFlag) {
+            history.push('/login')
+        }
+        
         const user = JSON.parse(localStorage.getItem('user'));
         if (user?.idPrivilege == 'student') {
             setIsTeacherFlag(false)
@@ -44,16 +48,12 @@ const MainAppLayout = () => {
 
         getListSubjectJoin();
 
-        if (!authFlag) {
-            history.push('/login')
-        }
+        
     }, [])
 
     const getListSubjectJoin = async () => {
         setLoadingCourse(true)
-        setTimeout(() => {
-            setLoadingCourse(false)
-        }, 15000);
+
         const restClientApi = new RestClient({ token })
 
         await restClientApi.asyncGet('/subject')

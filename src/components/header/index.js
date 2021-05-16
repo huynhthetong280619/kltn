@@ -25,13 +25,12 @@ const { Text } = Typography;
 
 const HeaderLayout = ({ setOpen }) => {
     const { t, i18n } = useTranslation()
-    const { authFlag, setAuth } = useContext(StoreTrading)
+    const { authFlag, setAuth, language, setLanguage } = useContext(StoreTrading)
 
     const [openMessage, setOpenMessage] = useState(false)
     const [profile, setProfile] = useState({});
     const history = useHistory()
 
-    const [language, setLanguage] = useState('VI')
 
 
     useEffect(() => {

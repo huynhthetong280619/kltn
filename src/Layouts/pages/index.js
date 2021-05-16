@@ -20,6 +20,7 @@ import TakeQuiz from '../take-quiz';
 import AssignmentCheck from '../assignment-check';
 import CreateAccount from '../createAccount';
 import FooterLayout from '../footer-layout';
+import SurveyTake from '../survey-take';
 
 const { Header, Content, Footer } = Layout
 
@@ -57,6 +58,8 @@ function Child() {
             return <TakeQuiz />
         case 'check-assignment':
             return <AssignmentCheck />
+        case 'survey-take': 
+            return <SurveyTake />
         default:
             break
     }
@@ -84,6 +87,7 @@ const PagesView = () => {
                 <Suspense fallback={<LoadingView />}>
                     <Switch>
                         <Route exact path="/" component={MainPages} />
+                        <Route exact path="/home" component={MainPages} />
                         <Route path="/home/:link" children={<Child />} />
                     </Switch>
                 </Suspense>
