@@ -4,7 +4,7 @@ import { STORE_KEY } from './utils/STORE_KEY';
 
 export const StoreTrading = React.createContext(null);
 
-export default function ({ children }) {
+export default  ({ children }) => {
 
     const {i18n} = useTranslation()
     const [authFlag, setAuth] = useState(false)
