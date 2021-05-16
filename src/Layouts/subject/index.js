@@ -18,6 +18,7 @@ import { notifyError, notifySuccess } from '../../assets/common/core/notify';
 
 import { ReactComponent as DashManage } from '../../assets/images/contents/dashboard.svg'
 import { CSVLink } from 'react-csv';
+import downloadFile from '../../assets/common/core/downloadFile';
 const Subject = () => {
     const { t } = useTranslation()
     const { authFlag, token } = useContext(StoreTrading)
@@ -400,7 +401,7 @@ const Subject = () => {
                                                                         {
                                                                             files.map((file, index) => (
                                                                                 <div className="subject-body">
-                                                                                    <div className="subject-main">
+                                                                                    <div className="subject-main" >
                                                                                         <div className="subject-icon">
                                                                                             {file.type.includes('doc') && (
                                                                                                 <i>
@@ -437,14 +438,14 @@ const Subject = () => {
                                                                                                     </i>
                                                                                                 )}
                                                                                         </div>
-                                                                                        <div className="subject-content">{file.name}</div>
+                                                                                        <div className="subject-content" onClick={(e) => {  downloadFile(file)}}>{file.name}</div>
                                                                                     </div>
                                                                                     <div className="subject-action">
                                                                                         {
                                                                                             isOnEdit && <div>
                                                                                                 <Tooltip title={t('edit_file')}>
                                                                                                     <a>
-                                                                                                        <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditFile(file._id, _id) }} />
+                                                                                                        <FontAwesomeIcon icoăn="edit" onClick={(e) => { e.stopPropagation(); focusEditFile(file._id, _id) }} />
                                                                                                     </a>
                                                                                                 </Tooltip>
                                                                                             </div>
@@ -705,7 +706,7 @@ const Subject = () => {
                                                                             </i>
                                                                         )}
                                                                 </div>
-                                                                <div className="subject-content">{file.name}</div>
+                                                                <div className="subject-content" onClick={(e) => {  downloadFile(file)}}>{file.name}</div>
                                                             </div>
 
                                                         </div>

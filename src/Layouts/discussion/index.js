@@ -151,12 +151,12 @@ const Discussion = () => {
                                         <Avatar size={64} icon={<img src={get(get(detailTopic, 'create'), 'urlAvatar')} />} />
                                     </div>
                                     <div>
-                                        <div className="color-default">{get(get(detailTopic, 'create'), 'surName') + " " + get(get(detailTopic, 'create'), 'firstName')}  • <span>{moment.utc(get(detailTopic, 'time')).fromNow()}</span></div>
+                                        <div className="color-default">{get(get(detailTopic, 'create'), 'firstName') + ' ' + get(get(detailTopic, 'create'), 'lastName')}  • <span>{moment.utc(get(detailTopic, 'time')).fromNow()}</span></div>
                                         <div className="color-default">@{get(get(detailTopic, 'create'), 'code')}</div>
                                     </div>
                                 </div>
-                                <div style={{ textAlign: 'center' }}>
-                                    {get(detailTopic, 'content')}
+                                <div style={{ textAlign: 'center', color: 'yellow', fontSize: '1rem' }}>
+                                    {get(detailTopic, 'content').toUpperCase()}
                                 </div>
                             </>
                         }

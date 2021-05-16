@@ -121,14 +121,14 @@ const Topic = () => {
                 {
                     isLoading ? <Skeleton avatar paragraph={{ rows: 4 }} /> : detailForum.map(({ _id, create, name, description, replies }) => {
                         return (
-                            <div style={{ display: 'grid', justifyContent: 'center' }} key={_id}>
+                            <div style={{ display: 'grid', justifyContent: 'center', margin: '0.5rem' }} key={_id}>
                                 <Badge.Ribbon text={`${t('replies_in_topic')}${replies ? replies : 0}`}
                                 >
                                     <Card
                                         onClick={() => { history.push('discuss', { ...location.state, idTopic: _id }) }}
                                         hoverable
                                         style={{
-                                            width: 161, margin: '10px',
+                                            width: 161,
                                             borderRadius: '0.25rem'
                                         }}
                                         cover={<img alt="example" src={get(create, 'urlAvatar')} height={183} />}

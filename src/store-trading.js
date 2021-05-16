@@ -4,7 +4,7 @@ import { STORE_KEY } from './utils/STORE_KEY';
 
 export const StoreTrading = React.createContext(null);
 
-export default ({ children }) => {
+export default function ({ children }) {
 
     const {i18n} = useTranslation()
     const [authFlag, setAuth] = useState(false)
@@ -31,7 +31,7 @@ export default ({ children }) => {
         i18n.changeLanguage(localStorage.getItem(STORE_KEY.LANGUAGE))
         setLanguage(localStorage.getItem(STORE_KEY.LANGUAGE))
 
-    }, [])
+    }, [language, i18n])
     
     const store = {
         token,

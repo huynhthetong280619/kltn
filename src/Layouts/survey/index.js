@@ -61,8 +61,8 @@ const Survey = () => {
         height: '30px',
         lineHeight: '30px'
     };
-    //console.log('Survey', survey)
-    return <>
+
+return <>
         <ModalWrapper style={{ width: '90%', margin: '0 auto', display: 'flex', rowGap: '1rem', flexDirection: 'column' }}>
             <ModalWrapper style={{ backgroundColor: '#494949' }}>
                 {
