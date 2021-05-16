@@ -18,11 +18,11 @@ const CommentList = ({ t, comments }) => (
         dataSource={comments}
         header={<div className="color-default">{`${comments.length} ${comments.length > 1 ? t('replies') : t('reply')}`}</div>}
         itemLayout="horizontal"
-        renderItem={props => <Comment author={<a className="color-default">{get(get(props, 'create'), 'surName') + " " + get(get(props, 'create'), 'firstName')}</a>}
+        renderItem={props => <Comment author={<a className="color-default">{get(get(props, 'create'), 'firstName') + ' ' + get(get(props, 'create'), 'lastName')}</a>}
             avatar={
                 <Avatar
                     src={get(get(props, 'create'), 'urlAvatar')}
-                    alt={get(get(props, 'create'), 'surName') + " " + get(get(props, 'create'), 'firstName')}
+                    alt={ get(get(props, 'create'), 'firstName') + ' ' + get(get(props, 'create'), 'lastName')}
                 />
             }
 
@@ -72,17 +72,13 @@ const Discussion = () => {
         setProfile(JSON.parse(localStorage.getItem('user')))
 
         setLoadingDiscussion(true)
-        restClient.asyncGet(`/discussion?idSubject=${idSubject}&idTimeline=${idTimeline}&idForum=${forumId}&idTopic=${idTopic}`)
-            .then(res => {
-                if (!res.hasError) {
-                    setComments(get(res, 'data'))
-                }
-            })
-
+      
         restClient.asyncGet(`/topic/${idTopic}?idSubject=${idSubject}&idTimeline=${idTimeline}&idForum=${forumId}`)
             .then(res => {
+                console.log(res)
                 if (!res.hasError) {
                     setDetailTopic(get(res, 'data').topic)
+                    setComments(get(res, 'data').topic?.discussions)
                     setLoadingDiscussion(false)
                 }
             })
@@ -109,8 +105,9 @@ const Discussion = () => {
                 }
             }
 
-            await restClient.asyncPost(`/discussion`, data)
+            await restClient.asyncPost(`/topic/${idTopic}/discuss?idSubject=${idSubject}&idTimeline=${idTimeline}&idForum=${forumId}`, data)
                 .then(res => {
+                    console.log('Res', res)
                     if (!res.hasError) {
                         setSubmitting(false)
                         setCommentInput('')
