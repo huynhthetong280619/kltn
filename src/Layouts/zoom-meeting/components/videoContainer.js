@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import "./videoContainer.css"
 const VideoContainer = ({ id, stream, user }) => {
 
+    const [isMute, setIsMute] = useState(false)
+
     const fullScreen = (e) => {
         const currentElement = e.currentTarget
 
@@ -11,15 +13,15 @@ const VideoContainer = ({ id, stream, user }) => {
     }
 
     useEffect(() => {
+        const video = document.getElementById(id);
         if (stream) {
-            const video = document.getElementById(id);
             video.srcObject = stream
             video.addEventListener('loadedmetadata', () => {
                 video.play()
             });
         }
         return () => {
-
+            
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [stream])
@@ -31,7 +33,10 @@ const VideoContainer = ({ id, stream, user }) => {
                     <i className="full-screen-widget__icon"></i>
                 </div>
                 <video id={id}></video>
-                <div style={{ textAlign: 'center', color: '#f9f9f9', position: 'absolute', bottom: '0' }}>{user.firstName + " " + user.lastName}</div>
+                <div>
+                    <div className="user-stream">{user.firstName + " " + user.lastName}</div>
+                    <div className={isMute ? 'mic-video-unmute' : 'mic-video-mute'} onClick={(e) => { e.stopPropagation(); setIsMute(!isMute)}}></div>
+                </div>
             </div>
         </>
     )

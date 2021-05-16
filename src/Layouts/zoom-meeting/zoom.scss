@@ -67,6 +67,18 @@
     height: 28px;
 }
 
+.zm-icon-phone-muted{
+    background-position: -68px -2px !important;
+    width: 26px;
+    height: 28px;
+}
+
+.zm-icon-phone-unmuted{
+    background-position: -99px -2px !important;
+    width: 26px;
+    height: 28px;
+}
+
 .zm-btn .loading, .zm-icon-arrow-up, .zm-icon-close, .zm-icon-cloud-record, .zm-icon-disallow-microphone, .zm-icon-disallow-video, .zm-icon-join-audio, .zm-icon-phone-muted, .zm-icon-phone-unmuted, .zm-icon-start-video, .zm-icon-stop-video, .zm-icon-voip-active, .zm-icon-voip-muted, .zm-icon-voip-unmuted {
     display: inline-block;
     background: url(../../assets//images/wc_sprites.png);
@@ -74,6 +86,12 @@
 }
 
 .zm-icon-stop-video {
+    background-position: -240px -153px !important;
+    width: 30px;
+    height: 30px;
+}
+
+.zm-icon-start-video {
     background-position: -192px -153px !important;
     width: 30px;
     height: 30px;
@@ -148,4 +166,101 @@
     min-height: 416px !important;
     z-index: 2 !important;
     transition: 0.5s;
+}
+
+.user-stream{
+    text-align: center;
+    color: rgb(249, 249, 249);
+    position: absolute;
+    bottom: -13px;
+    left: 13px;
+    border: 1px solid #0f70b8;
+    padding: 1px 12px;
+    border-radius: 0.5rem;
+    filter: drop-shadow(2px 4px 6px black);
+    background: #232323;
+}
+
+
+.mic-video-unmute{
+    background: url(../../assets//images/wc_sprites.png);
+    background-size: 416px 384px;
+    width: 25px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-position-x: -67px;
+    z-index: 999;
+    position: absolute;
+    right: 8px;
+    bottom: -25px;
+    cursor: pointer;
+
+}
+
+.mic-video-mute{
+    background: url(../../assets//images/wc_sprites.png);
+    background-size: 416px 384px;
+    width: 25px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-position-x: -99px;
+    z-index: 999;
+    position: absolute;
+    right: 8px;
+    bottom: -25px;
+    cursor: pointer;
+
+}
+
+.sharing-screen{
+    position: absolute;
+    right: -20px;
+    top: -18px;
+    z-index: 9999;
+    .status-sharing{
+        padding: 0 39px;
+        background: green;
+        color: #f9f9f9;
+        border-top-left-radius: 0.25rem;
+        border-bottom-left-radius: 0.25rem;
+        display: flex;
+        align-items: center;
+        .ic_checked{
+            background: url(../../assets//images/wc_sprites2.png);
+            background-size: 416px 384px;
+            width: 20px;
+            height: 17px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-position-x: -230px;
+            background-position-y: -32px;
+            margin-left: 5px;
+        }
+    }
+    .action-sharing{
+        padding: 0 9px;
+        background: #ff4000;
+        color: #f9f9f9f9;
+        border-top-right-radius: 0.25rem;
+        border-bottom-right-radius: 0.25rem;
+        display: flex;
+    align-items: center;
+        .ic-stop{
+            background: url(../../assets//images/wc_sprites2.png);
+            background-size: 416px 384px;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-position-x: -261px;
+            background-position-y: -7px;
+            margin-right: 5px;
+        }
+    }
 }

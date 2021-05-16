@@ -338,6 +338,7 @@ const ZoomMeeting = () => {
                 display: 'flex',
                 justifyContent: 'space-between',
                 columnGap: '1rem',
+                position: 'relative'
             }}>
                 <div style={{ width: '100%' }}>
                     <ModalWrapper style={{ minHeight: '450px', }}>
@@ -358,8 +359,21 @@ const ZoomMeeting = () => {
                             }
 
                         </div>
+                        
                     </ModalWrapper>
+                   
                 </div>
+                <div className="sharing-screen">
+                            <div style={{display: 'flex'}}>
+                                <div className="status-sharing">
+                                    You are screen sharing
+                                    <div className="ic_checked"></div>
+                                    </div>
+                                <div className="action-sharing">
+                                    <div className="ic-stop"></div>
+                                    Stop share</div>
+                            </div>
+                        </div>
                 {
                     openChatTab && <div style={{ width: '40%' }}>
                         <ModalWrapper style={{ height: '100%', position: 'relative' }} className="zoom-list">
@@ -398,12 +412,12 @@ const ZoomMeeting = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                     <Tooltip title="Join Audio">
                         <div className="zm-center" onClick={muteMic}>
-                            <i className="zm-icon zm-icon-join-audio" style={{ cursor: 'pointer' }}></i>
+                            <i className={`zm-icon ${true ? 'zm-icon-join-audio' : true ? 'zm-icon-phone-unmuted' : 'zm-icon-phone-muted'}`} style={{ cursor: 'pointer' }}></i>
                         </div>
                     </Tooltip>
                     <Tooltip title="Turn on/off video">
                         <div className="zm-center" onClick={hideCamera}>
-                            <i className="zm-icon zm-icon-stop-video" style={{ cursor: 'pointer' }}></i>
+                            <i className={`zm-icon ${true ? 'zm-icon-stop-video' : 'zm-icon-start-video'}`} style={{ cursor: 'pointer' }}></i>
                         </div>
                     </Tooltip>
                     <Tooltip title="Participant">
