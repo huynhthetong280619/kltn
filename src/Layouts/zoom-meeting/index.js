@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useReducer } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ReactComponent as Join_Meeting } from '../../assets/images/contents/join_meeting.svg'
 import { ReactComponent as New_Meeting } from '../../assets/images/contents/new_meeting.svg'
@@ -9,7 +9,7 @@ import { Row, Col, Avatar, Form, Button, List, Input, Tooltip, Comment, Skeleton
 
 import ModalWrapper from '../../components/basic/modal-wrapper'
 import './zoom.scss'
-import { get, indexOf } from 'lodash'
+import { get, indexOf, startCase } from 'lodash'
 import moment from 'moment'
 import { useLocation } from 'react-router'
 
@@ -85,16 +85,17 @@ const ZoomMeeting = () => {
     const idSubject = useRef('')
     const [socket, setSocket] = useState(null)
     const peer = new Peer();
-    let peers = {};
-    const [videoGrid, setVideoGrid] = useState([]);
-    const [videoStream, setVideoStream] = useState(null);
+
+    const [myVideoStream, setVideoStream] = useState(null);
     const [isMute, setMute] = React.useState(false);
     const [isCamera, setCamera] = React.useState(false);
     const [isOpenShare, setIsOpenShare] = React.useState(false);
 
     const currentUser = JSON.parse(localStorage.getLocalStorage('user'));
-    let arrayStream = [];
-    let arrayComments = [];
+
+    const [arrayStream, setArrayStream] = useState([]);
+
+    const [isShareScreen, setShareScreen] = useState(false);
 
     const setupSocket = () => {
         const token = localStorage.getCookie("token");
@@ -115,7 +116,7 @@ const ZoomMeeting = () => {
 
     useEffect(() => {
         idSubject.current = location.search.slice(1).split("&")[0].split("=")[1]
-        console.log('Idsubject', idSubject.current)
+        console.log('Id subject', idSubject.current)
         setupSocket();
     }, []);
 
@@ -125,40 +126,99 @@ const ZoomMeeting = () => {
             addVideoStream(peerId, userVideoStream, user);
         });
 
-        peers[peerId] = call
+        dispatchPeers({
+            method: 'ADD', peer: {
+                peerId: peerId,
+                call: call
+            }
+        });
+    }
+
+    const peersReducer = (state, action) => {
+        switch (action.method) {
+            case 'ADD':
+                const { peer } = action;
+                return { ...state, [peer.peerId]: peer.call }
+            case 'DELETE':
+                const { peerId } = action;
+                if (state[peerId]) {
+                    state[peerId].close();
+                    delete state[peerId];
+                }
+                return state;
+            default:
+                break;
+        }
+    }
+    const [peers, dispatchPeers] = useReducer(peersReducer, {})
+
+    const replaceVideoStream = (stream) => {
+        // Replace video stream of person in call
+        let videoTrack = stream.getVideoTracks()[0];
+        for (var key in peers) {
+            const peerConnection = peers[key].peerConnection;
+            var sender = peerConnection.getSenders().find(function (s) {
+                return s.track.kind === videoTrack.kind;
+            });
+            sender.replaceTrack(videoTrack);
+        }
+
+        //Replace video of current user
+        console.log(arrayStream);
+        setArrayStream(arrayStream.map(video => {
+            if (video.user._id === currentUser._id) {
+                video.stream = stream;
+            }
+            return video;
+        }))
+    }
+
+    const shareScreen = () => {
+        navigator.mediaDevices.getDisplayMedia().then(mediaStream => {
+
+            // Handle display share screen
+            replaceVideoStream(mediaStream);
+            setShareScreen(true);
+
+            mediaStream.getVideoTracks()[0].onended = function () {
+                // doWhatYouNeedToDo();
+                setShareScreen(false);
+                replaceVideoStream(myVideoStream);
+            };
+        })
     }
 
     const removeVideoStream = (id) => {
-        const index = arrayStream.findIndex(value => value.id === id);
-        if (index) {
-            arrayStream[index].stream.getTracks().forEach(track => track.stop());
-            arrayStream.splice(index, 1);
-        }
-        displayVideoStream();
+        setArrayStream(preState => preState.filter(value => {
+            if (value.id === id) {
+                value.stream.getTracks().forEach(track => track.stop());
+                return false
+            }
+            return true;
+        }));
     }
 
     const addVideoStream = (id, stream, user) => {
-        const index = arrayStream.findIndex(value => value.id === id)
-        if (index < 0) {
-            arrayStream.push({ id, stream, user });
-        }
-        displayVideoStream();
+        console.log({ id, stream, user });
+        setArrayStream(preState => {
+            const index = preState.findIndex(value => value.id === id)
+            if (index < 0) {
+                return [...preState, { id, stream, user }]
+            }
+            return [...preState]
+        });
     }
 
-    const displayVideoStream = () => {
-        const container = arrayStream.map(({ id, stream, user }) => {
-            return <VideoContainer key={id} stream={stream} id={id} user={user} />
-        })
-
-        setVideoGrid(container);
-    }
+     const handleWhenHasAlreadyJoinInAnotherPlace=(message)=>{
+         notify.notifyError("Error!",message);
+     }
 
     useEffect(() => {
         if (socket) {
             peer.on('open', (id) => {
                 socket.emit('join-zoom', idSubject.current, id);
                 socket.on('403', (message) => {
-                    alert(message);
+                    handleWhenHasAlreadyJoinInAnotherPlace(message);
                 })
                 socket.on('200', () => {
                     navigator.mediaDevices
@@ -175,6 +235,12 @@ const ZoomMeeting = () => {
                             });
 
                             peer.on('call', (call) => {
+                                dispatchPeers({
+                                    method: 'ADD', peer: {
+                                        peerId: call.peer,
+                                        call: call
+                                    }
+                                });
                                 call.answer(stream)
                                 call.on('stream', (userVideoStream) => {
                                     socket.emit('get-user', call.peer);
@@ -185,13 +251,12 @@ const ZoomMeeting = () => {
                             });
                         })
                     socket.on('user-disconnected', (peerId) => {
-                        if (peers[peerId]) peers[peerId].close()
+                        dispatchPeers({ method: 'DELETE', peerId });
                         removeVideoStream(peerId);
                     });
 
                     socket.on('newMessage', (message) => {
-                        arrayComments.push(message);
-                        setComments([...comments, ...arrayComments]);
+                        setComments(preState => [...preState, message]);
                     })
                 });
             });
@@ -206,19 +271,19 @@ const ZoomMeeting = () => {
     }, [socket]);
 
     const muteMic = () => {
-        const enabled = videoStream.getAudioTracks()[0].enabled
-        videoStream.getAudioTracks()[0].enabled = !enabled;
+        const enabled = myVideoStream.getAudioTracks()[0].enabled
+        myVideoStream.getAudioTracks()[0].enabled = !enabled;
         setMute(enabled)
     }
 
     const hideCamera = () => {
-        const enabled = videoStream.getVideoTracks()[0].enabled
-        videoStream.getVideoTracks()[0].enabled = !enabled;
+        const enabled = myVideoStream.getVideoTracks()[0].enabled
+        myVideoStream.getVideoTracks()[0].enabled = !enabled;
         setCamera(enabled);
     }
 
     const onCloseModalAction = () => {
-        setIsOpenModalFunction(false)
+        setIsOpenModalFunction(false);
     }
 
     const openZoomFunction = (type) => {
@@ -249,7 +314,6 @@ const ZoomMeeting = () => {
     const handleChange = (e) => {
         setCommentInput(e.target.value)
     }
-
 
     return <div className="mt-4" style={{
         justifyContent: 'center',
@@ -286,7 +350,13 @@ const ZoomMeeting = () => {
                             display: 'flex',
                             position: 'relative'
                         }} >
-                            {videoGrid}
+
+                            {
+                                arrayStream.map(({ id, stream, user }) => {
+                                    return <VideoContainer key={id} stream={stream} id={id} user={user} />
+                                })
+                            }
+
                         </div>
                     </ModalWrapper>
                 </div>
@@ -346,7 +416,7 @@ const ZoomMeeting = () => {
                         </div>
                     </Tooltip>
                     <Tooltip title="Share screen">
-                        <div className="zm-center" style={{ cursor: 'pointer' }} onClick={() => setIsOpenShare(true)}>
+                        <div className="zm-center" style={{ cursor: 'pointer' }} onClick={() => { if (!isShareScreen) { shareScreen() } }}>
                             <div className="footer-button__share-icon" ></div>
                         </div>
                     </Tooltip>
