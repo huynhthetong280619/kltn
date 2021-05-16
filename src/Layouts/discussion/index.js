@@ -11,6 +11,10 @@ import ModalWrapper from '../../components/basic/modal-wrapper'
 import { ReactComponent as Logout } from '../../assets/images/contents/logout.svg'
 import ModalLoadingLogin from '../login/modal-loading-login';
 
+import * as notify from "../../assets/common/core/notify";
+import { SERVER_SOCKET } from "../../assets/constants/const";
+import io from "socket.io-client";
+import * as localStorage from "../../assets/common/core/localStorage";
 
 const { TextArea } = Input;
 const CommentList = ({ t, comments }) => (
@@ -22,7 +26,7 @@ const CommentList = ({ t, comments }) => (
             avatar={
                 <Avatar
                     src={get(get(props, 'create'), 'urlAvatar')}
-                    alt={ get(get(props, 'create'), 'firstName') + ' ' + get(get(props, 'create'), 'lastName')}
+                    alt={get(get(props, 'create'), 'firstName') + ' ' + get(get(props, 'create'), 'lastName')}
                 />
             }
 
@@ -68,11 +72,39 @@ const Discussion = () => {
     const [commentInput, setCommentInput] = useState('')
     const [detailTopic, setDetailTopic] = useState({})
     const [loadingDiscussion, setLoadingDiscussion] = useState(false)
+
+    const [socket, setSocket] = useState(null)
+
+    const setupSocket = () => {
+        const token = localStorage.getCookie("token");
+        if (token) {
+            const newSocket = io(SERVER_SOCKET, {
+                query: {
+                    token,
+                },
+            });
+
+            newSocket.on("connect", () => {
+                notify.notifySuccess(t("success"), t("join_success"));
+            });
+
+            newSocket.on('not-accessible', (message) => {
+                notify.notifyError(t("failure"), message);
+            })
+
+            newSocket.on('error', (message) => {
+                notify.notifyError(t("failure"), message);
+            })
+
+            setSocket(newSocket);
+        }
+    };
+
     useEffect(() => {
-        setProfile(JSON.parse(localStorage.getItem('user')))
+        setProfile(JSON.parse(localStorage.getLocalStorage('user')))
 
         setLoadingDiscussion(true)
-      
+
         restClient.asyncGet(`/topic/${idTopic}?idSubject=${idSubject}&idTimeline=${idTimeline}&idForum=${forumId}`)
             .then(res => {
                 console.log(res)
@@ -83,42 +115,70 @@ const Discussion = () => {
                 }
             })
 
+        setupSocket();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-    }, [])
+    useEffect(() => {
+        if (socket) {
+            socket.emit('join-topic', {
+                idSubject: idSubject,
+                idTimeline: idTimeline,
+                idForum: forumId,
+                idTopic: idTopic
+            });
+
+            socket.on('newDiscuss', newDiscuss => {
+                setComments(preState => [newDiscuss, ...preState]);
+            });
+
+            socket.on('discuss-success', () => {
+                setSubmitting(false);
+                setCommentInput('');
+            })
+
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [socket])
+
 
     const handleSubmit = () => {
         if (!commentInput) {
             return;
         }
 
-        setSubmitting(true)
+        setSubmitting(true);
 
-        setTimeout(async () => {
+        socket.emit('discuss', commentInput);
 
-            const data = {
-                idSubject,
-                idTimeline,
-                idForum: forumId,
-                idTopic,
-                data: {
-                    content: commentInput
-                }
-            }
+        // setTimeout(async () => {
 
-            await restClient.asyncPost(`/topic/${idTopic}/discuss?idSubject=${idSubject}&idTimeline=${idTimeline}&idForum=${forumId}`, data)
-                .then(res => {
-                    console.log('Res', res)
-                    if (!res.hasError) {
-                        setSubmitting(false)
-                        setCommentInput('')
-                        setComments([...[
-                            get(res, 'data').discussion,
+        //     const data = {
+        //         idSubject,
+        //         idTimeline,
+        //         idForum: forumId,
+        //         idTopic,
+        //         data: {
+        //             content: commentInput
+        //         }
+        //     }
 
-                        ], ...comments.reverse()].reverse())
-                    }
-                })
+        //     await restClient.asyncPost(`/topic/${idTopic}/discuss?idSubject=${idSubject}&idTimeline=${idTimeline}&idForum=${forumId}`, data)
+        //         .then(res => {
+        //             console.log('Res', res)
+        //             if (!res.hasError) {
+        //                 setSubmitting(false)
+        //                 setCommentInput('')
+        //                 setComments([...[
+        //                     get(res, 'data').discussion,
 
-        }, 1000);
+        //                 ], ...comments.reverse()].reverse())
+        //             }
+        //         })
+
+        // }, 1000);
+
+
     };
 
     const handleChange = e => {
