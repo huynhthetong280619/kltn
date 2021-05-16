@@ -35,7 +35,7 @@ const MainAppLayout = () => {
         if (!authFlag) {
             history.push('/login')
         }
-        
+
         const user = JSON.parse(localStorage.getItem('user'));
         if (user?.idPrivilege == 'student') {
             setIsTeacherFlag(false)
@@ -48,7 +48,7 @@ const MainAppLayout = () => {
 
         getListSubjectJoin();
 
-        
+
     }, [])
 
     const getListSubjectJoin = async () => {
