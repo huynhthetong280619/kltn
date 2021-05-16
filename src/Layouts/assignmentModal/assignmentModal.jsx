@@ -131,8 +131,8 @@ const AssignmentModal = (props) => {
                         {
                             get(props.assignment, 'isCanSubmit') &&
                             <Row style={{ marginTop: 10 }}>
-                                <div>
-                                    <Button type="primary" loading={props.isSubmitAssignment} onClick={handleSubmit} style={{ borderRadius: 20 }}>{t('submit_assign')}</Button>
+                                <div style={{textAlign: 'center'}}>
+                                    <Button type="primary" loading={props.isSubmitAssignment} onClick={handleSubmit} className="lms-btn">{t('submit_assign')}</Button>
                                 </div>
                             </Row>
                         }

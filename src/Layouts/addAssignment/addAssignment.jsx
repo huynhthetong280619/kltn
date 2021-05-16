@@ -377,4 +377,4 @@ const AddAssignment = ({ timelinesList, createAssignment, updateAssignment, idSu
 }
 
 
-export default withTranslation('translations')(AddAssignment)
+export default AddAssignment
