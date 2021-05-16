@@ -83,7 +83,7 @@ const PagesView = () => {
                 <HeaderLayout setOpen={setOpen} />
             </Header>
 
-            <Content style={{ overflow: 'auto', background: '#232323' }}>
+            <Content style={{ overflow: 'auto', background: '#232323', paddingTop: 25, paddingBottom: 25 }}>
                 <Suspense fallback={<LoadingView />}>
                     <Switch>
                         <Route exact path="/" component={MainPages} />

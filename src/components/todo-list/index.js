@@ -6,13 +6,15 @@ import { ReactComponent as IC_TODO } from '../../assets/images/todo-item.svg'
 import { useTranslation } from 'react-i18next'
 import moment from 'moment'
 import { get } from 'lodash'
+import { useHistory } from 'react-router'
 
 const TodoList = () => {
     const {t} = useTranslation()
     const { token } = useContext(StoreTrading)
 
     const [todolist, setTodoslist] = useState([])
-    const [flag, setFlag] = useState(true)
+    const history = useHistory()
+    const [flag, setFlag] = useState(false)
 
     useEffect(() => {
         getTodosList()
@@ -82,7 +84,9 @@ const TodoList = () => {
                                     <Col span={24} style={{
                                         display: 'flex',
                                         alignItems: 'center'
-                                    }}>
+                                    }}
+                                    onClick={() => history.push('/home/course-app', {_id: item?.idSubject})}
+                                    >
                                         <Col className="todos-item__ic">
                                             <IC_TODO />
                                         </Col>

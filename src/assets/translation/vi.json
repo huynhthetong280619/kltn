@@ -317,5 +317,11 @@
     "loading_class": "Hệ thống đang tải dữ liệu lớp học...",
     "call_video": "Call video",
     "go_back": "Quay lại",
-    "reset_pwd": "Lấy lại mật khẩu"
+    "reset_pwd": "Lấy lại mật khẩu",
+    "join_success": "Tham gia lớp học thành công!",
+    "status_sharing": "Màn hình của bạn đang được chia sẻ",
+    "ic_stop": "Dừng chia sẻ",
+    "registered_subject": "Đã đăng ký",
+    "todo_list": "Việc cần làm"
+
 }

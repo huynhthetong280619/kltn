@@ -250,6 +250,7 @@
         border-bottom-right-radius: 0.25rem;
         display: flex;
     align-items: center;
+    cursor: pointer;
         .ic-stop{
             background: url(../../assets//images/wc_sprites2.png);
             background-size: 416px 384px;
@@ -261,6 +262,7 @@
             background-position-x: -261px;
             background-position-y: -7px;
             margin-right: 5px;
+            cursor: pointer;
         }
     }
 }

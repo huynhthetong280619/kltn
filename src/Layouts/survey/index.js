@@ -77,7 +77,7 @@ const Survey = () => {
                             <div><span style={{ fontWeight: 700 }}>{t('status')}: </span>{get(survey, 'isRemain') ? <span style={{ color: '#44bd32', fontWeight: 900 }}>{t('opening')}</span> : <span style={{ color: '#e84118', fontWeight: 900 }}>{t('closed')}</span>}</div>
                         </div>
                         <div>
-                            {(get(survey, 'isRemain') && get(survey, 'canAttempt')) && <Button type="primary" onClick={() => history.push('/survey-take', { idSurvey: surveyId, idSubject, idTimeline: timelineId })} style={{ marginTop: 25 }}>{t('take_survey')}</Button>}
+                            {(get(survey, 'isRemain') && get(survey, 'canAttempt')) && <Button type="primary" onClick={() => history.push('/home/survey-take', { idSurvey: surveyId, idSubject, idTimeline: timelineId })} style={{ marginTop: 25 }}>{t('take_survey')}</Button>}
                             {(get(survey, 'isRemain') == false) && <div style={{ color: '#ff4000', fontStyle: 'italic', fontWeight: 900 }}>{t('msg_timeup_survey')}</div>}
                             {(get(survey, 'isRemain') == false) && <Tooltip title="Thoát">
                                 <div className="logout-action">

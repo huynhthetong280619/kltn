@@ -815,6 +815,7 @@ h5.ant-typography{
 
 .ant-ribbon-wrapper{
     width: 100%;
+    filter: drop-shadow(2px 4px 6px black);
 }
 
 .ant-tabs-card>.ant-tabs-nav .ant-tabs-tab-active, .ant-tabs-card>div>.ant-tabs-nav .ant-tabs-tab-active{
@@ -895,4 +896,8 @@ h5.ant-typography{
     background: #232323 !important;
     filter: drop-shadow(2px 4px 6px black) !important;
     padding: 0 !important;
+}
+
+.ant-checkbox-wrapper span{
+    color: #f9f9f9
 }

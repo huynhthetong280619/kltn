@@ -108,7 +108,7 @@ const ZoomMeeting = () => {
             });
 
             newSocket.on("connect", () => {
-                notify.notifySuccess("success", "Socket Connected!");
+                notify.notifySuccess(t("success"), t("join_success"));
             });
 
             setSocket(newSocket);
@@ -343,20 +343,6 @@ const ZoomMeeting = () => {
         display: 'flex'
     }}>
         <ModalWrapper style={{ width: '80.5rem', background: '#494949' }}>
-            {/* <div className="menu-container-zoom-meeting">
-                <Tooltip title="Join meeting class" >
-                    <Join_Meeting style={{ cursor: 'pointer' }} onClick={() => openZoomFunction('Join meeting class')} />
-                </Tooltip>
-                <Tooltip title="Create new meeting class">
-                    <New_Meeting style={{ cursor: 'pointer' }} onClick={() => openZoomFunction('Create new meeting class')} />
-                </Tooltip>
-                <Tooltip title="Share your screen">
-                    <Share_Screen style={{ cursor: 'pointer' }} onClick={() => openZoomFunction('Share your screen')} />
-                </Tooltip>
-                <Tooltip title="Shedule meeting class">
-                    <Schedule_Meeting style={{ cursor: 'pointer' }} onClick={() => openZoomFunction('Shedule meeting class')} />
-                </Tooltip>
-            </div> */}
             <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -390,12 +376,13 @@ const ZoomMeeting = () => {
                     <div className="sharing-screen">
                         <div style={{ display: 'flex' }}>
                             <div className="status-sharing">
-                                You are screen sharing
-                                               <div className="ic_checked"></div>
+                                {t('status_sharing')}
+                                <div className="ic_checked"></div>
                             </div>
                             <div className="action-sharing">
                                 <div className="ic-stop" onClick={() => stopShareScreen()} ></div>
-                                               Stop share</div>
+                                {t('ic_stop')}
+                            </div>
                         </div>
                     </div>
                 }

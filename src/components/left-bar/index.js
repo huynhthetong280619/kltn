@@ -76,13 +76,13 @@ const LeftBar = ({ isOpen, setOpen }) => {
                 <div className="drawer-item__c color-default">Lớp học đã lưu trữ</div>
             </div> */}
                 </>  : <>
-                <Title level={5} style={{ color: '#f9f9f9' }}>Đã đăng ký</Title>
+                <Title level={5} style={{ color: '#f9f9f9' }}>{t('registered_subject')}</Title>
             <div className="drawer-item-app" onClick={() => navigationTo('/home/todo-list')}>
                 <div className="mask-hover"></div>
                 <div className="drawer-item__i">
                     <IC_TODO />
                 </div>
-                <div className="drawer-item__c color-default">Việc cần làm</div>
+                <div className="drawer-item__c color-default">{t('todo_list')}</div>
             </div>
             <Divider />
                 </>

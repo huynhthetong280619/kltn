@@ -316,6 +316,14 @@
      "loading_class": "The system is loading class data ...",
      "call_video": "Call video",
      "go_back": "Back",
-     "reset_pwd": "Reset password"
+     "reset_pwd": "Reset password",
+     "join_success": "Join class success!",
+     "status_sharing": "You are screen sharing",
+     "ic_stop": " Stop share",
+     "registered_subject": "Registered subject",
+     "todo_list": "To do lists"
+
+
+
 
 }
