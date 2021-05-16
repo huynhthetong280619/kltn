@@ -57,9 +57,9 @@ const Quiz = () => {
             })
 
 
-            restClient.asyncGet(`/exam/${examId}/attempt?idSubject=${idSubject}&idTimeline=${idTimeline}`)
+        restClient.asyncGet(`/exam/${examId}/attempt?idSubject=${idSubject}&idTimeline=${idTimeline}`)
             .then(res => {
-                if(!res.hasError){
+                if (!res.hasError) {
                     setIdSubmission(get(res, 'data')?.idSubmission)
                 }
             })
@@ -128,7 +128,7 @@ const Quiz = () => {
                 title: t('action'),
                 dataIndex: 'isContinue',
                 key: 'isContinue',
-                render: (data) => data ? <a onClick={(e) => {e.preventDefault(); directJoinQuiz({examId, idSubject, idTimeline, idSubmission})}}>{t('continue')}</a> : null
+                render: (data) => data ? <a onClick={(e) => { e.preventDefault(); directJoinQuiz({ examId, idSubject, idTimeline, idSubmission }) }}>{t('continue')}</a> : null
             }
         ]
     }
@@ -158,7 +158,7 @@ const Quiz = () => {
                                     <div><span style={{ fontWeight: 700 }}>{t('quiz_grade_method')}</span>{t('quiz_highest_grade')}</div>
                                 </div>
                                 {!isTeacherPrivilege && (<div>
-                                    {(get(requirementExam, 'attemptAvailable') > 0 && get(requirementExam, 'isAttempt') == true) && <Button type="primary" onClick={() => directJoinQuiz({examId, idSubject, idTimeline})} style={{ marginTop: 25 }}>{t('take_quiz')}</Button>}
+                                    {(get(requirementExam, 'attemptAvailable') > 0 && get(requirementExam, 'isAttempt') == true) && <Button type="primary" onClick={() => directJoinQuiz({ examId, idSubject, idTimeline, idSubmission })} style={{ marginTop: 25 }}>{t('take_quiz')}</Button>}
                                     {(get(requirementExam, 'attemptAvailable') == 0) && <div style={{ color: '#ff4000', fontStyle: 'italic', fontWeight: 900 }}>{t('quiz_join_run_out')}</div>}
                                     {(!get(requirementExam, 'isOpen')) && (get(requirementExam, 'isRemain')) && <div style={{ color: '#ff4000', fontStyle: 'italic', fontWeight: 900 }}>{t('quiz_not_time')}</div>}
                                 </div>)}
@@ -166,7 +166,7 @@ const Quiz = () => {
                     }
                 </ModalWrapper>
                 <ModalWrapper style={{ background: '#494949', width: '100%' }}>
-                  {!isLoading ? <Table pagination={false} columns={columns} dataSource={submissions} rowKey='key' scroll={{ y: 240 }} /> : <Skeleton />}  
+                    {!isLoading ? <Table pagination={false} columns={columns} dataSource={submissions} rowKey='key' scroll={{ y: 240 }} /> : <Skeleton />}
                 </ModalWrapper>
 
             </ModalWrapper>

@@ -609,14 +609,14 @@ const Subject = () => {
                     </DragDropContext>
 
 
-                    <WidgeRight
+                    {/* <WidgeRight
 
                         isOpenModalFunction={isOpenModalFunction}
                         setIsOpenModalFunction={setIsOpenModalFunction}
                         importState={importState}
                         setImportState={setImportState}
                         exportState={exportState}
-                        setExportState={setExportState} />
+                        setExportState={setExportState} /> */}
                 </>
                 ) : (
                     detailSubject.map(({ _id, name, description, assignments, exams, forums, announcements, files, surveys }, index) => {

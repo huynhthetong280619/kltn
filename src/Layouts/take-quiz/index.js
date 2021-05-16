@@ -29,9 +29,8 @@ const TakeQuiz = () => {
 
 
     useEffect(() => {
-        restClient.asyncGet(`/exam/${examId}/attempt${idSubmission ? `/${idSubmission}` : ''}?idSubject=${idSubject}&idTimeline=${idTimeline}`)
+        restClient.asyncGet(`/exam/${examId}/attempt/${idSubmission}?idSubject=${idSubject}&idTimeline=${idTimeline}`)
             .then(res => {
-                console.log('setExamQuestions', res)
                 if (!res.hasError) {
                     const examQuestion = get(res, 'data').quiz
                     setExamQuestions(examQuestion)
