@@ -167,7 +167,7 @@ const AddFile = ({ timelinesList, createFile, updateFile, idSubject, idTimeline,
                                     }}>
                                         {file.type.includes('doc')
                                             ? <img src={word} width={20} /> : <img src={pdf} width={20} />}
-                                        <a style={{ marginLeft: 10 }}>
+                                        <a style={{ marginLeft: 10 }} href="#">
                                             <span onClick={() => downloadFile(file)}>{file.name}.{file.type}</span>
                                         </a>
                                     </span>

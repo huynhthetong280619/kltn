@@ -371,7 +371,7 @@ const Subject = () => {
                                                                                         {
                                                                                             isOnEdit && <div>
                                                                                                 <Tooltip title={t('edit_file')}>
-                                                                                                    <a>
+                                                                                                    <a href="#">
                                                                                                         <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditSurvey(survey._id, _id) }} />
                                                                                                     </a>
                                                                                                 </Tooltip>
@@ -444,7 +444,7 @@ const Subject = () => {
                                                                                         {
                                                                                             isOnEdit && <div>
                                                                                                 <Tooltip title={t('edit_file')}>
-                                                                                                    <a>
+                                                                                                    <a href="#">
                                                                                                         <FontAwesomeIcon icoăn="edit" onClick={(e) => { e.stopPropagation(); focusEditFile(file._id, _id) }} />
                                                                                                     </a>
                                                                                                 </Tooltip>
@@ -483,7 +483,7 @@ const Subject = () => {
                                                                                         {
                                                                                             isOnEdit && <div>
                                                                                                 <Tooltip title={t('edit_file')}>
-                                                                                                    <a>
+                                                                                                    <a href="#">
                                                                                                         <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditAssignment(assignment._id, _id) }} />
                                                                                                     </a>
                                                                                                 </Tooltip>
@@ -523,7 +523,7 @@ const Subject = () => {
                                                                                         {
                                                                                             isOnEdit && <div>
                                                                                                 <Tooltip title={t('edit_file')}>
-                                                                                                    <a>
+                                                                                                    <a href="#">
                                                                                                         <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditForum(forum._id, _id) }} />
                                                                                                     </a>
                                                                                                 </Tooltip>
@@ -563,7 +563,7 @@ const Subject = () => {
                                                                                         {
                                                                                             isOnEdit && <div>
                                                                                                 <Tooltip title={t('edit_file')}>
-                                                                                                    <a>
+                                                                                                    <a href="#">
                                                                                                         <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditExams(exam._id, _id) }} />
                                                                                                     </a>
                                                                                                 </Tooltip>

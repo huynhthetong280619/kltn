@@ -22,14 +22,14 @@ const TakeQuiz = () => {
     const [isLoading, setIsLoading] = useState(false)
     const location = useLocation()
     const history = useHistory()
-    const { examId, idSubject, idTimeline } = location.state
+    const { examId, idSubject, idTimeline, idSubmission } = location.state
     const [callBackResponse, setCallBackResponse] = useState(false)
     const [examQuestions, setExamQuestions] = useState([])
     const restClient = new RestClient({ token: '' })
 
 
     useEffect(() => {
-        restClient.asyncGet(`/exam/${examId}/attempt?idSubject=${idSubject}&idTimeline=${idTimeline}`)
+        restClient.asyncGet(`/exam/${examId}/attempt/${idSubmission}?idSubject=${idSubject}&idTimeline=${idTimeline}`)
             .then(res => {
                 console.log('setExamQuestions', res)
                 if (!res.hasError) {
@@ -81,7 +81,7 @@ const TakeQuiz = () => {
             idTimeline: idTimeline,
             data: convert
         }
-        await restClient.asyncPost(`/exam/${examId}/submit`, data)
+        await restClient.asyncPost(`/exam/${examId}/submit/${idSubmission}?idSubject=${idSubject}&idTimeline=${idTimeline}`, data)
             .then(res => {
                 if (!res.hasError) {
                     notification.success({

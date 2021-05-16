@@ -24,6 +24,7 @@ const Quiz = () => {
     const history = useHistory()
     const { examId, idSubject, idTimeline } = location.state
     const [isLoading, setIsLoading] = useState(false)
+    const [idSubmission, setIdSubmission] = useState('')
 
     const transTime = (time) => {
         //console.log('transTime', time)
@@ -52,6 +53,14 @@ const Quiz = () => {
                     setRequirementExam(get(res, 'data').exam)
                     setSubmissions(get(get(res, 'data').exam, 'submissions'))
                     setIsLoading(false)
+                }
+            })
+
+
+            restClient.asyncGet(`/exam/${examId}/attempt?idSubject=${idSubject}&idTimeline=${idTimeline}`)
+            .then(res => {
+                if(!res.hasError){
+                    setIdSubmission(get(res, 'data')?.idSubmission)
                 }
             })
     }, [])
@@ -119,7 +128,7 @@ const Quiz = () => {
                 title: t('action'),
                 dataIndex: 'isContinue',
                 key: 'isContinue',
-                render: (data) => data ? <a onClick={(e) => {e.preventDefault(); directJoinQuiz({examId, idSubject, idTimeline})}}>{t('continue')}</a> : null
+                render: (data) => data ? <a onClick={(e) => {e.preventDefault(); directJoinQuiz({examId, idSubject, idTimeline, idSubmission})}}>{t('continue')}</a> : null
             }
         ]
     }

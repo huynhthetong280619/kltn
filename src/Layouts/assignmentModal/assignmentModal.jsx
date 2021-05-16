@@ -117,7 +117,7 @@ const AssignmentModal = (props) => {
                                         textAlign: 'center'
                                     }}>
                                         <img src={get(props.assignment.submission, 'file')?.type.includes('doc') ? word : get(props.assignment.submission, 'file')?.type == 'rar' ? rar : file} />
-                                        <a>
+                                        <a href="#">
                                             <span onClick={() => downloadFile(get(props.assignment.submission, 'file'))}>
                                                 {get(props.assignment.submission, 'file')?.name}.{get(props.assignment.submission, 'file')?.type}
                                             </span>
@@ -153,8 +153,8 @@ const AssignmentModal = (props) => {
                                     }}>
                                         {f.type.includes('doc')
                                             ? <img src={word} width={20} /> : <img src={pdf} width={20} />}
-                                        <a style={{ marginLeft: 10 }}>
-                                            <span onClick={() => downloadFile(f)}>{f.name}.{f.type}</span>
+                                        <a style={{ marginLeft: 10 }} href="#">
+                                            <span onClick={(e) => {e.preventDefault();downloadFile(f)}}>{f.name}.{f.type}</span>
                                         </a>
                                     </span>
                                 })

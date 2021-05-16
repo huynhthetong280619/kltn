@@ -95,7 +95,7 @@ const AssignmentCheck = () => {
         { title: t('fullName'), dataIndex: 'student', key: 'student', render: data => <span>{get(data, 'surName') + " " + get(data, 'firstName')}</span> },
         {
             title: t('file_submission'), dataIndex: 'file', key: 'file',
-            render: data => <a onClick={() => downloadFile(data)}>{data.name}.{data.type}</a>
+            render: data => <a onClick={(e) => {e.preventDefault();downloadFile(data)}} href="#">{data.name}.{data.type}</a>
         },
         {
             title: t('grade'),
