@@ -13,15 +13,15 @@ const VideoContainer = ({ id, stream, user }) => {
     }
 
     useEffect(() => {
-        const video = document.getElementById(id);
         if (stream) {
+            const video = document.getElementById(id);
             video.srcObject = stream
             video.addEventListener('loadedmetadata', () => {
                 video.play()
             });
         }
         return () => {
-            
+
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [stream])
