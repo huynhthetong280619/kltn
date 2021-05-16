@@ -257,6 +257,10 @@ const Subject = () => {
         history.push('manage-student', { idSubject: location.state._id })
     }
 
+    const directManageScore = () => {
+        history.push('manage-score', { idSubject: location.state._id })
+    }
+
     const directSurvey = (obj) => {
         history.push('survey', obj)
     }
@@ -314,7 +318,7 @@ const Subject = () => {
                         <DashManage />
                         <div onClick={() => directManageStudent()}>{t('manage_student')}</div>
                     </div>
-                        : <div className="subject-wrapper" style={{ display: 'flex', alignItems: 'center', color: '#f9f9f9', cursor: 'pointer' }}>Quản lý điểm</div>
+                        : <div className="subject-wrapper" style={{ display: 'flex', alignItems: 'center', color: '#f9f9f9', cursor: 'pointer' }} onClick={() => directManageScore()}>Quản lý điểm</div>
                 }
 
             </div>
