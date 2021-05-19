@@ -70,8 +70,8 @@ const MainAppLayout = () => {
                 if (!res.hasError) {
                     const { allSubject } = res.data
                     setPublicSubject(allSubject)
-                    setLoadingCourse(false)
                 }
+                setLoadingCourse(false)
             })
     }
 

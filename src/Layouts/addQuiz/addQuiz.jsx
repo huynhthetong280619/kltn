@@ -314,7 +314,7 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
                         </Form.Item>
 
                         <Form.Item>
-                            <Button type="primary" loading={isLoading} htmlType="submit" className="lms-btn">
+                            <Button type="primary" loading={isLoading} htmlType="submit" className="lms-btn" style={{marginTop: 0}}>
                                 {t('submit')}</Button>
                         </Form.Item>
 

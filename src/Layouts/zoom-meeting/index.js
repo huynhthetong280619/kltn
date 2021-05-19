@@ -319,6 +319,7 @@ const ZoomMeeting = () => {
     }
 
     const handleSubmit = () => {
+
         if (socket) {
 
             if (!commentInput) {
@@ -332,6 +333,14 @@ const ZoomMeeting = () => {
             setSubmitting(false)
             setCommentInput('')
         }
+        const elm = document.querySelector('.ant-list-items')
+
+        if (elm) {
+            setTimeout(() => {
+                elm.scrollTo({ left: 0, top: elm.scrollHeight + elm.clientHeight , behavior: "smooth" })
+            }, 1000)
+        }
+        console.log(document.querySelector('.ant-list-items'))
     }
 
     const handleChange = (e) => {

@@ -6,7 +6,7 @@ import fileDownload from 'js-file-download';
 import RestClient from '../../utils/restClient.js';
 import { useTranslation } from 'react-i18next';
 
-const ExportSubject = ({ idSubject,  nameSubject }) => {
+const ExportSubject = ({ idSubject, nameSubject }) => {
 
     const [form] = Form.useForm();
 
@@ -40,7 +40,7 @@ const ExportSubject = ({ idSubject,  nameSubject }) => {
     const onFinish = (values) => {
         console.log('values', values);
         setLoading(true);
-         restClient.asyncPost(`/subject/${idSubject}/export`, values)
+        restClient.asyncPost(`/subject/${idSubject}/export`, values)
             .then(res => {
                 console.log(res)
                 setLoading(false);
@@ -83,33 +83,12 @@ const ExportSubject = ({ idSubject,  nameSubject }) => {
                 >
                     <Checkbox onChange={(e) => onChangeSelect(e.target)} />
                 </Form.Item>
-
                 <Form.Item >
                     <Button type="primary" loading={isLoading} htmlType="submit">
                         {t('export_data')}
-                        </Button>
+                    </Button>
                 </Form.Item>
             </Form>
-            <Row>
-                <div style={{
-                    border: "2px solid #cacaca",
-                    padding: "20px 0",
-                    borderRadius: "11px",
-                    position: 'relative',
-                    margin: '20px',
-                    width: '100%'
-                }}>
-                    <h2>{t('export_h1')}</h2>
-                    <p style={{
-                        fontStyle: 'italic',
-                        color: '#9d9393'
-                    }}>{t('export_h2')}</p>
-                    <p style={{
-                        fontStyle: 'italic',
-                        color: '#9d9393'
-                    }}>{t('export_h3')} </p>
-                </div>
-            </Row>
         </>
     )
 }

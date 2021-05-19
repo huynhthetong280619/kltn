@@ -7,7 +7,7 @@ const ImportSubject = ({ isLoading, handleImportSubject }) => {
 
     const [form] = Form.useForm();
     const [fileAttach, setFileAttach] = useState(null);
-    const {t} = useTranslation()
+    const { t } = useTranslation()
 
 
     const handleProcessFile = (e) => {
@@ -34,8 +34,7 @@ const ImportSubject = ({ isLoading, handleImportSubject }) => {
     };
 
     const onFinish = async (values) => {
-        //console.log('fileAttach', fileAttach);
-
+        console.log(values);
         if (fileAttach) {
             let text = await readFileAsDataURL(fileAttach)
             let data = null;
@@ -79,35 +78,11 @@ const ImportSubject = ({ isLoading, handleImportSubject }) => {
                 </Form.Item>
 
                 <Form.Item>
-                    <Button type="primary" >
+                    <Button type="primary" htmlType="submit">
                         {t('import_subject')}</Button>
                 </Form.Item>
 
             </Form>
-            <Row>
-                <div style={{
-                    border: "2px solid #cacaca",
-                    padding: "20px 0",
-                    borderRadius: "11px",
-                    position: 'relative',
-                    margin: '20px',
-                    width: '100%'
-                }}>
-                    <h2>{t('import_h1')}</h2>
-                    <p style={{
-                        fontStyle: 'italic',
-                        color: '#9d9393'
-                    }}>{t('import_h2')}</p>
-                    <p style={{
-                        fontStyle: 'italic',
-                        color: '#9d9393'
-                    }}>{t('import_h3')} </p>
-                    <p style={{
-                        fontStyle: 'italic',
-                        color: '#9d9393'
-                    }}>{t('import_h4')}</p>
-                </div>
-            </Row>
         </>
     )
 }

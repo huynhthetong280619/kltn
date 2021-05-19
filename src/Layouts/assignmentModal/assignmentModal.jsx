@@ -63,7 +63,7 @@ const AssignmentModal = (props) => {
     const handleCancel = () => {
         setFileData(null)
         setComment('')
-        props.handleCancelModal();
+        // handleCancelModal();
     }
 
 

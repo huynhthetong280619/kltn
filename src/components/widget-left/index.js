@@ -79,7 +79,13 @@ const WidgetLeft = ({
     focusExamEdit,
     setFocusExamEdit,
 
-    isTeacherFlag
+    isTeacherFlag,
+
+    quizBankState,
+    setQuizBankState,
+
+    surveyBankState,
+    setSurveyBankState
 }) => {
     const { t } = useTranslation()
     // const [openCreateContent, setOpenCreateContent] = useState(false)
@@ -109,37 +115,61 @@ const WidgetLeft = ({
 
     const focusTodos = () => {
         setTodosState(true)
-        // setOpenCreateContent(false)
+        setOpenCreateContent(false)
     }
 
     const focusNotification = () => {
         setNotificationState(true)
-        // setOpenCreateContent(false)
+        setOpenCreateContent(false)
     }
 
     const focusDocument = () => {
         setDocumentState(true)
-        // setOpenCreateContent(false)
+        setOpenCreateContent(false)
     }
 
     const focusSurvey = () => {
         setSurveyState(true)
-        // setOpenCreateContent(false)
+        setOpenCreateContent(false)
     }
 
     const focusQuiz = () => {
         setQuizState(true)
-        // setOpenCreateContent(false)
+        setOpenCreateContent(false)
     }
 
     const focusTimeline = () => {
         setTimelineState(true)
-        // setOpenCreateContent(false)
+        setOpenCreateContent(false)
     }
 
     const focusForum = () => {
         setForumState(true)
-        // setOpenCreateContent(false)
+        setOpenCreateContent(false)
+    }
+
+    const focusExportData = () => {
+        setExportState(true)
+        setOpenCreateContent(false)
+
+    }
+
+    const focusImportData = () => {
+        setImportState(true)
+        setOpenCreateContent(false)
+
+    }
+
+    const focusQuizBank = () => {
+        setQuizBankState(true)
+        setOpenCreateContent(false)
+
+    }
+
+    const focusSurveyBank = () => {
+        setSurveyBankState(true)
+        setOpenCreateContent(false)
+
     }
 
     const createAssignment = async ({ assignment, idTimeline }) => {
@@ -493,20 +523,17 @@ const WidgetLeft = ({
     }
 
     const handleImportSubject = async (data) => {
-        await restClient.asyncPost(`/subject/${location.state._id}/import-teacher`, data)
+        await restClient.asyncPost(`/subject/${location.state._id}/import`, data)
             .then(res => {
-                this.setState({ isLoading: false });
-                //console.log('res', res);
+                console.log('res', res);
                 if (!res.hasError) {
-                    // this.setState({
-                    //     lstTimelines: res.data.timelines.map(value => { return { _id: value._id, name: value.name } }),
-                    //     lstSurveys: res.data.surveyBank,
-                    //     lstQuizzes: res.data.quizBank,
-                    //     timelines: res.data.timelines,
-                    //     timelinesIndex: res.data.timelines
-                    // });
+                    setDetailSubject(res.data.timelines)
+                    setSurveyList(res.data.surveyBank)
+                    setQuizList(res.data.quizBank)
                     notifySuccess(t('success'), res.data.message);
-                    // this.onCloseModalAction();
+
+                    setImportState(false)
+                    setOpenCreateContent(false)
                 } else {
                     notifyError(t('failure'), res.data.message);
                 }
@@ -516,7 +543,7 @@ const WidgetLeft = ({
     return (<>
         <div className="container-left">
             {
-                isTeacherFlag && <><a href="#" onClick={(e) => {e.preventDefault();setOpenCreateContent(true)}}>
+                isTeacherFlag && <><a href="#" onClick={(e) => { e.preventDefault(); setOpenCreateContent(true) }}>
                     <i><FontAwesomeIcon icon="wrench" /></i>
                     <span>{t('setting')}</span>
                 </a>
@@ -529,20 +556,28 @@ const WidgetLeft = ({
                     </a></>
             }
 
-            <a href="#"  onClick={(e) => {e.preventDefault();history.push(`zoom-meeting?idSubject=${location.state._id}`, { idSubject: location.state._id })}}>
+            <a href="#" onClick={(e) => { e.preventDefault(); history.push(`zoom-meeting?idSubject=${location.state._id}`, { idSubject: location.state._id }) }}>
                 <i><FontAwesomeIcon icon="video" /></i>
                 <span>{t('call_video')}</span>
             </a>
         </div>
-        <Drawer
-            title={t('manage_content')}
-            placement="bottom"
+        <Modal visible={openCreateContent}
+            className="modal-function-customize"
+            onCancel={() => setOpenCreateContent(false)}
             closable={false}
-            onClose={() => setOpenCreateContent(false)}
-            visible={openCreateContent}
-            key="right"
-            width={540}
-            style={{ textAlign: 'center' }}
+            title={<div
+                style={{
+                    padding: '1rem 0.625rem 0.625rem 0',
+                    alignItems: 'center',
+                }}
+
+            >
+                <div style={{ color: '#f9f9f9' }}>{t('CHUC NANG')}</div>
+                <div className="close-icon-modal" onClick={() => setOpenCreateContent(false)}>
+                    <IC_CLOSE />
+                </div>
+            </div>}
+            footer={null}
         >
 
             <Row style={{ justifyContent: 'space-around' }}>
@@ -677,10 +712,28 @@ const WidgetLeft = ({
                     borderRadius: '0.5rem',
                     cursor: 'pointer'
                 }} onClick={() => {
-                    openModalFunction('create_forum');
-                    focusForum();
+                    openModalFunction('export_data');
+                    focusExportData();
                 }} >
-                    {t('Export data class')}
+                    {t('export')}
+                </Col>
+            </Row>
+
+            <Row style={{ justifyContent: 'space-around', marginTop: '10px' }}>
+                <Col span={6} className="action-select-add-content" style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    background: '#0c2461',
+                    color: '#fff',
+                    padding: '0.5rem',
+                    borderRadius: '0.5rem',
+                    cursor: 'pointer'
+                }} onClick={() => {
+                    openModalFunction('import');
+                    focusImportData();
+                }} >
+                    {t('import')}
                 </Col>
             </Row>
 
@@ -696,25 +749,7 @@ const WidgetLeft = ({
                     cursor: 'pointer'
                 }} onClick={() => {
                     openModalFunction('create_forum');
-                    focusForum();
-                }} >
-                    {t('Import data class')}
-                </Col>
-            </Row>
-
-            <Row style={{ justifyContent: 'space-around', marginTop: '10px' }}>
-                <Col span={6} className="action-select-add-content" style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    background: '#0c2461',
-                    color: '#fff',
-                    padding: '0.5rem',
-                    borderRadius: '0.5rem',
-                    cursor: 'pointer'
-                }} onClick={() => {
-                    openModalFunction('create_forum');
-                    focusForum();
+                    focusQuizBank();
                 }} >
                     {t('Quiz Bank')}
                 </Col>
@@ -732,13 +767,13 @@ const WidgetLeft = ({
                     cursor: 'pointer'
                 }} onClick={() => {
                     openModalFunction('create_forum');
-                    focusForum();
+                    focusSurveyBank();
                 }} >
                     {t('Survey bank')}
                 </Col>
             </Row>
 
-        </Drawer>
+        </Modal>
         {isOpenModalFunction && <Modal className="modal-function-customize"
             onCancel={() => onCloseModalAction()}
             visible={isOpenModalFunction}
