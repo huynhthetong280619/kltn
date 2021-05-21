@@ -19,6 +19,7 @@ import { notifyError, notifySuccess } from '../../assets/common/core/notify';
 import { ReactComponent as DashManage } from '../../assets/images/contents/dashboard.svg'
 import { CSVLink } from 'react-csv';
 import downloadFile from '../../assets/common/core/downloadFile';
+import {ReactComponent as ManageSubject} from '../../assets/images/mn.svg'
 const Subject = () => {
     const { t } = useTranslation()
     const { authFlag, token } = useContext(StoreTrading)
@@ -66,6 +67,8 @@ const Subject = () => {
     const [focusExamEdit, setFocusExamEdit] = useState(false)
 
     const [isTeacherFlag, setIsTeacherFlag] = useState(false)
+
+    const [quizBankState, setQuizBankState] = useState(false)
 
     const history = useHistory()
     const restClient = new RestClient({ token })
@@ -209,7 +212,7 @@ const Subject = () => {
 
     const commentAssignmentGrade = async ({ comment, idAssignment }) => {
         setIsCommentAssignment(true);
-        await restClient.asyncPost(`/assignment/${idAssignment}/comment`, { idSubject: location.state._id, idTimeline: idTimelineRequired, comment: comment }, token)
+        await restClient.asyncPost(`/assignment/${idAssignment}/comment/${comment._id}?idSubject=${location.state._id}&idTimeline=${idTimelineRequired}`, { idSubject: location.state._id, idTimeline: idTimelineRequired, comment: comment }, token)
             .then(res => {
                 setIsCommentAssignment(false);
                 if (!res.hasError) {
@@ -315,10 +318,13 @@ const Subject = () => {
             <div className="subject-container">
                 {
                     isTeacherFlag ? <div className="subject-wrapper" style={{ display: 'flex', alignItems: 'center', color: '#f9f9f9', cursor: 'pointer' }}>
-                        <DashManage />
+                        <ManageSubject />
                         <div onClick={() => directManageStudent()}>{t('manage_student')}</div>
                     </div>
-                        : <div className="subject-wrapper" style={{ display: 'flex', alignItems: 'center', color: '#f9f9f9', cursor: 'pointer' }} onClick={() => directManageScore()}>Quản lý điểm</div>
+                        :   <div className="subject-wrapper" style={{ display: 'flex', alignItems: 'center', color: '#f9f9f9', cursor: 'pointer' }}>
+                            <ManageSubject />
+                            <div onClick={() => directManageScore()}>{t('manage_point')}</div>
+                        </div>
                 }
 
             </div>
@@ -845,6 +851,9 @@ const Subject = () => {
                 importState={importState}
                 exportState={exportState}
                 isTeacherFlag={isTeacherFlag}
+
+                quizBankState={quizBankState}
+                setQuizBankState={setQuizBankState}
             />
 
             <AssignmentModal

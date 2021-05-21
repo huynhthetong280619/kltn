@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Form, Button, Input, Divider, Col, Checkbox } from 'antd'
+import { Form, Button, Input, Divider, Col, Checkbox, notification } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { UserOutlined, KeyOutlined } from '@ant-design/icons';
 import { GOOGLE_CLIENT_ID, FACEBOOK_CLIENT_ID } from '../../assets/constants/const'
@@ -30,6 +30,7 @@ const Login = () => {
 
         restClientAPI.asyncPost('/user/authenticate', data)
             .then(res => {
+                console.log(res)
                 if (!res.hasError) {
                     authenticate(res, () => {
                         const { token, user } = res.data;
@@ -43,9 +44,14 @@ const Login = () => {
                         history.push('/home/main-app')
                     })
 
+                } else {
+                    notification.warning({
+                        message: res?.data?.message,
+                        description: '',
+                        placement: 'bottomRight'
+                    })
                 }
                 setLoadingLogin(false)
-
             })
 
     }
@@ -166,7 +172,7 @@ const Login = () => {
                     <Form.Item
                         style={{ textAlign: 'center' }}
                     >
-                        <Button className="btn-login" type="primary" size='large' htmlType="submit" style={{fontSize: 'initial'}}>
+                        <Button className="btn-login" type="primary" size='large' htmlType="submit" style={{ fontSize: 'initial' }}>
                             Đăng nhập</Button>
                     </Form.Item>
                 </Form>
@@ -197,7 +203,7 @@ const Login = () => {
                     </Col>
                 </div>
 
-                <div className="register-account"><div>Bạn chưa có tài khoản?</div> <a style={{ cursor: 'pointer' }} className="ml-2" onClick={(e) => {e.preventDefault(); history.push('/create-account')}}>Tạo tài khoản</a></div>
+                <div className="register-account"><div>Bạn chưa có tài khoản?</div> <a style={{ cursor: 'pointer' }} className="ml-2" onClick={(e) => { e.preventDefault(); history.push('/create-account') }}>Tạo tài khoản</a></div>
             </div>
         </div>
 

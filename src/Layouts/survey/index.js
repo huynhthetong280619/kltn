@@ -12,6 +12,7 @@ import RestClient from '../../utils/restClient'
 import { useHistory, useLocation } from 'react-router'
 import ModalWrapper from '../../components/basic/modal-wrapper'
 import { ReactComponent as Logout } from '../../assets/images/contents/logout.svg'
+import ModalLoadingLogin from '../login/modal-loading-login'
 
 
 const { TabPane } = Tabs;
@@ -245,6 +246,8 @@ return <>
                     </Tabs>
 
                 }
+
+                <ModalLoadingLogin visible={isLoading} content={t('loading_survey')}/>
 
             </ModalWrapper>
         </ModalWrapper>

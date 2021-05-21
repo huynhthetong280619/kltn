@@ -22,6 +22,7 @@ import Modal from 'antd/lib/modal/Modal';
 import ModalWrapper from '../basic/modal-wrapper';
 import { ReactComponent as IC_CLOSE } from '../../assets/images/contents/ic_close.svg'
 import { get } from 'lodash';
+import QuizBank from '../../Layouts/quiz-bank';
 
 
 const WidgetLeft = ({
@@ -540,6 +541,12 @@ const WidgetLeft = ({
             });
     }
 
+    const closeModalCurrentQuizBank = () => {
+        setOpenCreateContent(false)
+        setIsOpenModalFunction(false)
+        setQuizBankState(false)
+    }
+
     return (<>
         <div className="container-left">
             {
@@ -802,6 +809,7 @@ const WidgetLeft = ({
                 {(forumState || focusForumEdit) && (<AddForum timelinesList={timelinesList} createForum={createForum} updateForum={updateForum} idSubject={location.state._id} idTimeline={timelineIdEdit} idForum={forumIdEdit} />)}
                 {importState && (<ImportSubject isLoading={null} handleImportSubject={handleImportSubject} />)}
                 {exportState && (<ExportSubject idSubject={location.state._id} nameSubject={null} />)}
+                {quizBankState && (<QuizBank idSubject={location.state._id} closeModalCurrentQuizBank={closeModalCurrentQuizBank}/>)}
             </ModalWrapper>
         </Modal>}
     </>

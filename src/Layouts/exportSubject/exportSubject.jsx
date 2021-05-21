@@ -18,9 +18,6 @@ const ExportSubject = ({ idSubject, nameSubject }) => {
             span: 8,
 
         },
-        wrapperCol: {
-            span: 4,
-        },
     };
 
     const onChangeSelect = (cbx) => {
@@ -82,7 +79,7 @@ const ExportSubject = ({ idSubject, nameSubject }) => {
                     valuePropName='checked'
                 >
                     <Checkbox onChange={(e) => onChangeSelect(e.target)} />
-                </Form.Item>
+                </Form.Item>    
                 <Form.Item >
                     <Button type="primary" loading={isLoading} htmlType="submit">
                         {t('export_data')}

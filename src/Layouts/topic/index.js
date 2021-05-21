@@ -8,6 +8,7 @@ import './overwrite.css'
 import { useHistory, useLocation } from 'react-router'
 import RestClient from '../../utils/restClient'
 import ModalWrapper from '../../components/basic/modal-wrapper'
+import ModalLoadingLogin from '../login/modal-loading-login'
 
 const { Meta } = Card;
 
@@ -205,6 +206,8 @@ const Topic = () => {
                 </Form.Item>
             </Form>
         </Modal>
+
+        <ModalLoadingLogin visible={isLoading} content={t('loading_survey')}/>
     </ModalWrapper>
     </div>
 

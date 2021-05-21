@@ -11,6 +11,7 @@ import './overwrite.css'
 import { useHistory, useLocation } from 'react-router'
 import ModalWrapper from '../../components/basic/modal-wrapper'
 import { ReactComponent as Logout } from '../../assets/images/contents/logout.svg'
+import ModalLoadingLogin from '../login/modal-loading-login'
 
 const { Text } = Typography;
 
@@ -168,7 +169,7 @@ const Quiz = () => {
                 <ModalWrapper style={{ background: '#494949', width: '100%' }}>
                     {!isLoading ? <Table pagination={false} columns={columns} dataSource={submissions} rowKey='key' scroll={{ y: 240 }} /> : <Skeleton />}
                 </ModalWrapper>
-
+                <ModalLoadingLogin visible={isLoading} content={t('loading_survey')} />
             </ModalWrapper>
         </>)
 }

@@ -138,7 +138,7 @@ const Discussion = () => {
             })
 
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [socket])
 
 
@@ -189,9 +189,6 @@ const Discussion = () => {
         <ModalWrapper style={{ width: '90%', margin: '0 auto' }} className="mt-4">
             <div style={{ margin: '0 auto' }}>
                 <div style={{ display: 'flex' }}>
-                    <Tooltip title="Thoát hội thảo">
-                        <Logout style={{ cursor: 'pointer' }} onClick={() => history.go(-1)} />
-                    </Tooltip>
                     <div style={{ textAlign: 'center', width: '100%', padding: '0 0 10px 0' }}>
                         <span className="mr-4">
                             <img src={discussion} width="25px" style={{ borderRadius: '1rem' }} />
@@ -214,6 +211,11 @@ const Discussion = () => {
                                 </div>
                                 <div style={{ textAlign: 'center', color: 'yellow', fontSize: '1rem' }}>
                                     {get(detailTopic, 'content').toUpperCase()}
+                                </div>
+                                <div style={{ textAlign: 'center'}} className="mt-4">
+                                    <Tooltip title="Thoát hội thảo">
+                                        <Logout style={{ cursor: 'pointer' }} onClick={() => history.go(-1)} />
+                                    </Tooltip>
                                 </div>
                             </>
                         }

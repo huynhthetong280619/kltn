@@ -66,6 +66,17 @@ const AssignmentModal = (props) => {
         // handleCancelModal();
     }
 
+    const getColor = (grade) => {
+        if (grade >= 8) {
+            return 'green'
+        }
+
+        if (grade >= 6 && grade < 8) {
+            return 'orange'
+        }
+
+        return 'red'
+    }
 
     return <Modal
         closable={false}
@@ -78,7 +89,7 @@ const AssignmentModal = (props) => {
 
         >
             <div style={{ color: '#f9f9f9' }}>{`[ ${t('exercise')} ] ${props.assignment ? props.assignment.name : ' '}`}</div>
-            <div className="close-icon-modal" onClick={() => handleCancel()()}>
+            <div className="close-icon-modal" onClick={() => handleCancel()}>
                 <IC_CLOSE />
             </div></div>}
         visible={props.isTodoModal}
@@ -114,14 +125,18 @@ const AssignmentModal = (props) => {
                                 (props.assignment.submission !== null) && <div style={{ margin: '10px 0' }}>
                                     <div style={{
                                         padding: '5px 20px',
-                                        textAlign: 'center'
-                                    }}>
+                                        textAlign: 'center',
+                                        cursor: 'pointer'
+                                    }}
+                                        onClick={() => downloadFile(get(props.assignment.submission, 'file'))}
+                                    >
                                         <img src={get(props.assignment.submission, 'file')?.type.includes('doc') ? word : get(props.assignment.submission, 'file')?.type == 'rar' ? rar : file} />
-                                        <a href="#">
-                                            <span onClick={() => downloadFile(get(props.assignment.submission, 'file'))}>
-                                                {get(props.assignment.submission, 'file')?.name}.{get(props.assignment.submission, 'file')?.type}
-                                            </span>
-                                        </a>
+                                        <div onClick={() => downloadFile(get(props.assignment.submission, 'file'))} style={{
+                                            fontSize: '1rem',
+                                            color: '#1890ff'
+                                        }}>
+                                            {get(props.assignment.submission, 'file')?.name}.{get(props.assignment.submission, 'file')?.type}
+                                        </div>
                                     </div>
                                 </div>
                             }
@@ -131,7 +146,7 @@ const AssignmentModal = (props) => {
                         {
                             get(props.assignment, 'isCanSubmit') &&
                             <Row style={{ marginTop: 10 }}>
-                                <div style={{textAlign: 'center'}}>
+                                <div style={{ textAlign: 'center' }}>
                                     <Button type="primary" loading={props.isSubmitAssignment} onClick={handleSubmit} className="lms-btn">{t('submit_assign')}</Button>
                                 </div>
                             </Row>
@@ -154,7 +169,7 @@ const AssignmentModal = (props) => {
                                         {f.type.includes('doc')
                                             ? <img src={word} width={20} /> : <img src={pdf} width={20} />}
                                         <a style={{ marginLeft: 10 }} href="#">
-                                            <span onClick={(e) => {e.preventDefault();downloadFile(f)}}>{f.name}.{f.type}</span>
+                                            <span onClick={(e) => { e.preventDefault(); downloadFile(f) }}>{f.name}.{f.type}</span>
                                         </a>
                                     </span>
                                 })
@@ -170,11 +185,11 @@ const AssignmentModal = (props) => {
                                 </div>
                                 <div>
                                     <span style={{ fontWeight: 600, color: '#f9f9f9' }}>{t('grade')}: </span>
-                                    <span>{get(get(props.assignment, 'submission')?.feedBack, 'grade')}</span>
+                                    <span style={{ color: getColor(get(get(props.assignment, 'submission')?.feedBack, 'grade')) }}>{get(get(props.assignment, 'submission')?.feedBack, 'grade')}</span>
                                 </div>
                                 <div>
                                     <span style={{ fontWeight: 600, color: '#f9f9f9' }}>{t('grade_on')}: </span>
-                                    <span>{transTime(get(get(props.assignment, 'submission')?.feedBack, 'gradeOn'))}</span>
+                                    <span style={{ color: '#f9f9f9' }}>{transTime(get(get(props.assignment, 'submission')?.feedBack, 'gradeOn'))}</span>
                                 </div>
                                 {
                                     (props.assignment.submission.feedBack.comment) ?
@@ -187,7 +202,7 @@ const AssignmentModal = (props) => {
                                         : (
                                             <>
                                                 <div>
-                                                    <div style={{ marginBottom: 10 }}>{t('fback_comt')}</div>
+                                                    <div style={{ marginBottom: 10, color: '#f9f9f9' }}>{t('fback_comt')}</div>
                                                     <TextArea rows={2}
                                                         placeholder="Comment about grade..."
                                                         autoSize={{ minRows: 2, maxRows: 5 }}
@@ -197,11 +212,9 @@ const AssignmentModal = (props) => {
                                                         }}
                                                     />
                                                 </div>
-                                                <Row style={{ marginTop: 10 }}>
-                                                    <div>
-                                                        <Button type="primary" loading={props.isCommentAssignment} onClick={commentFeedback} style={{ borderRadius: 20 }}>{t('send')}</Button>
-                                                    </div>
-                                                </Row>
+                                                <div style={{ textAlign: 'center' }}>
+                                                    <Button type="primary" loading={props.isCommentAssignment} onClick={commentFeedback} className="lms-btn">{t('send')}</Button>
+                                                </div>
                                             </>
                                         )
                                 }

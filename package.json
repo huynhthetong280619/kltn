@@ -32,6 +32,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "react-spinners": "^0.10.6",
+    "read-excel-file": "^5.1.0",
     "socket.io-client": "^4.0.1",
     "url-join": "^4.0.1",
     "web-vitals": "^1.0.1"
