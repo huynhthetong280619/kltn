@@ -15,16 +15,23 @@ const VideoContainer = ({ id, stream, user }) => {
     }
 
     useEffect(() => {
+        let video;
         if (stream) {
-            const video = document.getElementById(id);
+            video = document.getElementById(id);
             if (user._id === currentUser._id) {
                 video.muted = true;
             }
-            
+
             video.srcObject = stream
             video.addEventListener('loadedmetadata', () => {
                 video.play()
             });
+        }
+        return () => {
+            if (video) {
+                video.pause();
+                video.srcObject = null;
+            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [stream])
@@ -35,7 +42,7 @@ const VideoContainer = ({ id, stream, user }) => {
                 <div className="full-screen">
                     <i className="full-screen-widget__icon"></i>
                 </div>
-                <video id={id}></video>
+                <video id={id} autoPlay></video>
                 <div>
                     <div className="user-stream">{user.firstName + " " + user.lastName}</div>
                     <div className={stream.getAudioTracks()[0]?.enabled ? 'mic-video-unmute' : 'mic-video-mute'} onClick={(e) => { e.stopPropagation(); }}></div>

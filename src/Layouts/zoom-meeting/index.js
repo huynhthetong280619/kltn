@@ -84,11 +84,7 @@ const ZoomMeeting = () => {
     const location = useLocation()
     const idSubject = useRef('')
     const [socket, setSocket] = useState(null)
-    const peer = new Peer();
-
-    const [myVideoStream, setVideoStream] = useState(null);
-
-    const [myShareScreen, setShareScreen] = useState(null);
+    const [peer, setPeer] = useState(new Peer());
 
     const [isMute, setMute] = React.useState(false);
     const [isHideCamera, setCamera] = React.useState(false);
@@ -96,7 +92,58 @@ const ZoomMeeting = () => {
 
     const currentUser = JSON.parse(localStorage.getLocalStorage('user'));
 
-    const [arrayStream, setArrayStream] = useState([]);
+    const [arrayStream, dispatchArrayStream] = useReducer((state, action) => {
+        switch (action.method) {
+            case 'add':
+                const { video } = action;
+                return [...state, video]
+            case 'remove':
+                const { peerId } = action;
+                state = state.filter(value => {
+                    if (value.id === peerId) {
+                        value.stream.getTracks().forEach(track => track.stop());
+                        return false
+                    }
+                    return true;
+                })
+                return state;
+            case 'replace':
+                const { stream } = action;
+                state = state.map(video => {
+                    if (video.user._id === currentUser._id) {
+                        video.stream = stream;
+                    }
+                    return video;
+                });
+                return state;
+            default:
+                break;
+        }
+    }, []);
+
+    const handleDispatchStream = (state, action) => {
+        switch (action.method) {
+            case 'set':
+                return action.stream;
+            case 'remove':
+                if (state) {
+                    state.getTracks().forEach(function (track) {
+                        track.stop();
+                    });
+                }
+                return null;
+            default:
+                return null;
+        }
+    }
+
+    const [localStream, dispatchLocalScreen] = useReducer((state, action) => {
+        return handleDispatchStream(state, action);
+    }, null);
+
+    const [shareScreen, dispatchShareScreen] = useReducer((state, action) => {
+        return handleDispatchStream(state, action);
+    }, null);
 
     const setupSocket = () => {
         const token = localStorage.getCookie("token");
@@ -119,16 +166,21 @@ const ZoomMeeting = () => {
         idSubject.current = location.search.slice(1).split("&")[0].split("=")[1]
         console.log('Id subject', idSubject.current)
         setupSocket();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const connectToNewUser = (peerId, stream, user) => {
-        const call = peer.call(peerId, stream)
-        call.on('stream', (userVideoStream) => {
-            addVideoStream(peerId, userVideoStream, user);
+        const call = peer.call(peerId, stream);
+        var isReceive = false;
+        call.on('stream', (remoteStream) => {
+            if (!isReceive) {
+                addVideoStream(peerId, remoteStream, user);
+                isReceive = true;
+            }
         });
-
         dispatchPeers({
-            method: 'ADD', peer: {
+            method: 'ADD',
+            peer: {
                 peerId: peerId,
                 call: call
             }
@@ -153,7 +205,7 @@ const ZoomMeeting = () => {
     }
     const [peers, dispatchPeers] = useReducer(peersReducer, {})
 
-    const replaceVideoStream = (stream) => {
+    const replaceLocalStream = (stream) => {
         // Replace video stream of person in call
         const videoTrack = stream.getVideoTracks()[0];
         for (var key in peers) {
@@ -166,70 +218,66 @@ const ZoomMeeting = () => {
 
         //Replace video of current user
 
-        setArrayStream(arrayStream.map(video => {
-            if (video.user._id === currentUser._id) {
-                video.stream = stream;
-            }
-            return video;
-        }))
+        dispatchArrayStream({
+            method: 'replace',
+            stream: stream,
+        });
     }
 
     const stopShareScreen = () => {
-        if (myShareScreen) {
-            myShareScreen.getVideoTracks()[0].stop();
-            setShareScreen(null);
-            replaceVideoStream(myVideoStream);
+        if (shareScreen) {
+            dispatchShareScreen({ method: 'remove' });
+            replaceLocalStream(localStream);
         }
     }
 
-    const shareScreen = () => {
+    const handleShareScreen = () => {
         navigator.mediaDevices.getDisplayMedia(
             {
                 video: true,
             }
         ).then(mediaStream => {
-            if (myShareScreen) {
-                myShareScreen.getVideoTracks()[0].stop();
-                setShareScreen(null);
+            if (shareScreen) {
+                dispatchShareScreen({ method: 'remove' });
             }
 
             // Handle display share screen
-            replaceVideoStream(mediaStream);
-            setShareScreen(mediaStream);
+            replaceLocalStream(mediaStream);
+            dispatchShareScreen({ method: 'set', stream: mediaStream });
 
             mediaStream.getVideoTracks()[0].onended = function () {
                 // doWhatYouNeedToDo();
-                setShareScreen(null);
-                replaceVideoStream(myVideoStream);
+                dispatchShareScreen({ method: 'remove' });
+                replaceLocalStream(localStream);
             };
         }).catch(err => {
             if (err.message === 'Permission denied') {
-                if (myShareScreen) {
-                    myShareScreen.getVideoTracks()[0].stop();
-                    replaceVideoStream(myVideoStream);
+                if (shareScreen) {
+                    dispatchShareScreen({ method: 'remove' });
+                    replaceLocalStream(localStream);
                 }
             }
         })
     }
 
-    const removeVideoStream = (id) => {
-        setArrayStream(preState => preState.filter(value => {
-            if (value.id === id) {
-                value.stream.getTracks().forEach(track => track.stop());
-                return false
-            }
-            return true;
-        }));
+    const removeVideoStream = (peerId) => {
+
+        dispatchArrayStream({
+            method: 'remove',
+            peerId: peerId,
+        });
+
     }
 
     const addVideoStream = (id, stream, user) => {
-        setArrayStream(preState => {
-            const index = preState.findIndex(value => value.id === id)
-            if (index < 0) {
-                return [...preState, { id, stream, user }]
+
+        dispatchArrayStream({
+            method: 'add',
+            video: {
+                id, stream, user
             }
-            return [...preState]
         });
+
     }
 
     const handleWhenHasAlreadyJoinInAnotherPlace = (message) => {
@@ -250,28 +298,42 @@ const ZoomMeeting = () => {
                             audio: true,
                         })
                         .then((stream) => {
-                            setVideoStream(stream);
+                            dispatchLocalScreen({ method: 'set', stream });
+                            
                             addVideoStream(peer._id, stream, currentUser);
 
                             socket.on('user-connected', (peerId, user) => {
-                                connectToNewUser(peerId, stream, user)
+                                connectToNewUser(peerId, stream, user);
                             });
 
                             peer.on('call', (call) => {
+
+                                call.answer(stream);
+
+                                var isReceive = false;
+
+                                call.on('stream', (remoteStream) => {
+                                    if (!isReceive) {
+                                        socket.emit('get-user', call.peer);
+                                        socket.on('receive-user', (user) => {
+                                            addVideoStream(call.peer, remoteStream, user);
+                                        });
+                                        isReceive = true;
+                                    }
+                                });
+
                                 dispatchPeers({
-                                    method: 'ADD', peer: {
+                                    method: 'ADD',
+                                    peer: {
                                         peerId: call.peer,
                                         call: call
                                     }
                                 });
-                                call.answer(stream)
-                                call.on('stream', (userVideoStream) => {
-                                    socket.emit('get-user', call.peer);
-                                    socket.on('receive-user', (user) => {
-                                        addVideoStream(call.peer, userVideoStream, user);
-                                    })
-                                })
                             });
+                        }).catch(err => {
+                            if (err.message === 'Permission denied') {
+
+                            }
                         })
                     socket.on('user-disconnected', (peerId) => {
                         dispatchPeers({ method: 'DELETE', peerId });
@@ -289,20 +351,28 @@ const ZoomMeeting = () => {
             if (socket) {
                 socket.emit("leave");
             }
+
+            dispatchLocalScreen({ method: 'remove' });
+
+            dispatchShareScreen({ method: 'remove' });
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [socket]);
 
     const muteMic = () => {
-        const enabled = myVideoStream.getAudioTracks()[0].enabled
-        myVideoStream.getAudioTracks()[0].enabled = !enabled;
-        setMute(enabled)
+        if (localStream) {
+            const enabled = localStream.getAudioTracks()[0].enabled
+            localStream.getAudioTracks()[0].enabled = !enabled;
+            setMute(enabled)
+        }
     }
 
     const hideCamera = () => {
-        const enabled = myVideoStream.getVideoTracks()[0].enabled
-        myVideoStream.getVideoTracks()[0].enabled = !enabled;
-        setCamera(enabled);
+        if (localStream) {
+            const enabled = localStream.getVideoTracks()[0].enabled
+            localStream.getVideoTracks()[0].enabled = !enabled;
+            setCamera(enabled);
+        }
     }
 
     const onCloseModalAction = () => {
@@ -337,7 +407,7 @@ const ZoomMeeting = () => {
 
         if (elm) {
             setTimeout(() => {
-                elm.scrollTo({ left: 0, top: elm.scrollHeight + elm.clientHeight , behavior: "smooth" })
+                elm.scrollTo({ left: 0, top: elm.scrollHeight + elm.clientHeight, behavior: "smooth" })
             }, 1000)
         }
         console.log(document.querySelector('.ant-list-items'))
@@ -381,7 +451,7 @@ const ZoomMeeting = () => {
                     </ModalWrapper>
 
                 </div>
-                {myShareScreen &&
+                {shareScreen &&
                     <div className="sharing-screen">
                         <div style={{ display: 'flex' }}>
                             <div className="status-sharing">
@@ -452,7 +522,7 @@ const ZoomMeeting = () => {
                         </div>
                     </Tooltip>
                     <Tooltip title="Share screen">
-                        <div className="zm-center" style={{ cursor: 'pointer' }} onClick={() => shareScreen()}>
+                        <div className="zm-center" style={{ cursor: 'pointer' }} onClick={() => handleShareScreen()}>
                             <div className="footer-button__share-icon" ></div>
                         </div>
                     </Tooltip>
