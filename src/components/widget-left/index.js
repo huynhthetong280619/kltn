@@ -550,11 +550,11 @@ const WidgetLeft = ({
     return (<>
         <div className="container-left">
             {
-                isTeacherFlag && <><div href="#" onClick={(e) => { e.preventDefault(); setOpenCreateContent(true) }}>
+                isTeacherFlag && <><div onClick={(e) => { e.preventDefault(); setOpenCreateContent(true) }}>
                     <i><FontAwesomeIcon icon="wrench" /></i>
                     <span>{t('setting')}</span>
                 </div>
-                    <div href="#" onClick={(e) => {
+                    <div onClick={(e) => {
                         e.preventDefault();
                         setIsOnEdit(!isOnEdit)
                     }}>
@@ -563,7 +563,7 @@ const WidgetLeft = ({
                     </div></>
             }
 
-            <div href="#" onClick={(e) => { e.preventDefault(); history.push(`zoom-meeting?idSubject=${location.state._id}`, { idSubject: location.state._id }) }}>
+            <div onClick={(e) => { e.preventDefault(); history.push(`zoom-meeting?idSubject=${location.state._id}`, { idSubject: location.state._id }) }}>
                 <i><FontAwesomeIcon icon="video" /></i>
                 <span>{t('call_video')}</span>
             </div>

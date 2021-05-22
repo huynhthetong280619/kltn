@@ -170,7 +170,7 @@ const AssignmentModal = (props) => {
                                     }}>
                                         {f.type.includes('doc')
                                             ? <img src={word} width={20} /> : <img src={pdf} width={20} />}
-                                        <div style={{ marginLeft: 10 }} href="#">
+                                        <div style={{ marginLeft: 10 }} >
                                             <span onClick={(e) => { e.preventDefault(); downloadFile(f) }}>{f.name}.{f.type}</span>
                                         </div>
                                     </span>

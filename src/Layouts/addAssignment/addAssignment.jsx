@@ -307,7 +307,7 @@ const AddAssignment = ({ timelinesList, createAssignment, updateAssignment, idSu
                                     }}>
                                         {f.type.includes('doc')
                                             ? <img src={word} width={20} /> : <img src={pdf} width={20} />}
-                                        <span style={{ marginLeft: 10 }} href="#" onClick={e => e.preventDefault()}>
+                                        <span style={{ marginLeft: 10 }}  onClick={e => e.preventDefault()}>
                                             <span onClick={() => downloadFile(f)}>{f.name}.{f.type}</span>
                                         </span>
                                     </span>
