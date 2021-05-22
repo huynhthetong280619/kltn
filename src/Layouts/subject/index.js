@@ -19,7 +19,7 @@ import { notifyError, notifySuccess } from '../../assets/common/core/notify';
 import { ReactComponent as DashManage } from '../../assets/images/contents/dashboard.svg'
 import { CSVLink } from 'react-csv';
 import downloadFile from '../../assets/common/core/downloadFile';
-import {ReactComponent as ManageSubject} from '../../assets/images/mn.svg'
+import { ReactComponent as ManageSubject } from '../../assets/images/mn.svg'
 const Subject = () => {
     const { t } = useTranslation()
     const { authFlag, token } = useContext(StoreTrading)
@@ -69,6 +69,7 @@ const Subject = () => {
     const [isTeacherFlag, setIsTeacherFlag] = useState(false)
 
     const [quizBankState, setQuizBankState] = useState(false)
+    const [submissionAssigmentId, setSubmissionAssigmentId] = useState('')
 
     const history = useHistory()
     const restClient = new RestClient({ token })
@@ -189,9 +190,11 @@ const Subject = () => {
             setIsTodoModal(true)
             await restClient.asyncGet(`/assignment/${obj.idTodo}?idSubject=${location.state._id}&idTimeline=${obj.idTimeline}`)
                 .then(res => {
+                    console.log('getRequirementTodo', res)
                     if (!res.hasError) {
                         setAssignmentRequirement(get(res, 'data').assignment)
                         setIdTimelineRequired(obj.idTimeline)
+                        setSubmissionAssigmentId(get(res, 'data').assignment?.submission?._id)
                     } else {
                         notifyError(t('failure'), res.data.message);
                     }
@@ -212,7 +215,7 @@ const Subject = () => {
 
     const commentAssignmentGrade = async ({ comment, idAssignment }) => {
         setIsCommentAssignment(true);
-        await restClient.asyncPost(`/assignment/${idAssignment}/comment/${comment._id}?idSubject=${location.state._id}&idTimeline=${idTimelineRequired}`, { idSubject: location.state._id, idTimeline: idTimelineRequired, comment: comment }, token)
+        await restClient.asyncPost(`/assignment/${idAssignment}/comment/${submissionAssigmentId}?idSubject=${location.state._id}&idTimeline=${idTimelineRequired}`, { idSubject: location.state._id, idTimeline: idTimelineRequired, comment: comment }, token)
             .then(res => {
                 setIsCommentAssignment(false);
                 if (!res.hasError) {
@@ -321,7 +324,7 @@ const Subject = () => {
                         <ManageSubject />
                         <div onClick={() => directManageStudent()}>{t('manage_student')}</div>
                     </div>
-                        :   <div className="subject-wrapper" style={{ display: 'flex', alignItems: 'center', color: '#f9f9f9', cursor: 'pointer' }}>
+                        : <div className="subject-wrapper" style={{ display: 'flex', alignItems: 'center', color: '#f9f9f9', cursor: 'pointer' }}>
                             <ManageSubject />
                             <div onClick={() => directManageScore()}>{t('manage_point')}</div>
                         </div>
@@ -381,9 +384,7 @@ const Subject = () => {
                                                                                         {
                                                                                             isOnEdit && <div>
                                                                                                 <Tooltip title={t('edit_file')}>
-                                                                                                    <a href="#">
-                                                                                                        <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditSurvey(survey._id, _id) }} />
-                                                                                                    </a>
+                                                                                                    <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditSurvey(survey._id, _id) }} />
                                                                                                 </Tooltip>
                                                                                             </div>
                                                                                         }
@@ -448,15 +449,13 @@ const Subject = () => {
                                                                                                     </i>
                                                                                                 )}
                                                                                         </div>
-                                                                                        <div className="subject-content" onClick={(e) => {  downloadFile(file)}}>{file.name}</div>
+                                                                                        <div className="subject-content" onClick={(e) => { downloadFile(file) }}>{file.name}</div>
                                                                                     </div>
                                                                                     <div className="subject-action">
                                                                                         {
                                                                                             isOnEdit && <div>
                                                                                                 <Tooltip title={t('edit_file')}>
-                                                                                                    <a href="#">
-                                                                                                        <FontAwesomeIcon icoăn="edit" onClick={(e) => { e.stopPropagation(); focusEditFile(file._id, _id) }} />
-                                                                                                    </a>
+                                                                                                    <FontAwesomeIcon icoăn="edit" onClick={(e) => { e.stopPropagation(); focusEditFile(file._id, _id) }} />
                                                                                                 </Tooltip>
                                                                                             </div>
                                                                                         }
@@ -493,9 +492,7 @@ const Subject = () => {
                                                                                         {
                                                                                             isOnEdit && <div>
                                                                                                 <Tooltip title={t('edit_file')}>
-                                                                                                    <a href="#">
-                                                                                                        <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditAssignment(assignment._id, _id) }} />
-                                                                                                    </a>
+                                                                                                    <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditAssignment(assignment._id, _id) }} />
                                                                                                 </Tooltip>
                                                                                             </div>
                                                                                         }
@@ -533,9 +530,7 @@ const Subject = () => {
                                                                                         {
                                                                                             isOnEdit && <div>
                                                                                                 <Tooltip title={t('edit_file')}>
-                                                                                                    <a href="#">
-                                                                                                        <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditForum(forum._id, _id) }} />
-                                                                                                    </a>
+                                                                                                    <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditForum(forum._id, _id) }} />
                                                                                                 </Tooltip>
                                                                                             </div>
                                                                                         }
@@ -573,9 +568,7 @@ const Subject = () => {
                                                                                         {
                                                                                             isOnEdit && <div>
                                                                                                 <Tooltip title={t('edit_file')}>
-                                                                                                    <a href="#">
-                                                                                                        <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditExams(exam._id, _id) }} />
-                                                                                                    </a>
+                                                                                                    <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditExams(exam._id, _id) }} />
                                                                                                 </Tooltip>
                                                                                             </div>
                                                                                         }
@@ -716,7 +709,7 @@ const Subject = () => {
                                                                             </i>
                                                                         )}
                                                                 </div>
-                                                                <div className="subject-content" onClick={(e) => {  downloadFile(file)}}>{file.name}</div>
+                                                                <div className="subject-content" onClick={(e) => { downloadFile(file) }}>{file.name}</div>
                                                             </div>
 
                                                         </div>

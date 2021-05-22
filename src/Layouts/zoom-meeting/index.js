@@ -27,7 +27,7 @@ const CommentList = ({ t, comments }) => (
     <List
         dataSource={comments}
         itemLayout="horizontal"
-        renderItem={props => <Comment author={<a className="color-default">{get(get(props, 'user'), 'firstName') + " " + get(get(props, 'user'), 'lastName')}</a>}
+        renderItem={props => <Comment author={<span className="color-default">{get(get(props, 'user'), 'firstName') + " " + get(get(props, 'user'), 'lastName')}</span>}
             avatar={
                 <Avatar
                     src={get(get(props, 'user'), 'urlAvatar')}

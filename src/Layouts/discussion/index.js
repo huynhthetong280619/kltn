@@ -22,7 +22,7 @@ const CommentList = ({ t, comments }) => (
         dataSource={comments}
         header={<div className="color-default">{`${comments.length} ${comments.length > 1 ? t('replies') : t('reply')}`}</div>}
         itemLayout="horizontal"
-        renderItem={props => <Comment author={<a className="color-default">{get(get(props, 'create'), 'firstName') + ' ' + get(get(props, 'create'), 'lastName')}</a>}
+        renderItem={props => <Comment author={<span className="color-default">{get(get(props, 'create'), 'firstName') + ' ' + get(get(props, 'create'), 'lastName')}</span>}
             avatar={
                 <Avatar
                     src={get(get(props, 'create'), 'urlAvatar')}

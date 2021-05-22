@@ -129,7 +129,7 @@ const Quiz = () => {
                 title: t('action'),
                 dataIndex: 'isContinue',
                 key: 'isContinue',
-                render: (data) => data ? <a onClick={(e) => { e.preventDefault(); directJoinQuiz({ examId, idSubject, idTimeline, idSubmission }) }}>{t('continue')}</a> : null
+                render: (data) => data ? <span onClick={(e) => { e.preventDefault(); directJoinQuiz({ examId, idSubject, idTimeline, idSubmission }) }}>{t('continue')}</span> : null
             }
         ]
     }

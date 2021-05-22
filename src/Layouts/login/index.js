@@ -203,7 +203,7 @@ const Login = () => {
                     </Col>
                 </div>
 
-                <div className="register-account"><div>Bạn chưa có tài khoản?</div> <a style={{ cursor: 'pointer' }} className="ml-2" onClick={(e) => { e.preventDefault(); history.push('/create-account') }}>Tạo tài khoản</a></div>
+                <div className="register-account"><div>Bạn chưa có tài khoản?</div> <span style={{ cursor: 'pointer' }} className="ml-2" onClick={(e) => { e.preventDefault(); history.push('/create-account') }}>Tạo tài khoản</span></div>
             </div>
         </div>
 

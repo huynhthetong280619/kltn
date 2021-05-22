@@ -78,6 +78,8 @@ const AssignmentModal = (props) => {
         return 'red'
     }
 
+    console.log(props.assignment)
+
     return <Modal
         closable={false}
         className="modal-function-customize"

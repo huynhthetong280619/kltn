@@ -6,6 +6,8 @@ import downloadFile from '../../assets/common/core/downloadFile.js';
 import { notifyError, notifySuccess } from '../../assets/common/core/notify.js';
 import RestClient from '../../utils/restClient.js';
 import { useLocation } from 'react-router';
+import ModalWrapper from '../../components/basic/modal-wrapper/index.js';
+import ModalLoadingLogin from '../login/modal-loading-login.js';
 
 const AssignmentCheck = () => {
     const { t } = useTranslation()
@@ -14,6 +16,7 @@ const AssignmentCheck = () => {
     const location = useLocation()
     const { idSubject, idTodo, idTimeline } = location.state
     const restClient = new RestClient({ token: '' })
+    const [isLoading, setIsLoading] = useState(false)
     const [state, setState] = useState({
         assignment: assignment,
         lstSubmission: assignment.submission,
@@ -22,21 +25,24 @@ const AssignmentCheck = () => {
     });
 
     useEffect(() => {
+        setIsLoading(true)
         restClient.asyncGet(`/assignment/${idTodo}?idSubject=${idSubject}&idTimeline=${idTimeline}`)
             .then(res => {
                 console.log('Assignment', res)
                 if (!res.hasError) {
                     setAssignment(get(res, 'data').assignment)
-                    setState(prev => ({...prev, 
+                    setState(prev => ({
+                        ...prev,
                         assignment: get(res, 'data').assignment,
                         lstSubmission: get(res, 'data').assignment?.submission,
-                        
+
                     }))
                 }
+                setIsLoading(false)
             })
     }, [])
 
-   
+
     //console.log(assignment);
 
     const isEditingRow = (record) => {
@@ -95,7 +101,7 @@ const AssignmentCheck = () => {
         { title: t('fullName'), dataIndex: 'student', key: 'student', render: data => <span>{get(data, 'surName') + " " + get(data, 'firstName')}</span> },
         {
             title: t('file_submission'), dataIndex: 'file', key: 'file',
-            render: data => <a onClick={(e) => {e.preventDefault();downloadFile(data)}} href="#">{data.name}.{data.type}</a>
+            render: data => <a onClick={(e) => { e.preventDefault(); downloadFile(data) }} href="#">{data.name}.{data.type}</a>
         },
         {
             title: t('grade'),
@@ -166,37 +172,31 @@ const AssignmentCheck = () => {
 
 
     return (
-        <>
-            <Row id="lms-ws-exam-component" style={{
-                width: '85%',
-                textAlign: 'center',
-                background: '#fff',
-                minHeight: '20px',
-                justifyContent: 'center',
-                margin: '0 auto'
-            }}>
 
-                <Row style={{ width: '100%' }}>
-                    <Col span={24} style={{ padding: '25px', fontSize: '2em' }}>{get(state.assignment, 'name')}</Col>
-                </Row>
-                <Row style={{ width: '100%', padding: 10 }}>
-                    <div style={{ width: '100%', border: '1px solid #cacaca' }}>
-                        <Form
-                            form={form}
-                        >
-                            <Table
-                                columns={columns}
-                                scroll={{ y: 240 }}
-                                dataSource={state.lstSubmission}
-                                rowKey={["student"], ["_id"]}
-                                pagination={false}
-                                bordered
-                            />
-                        </Form>
-                    </div>
-                </Row>
+        <ModalWrapper style={{ margin: '0 auto', width: '90%' }}>
+
+            <Row style={{ width: '100%' }}>
+                <Col span={24} style={{ padding: '25px', fontSize: '2em', color: '#f9f9f9' }}>{get(state.assignment, 'name')}</Col>
             </Row>
-        </>
+            <Row style={{ width: '100%', padding: 10 }}>
+                <div style={{ width: '100%', border: '1px solid #cacaca' }}>
+                    <Form
+                        form={form}
+                    >
+                        <Table
+                            columns={columns}
+                            scroll={{ y: 240 }}
+                            dataSource={state.lstSubmission}
+                            rowKey={["student"], ["_id"]}
+                            pagination={false}
+                            bordered
+                        />
+                    </Form>
+                </div>
+            </Row>
+
+            <ModalLoadingLogin visible={isLoading} content={t('loading_survey')}/>
+        </ModalWrapper>
     )
 }
 
