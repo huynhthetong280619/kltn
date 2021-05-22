@@ -96,6 +96,10 @@ const ZoomMeeting = () => {
         switch (action.method) {
             case 'add':
                 const { video } = action;
+                const temp = state.find(value => value.id === video.id);
+                if (temp) {
+                    return state;
+                }
                 return [...state, video]
             case 'remove':
                 const { peerId } = action;
@@ -170,6 +174,7 @@ const ZoomMeeting = () => {
     }, []);
 
     const connectToNewUser = (peerId, stream, user) => {
+        console.log(localStream, shareScreen);
         const call = peer.call(peerId, stream);
         var isReceive = false;
         call.on('stream', (remoteStream) => {
@@ -285,7 +290,7 @@ const ZoomMeeting = () => {
     }
 
     useEffect(() => {
-        if (socket) {
+        if (socket && !localStream && !shareScreen) {
             peer.on('open', (id) => {
                 socket.emit('join-zoom', idSubject.current, id);
                 socket.on('403', (message) => {
@@ -299,7 +304,7 @@ const ZoomMeeting = () => {
                         })
                         .then((stream) => {
                             dispatchLocalScreen({ method: 'set', stream });
-                            
+
                             addVideoStream(peer._id, stream, currentUser);
 
                             socket.on('user-connected', (peerId, user) => {
@@ -307,6 +312,14 @@ const ZoomMeeting = () => {
                             });
 
                             peer.on('call', (call) => {
+
+                                dispatchPeers({
+                                    method: 'ADD',
+                                    peer: {
+                                        peerId: call.peer,
+                                        call: call
+                                    }
+                                });
 
                                 call.answer(stream);
 
@@ -319,14 +332,6 @@ const ZoomMeeting = () => {
                                             addVideoStream(call.peer, remoteStream, user);
                                         });
                                         isReceive = true;
-                                    }
-                                });
-
-                                dispatchPeers({
-                                    method: 'ADD',
-                                    peer: {
-                                        peerId: call.peer,
-                                        call: call
                                     }
                                 });
                             });
@@ -342,20 +347,22 @@ const ZoomMeeting = () => {
 
                     socket.on('newMessage', (message) => {
                         setComments(preState => [...preState, message]);
+                        scrollToNewMessage();
                     })
                 });
             });
+            return () => {
+                //Component Unmount
+                if (socket) {
+                    socket.emit("leave");
+                }
+
+                dispatchLocalScreen({ method: 'remove' });
+
+                dispatchShareScreen({ method: 'remove' });
+            };
         }
-        return () => {
-            //Component Unmount
-            if (socket) {
-                socket.emit("leave");
-            }
 
-            dispatchLocalScreen({ method: 'remove' });
-
-            dispatchShareScreen({ method: 'remove' });
-        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [socket]);
 
@@ -403,6 +410,11 @@ const ZoomMeeting = () => {
             setSubmitting(false)
             setCommentInput('')
         }
+
+
+    }
+
+    const scrollToNewMessage = () => {
         const elm = document.querySelector('.ant-list-items')
 
         if (elm) {
@@ -410,7 +422,6 @@ const ZoomMeeting = () => {
                 elm.scrollTo({ left: 0, top: elm.scrollHeight + elm.clientHeight, behavior: "smooth" })
             }, 1000)
         }
-        console.log(document.querySelector('.ant-list-items'))
     }
 
     const handleChange = (e) => {
