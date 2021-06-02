@@ -524,7 +524,7 @@ const WidgetLeft = ({
     }
 
     const handleImportSubject = async (data) => {
-        await restClient.asyncPost(`/subject/${location.state._id}/import`, data)
+        await restClient.asyncPost(`/course/${location.state._id}/import`, data)
             .then(res => {
                 console.log('res', res);
                 if (!res.hasError) {

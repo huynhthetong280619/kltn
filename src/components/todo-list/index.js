@@ -23,7 +23,7 @@ const TodoList = () => {
     const getTodosList = async () => {
         const restClientAPI = new RestClient({ token })
 
-        await restClientAPI.asyncGet('/subject/deadline')
+        await restClientAPI.asyncGet('/course/deadline')
             .then(res => {
                 if (!res.hasError) {
                     const { deadline } = res?.data

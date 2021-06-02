@@ -37,7 +37,7 @@ const ExportSubject = ({ idSubject, nameSubject }) => {
     const onFinish = (values) => {
         console.log('values', values);
         setLoading(true);
-        restClient.asyncPost(`/subject/${idSubject}/export`, values)
+        restClient.asyncPost(`/course/${idSubject}/export`, values)
             .then(res => {
                 console.log(res)
                 setLoading(false);

@@ -97,20 +97,22 @@ const Subject = () => {
     const queryDetailSubject = () => {
         setLoadingSubject(true)
 
-        restClient.asyncGet(`/subject/${location.state._id}`)
+        restClient.asyncGet(`/course/${location.state._id}`)
             .then(res => {
+                console.log('res', res)
                 if (!res.hasError) {
                     console.log(res?.data);
                     setLoadingSubject(false)
-                    setDetailSubject(res?.data?.subject?.timelines)
+                    setDetailSubject(res?.data?.course?.timelines)
                 }
             })
     }
 
     const queryListTimelines = () => {
 
-        restClient.asyncGet(`/timeline?idSubject=${location.state._id}`)
+        restClient.asyncGet(`/timeline?idCourse=${location.state._id}`)
             .then(res => {
+                console.log('res', res)
                 if (!res.hasError) {
                     console.log(res?.data);
                     setTimelinesList(res?.data?.timelines)
@@ -119,7 +121,7 @@ const Subject = () => {
     }
 
     const queryListQuiz = () => {
-        restClient.asyncGet(`/quiz-bank?idSubject=${location.state._id}`)
+        restClient.asyncGet(`/quiz-bank?idCourse=${location.state._id}`)
             .then(res => {
                 console.log('quiz list', res)
                 if (!res.hasError) {
@@ -129,7 +131,7 @@ const Subject = () => {
     }
 
     const querySurveyList = () => {
-        restClient.asyncGet(`/survey-bank?idSubject=${location.state._id}`)
+        restClient.asyncGet(`/survey-bank?idCourse=${location.state._id}`)
             .then(res => {
                 if (!res.hasError) {
                     setSurveyList(res?.data?.surveyBank)
@@ -164,7 +166,7 @@ const Subject = () => {
     }
 
     const updateTimelinesIndex = async (updateTimelines) => {
-        await restClient.asyncPost(`/subject/${location.state._id}/index`, updateTimelines)
+        await restClient.asyncPost(`/course/${location.state._id}/index`, updateTimelines)
             .then(res => {
                 console.log('Update timeline', res)
                 if (!res.hasError) {

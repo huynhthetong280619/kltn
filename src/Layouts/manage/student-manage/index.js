@@ -24,7 +24,7 @@ const StudentManage = ({ idSubject }) => {
     const [isLoadingAdd, setLoadingAdd] = useState(false);
 
     useEffect(() => {
-        restClient.asyncGet(`/subject/${idSubject}/students`)
+        restClient.asyncGet(`/course/${idSubject}/students`)
             .then(res => {
                 if (!res.hasError) {
                     setList(get(res, 'data').students)
@@ -35,7 +35,7 @@ const StudentManage = ({ idSubject }) => {
     const handleDeleteStudent = async (record) => {
         setLoadingDelete(true);
         setIdStudent(record._id)
-        await restClient.asyncDelete(`/subject/${idSubject}/remove-student`, {
+        await restClient.asyncDelete(`/course/${idSubject}/remove-student`, {
             idStudent: record.code
         })
             .then(res => {
@@ -61,7 +61,7 @@ const StudentManage = ({ idSubject }) => {
 
     const addStudentToClass = async (codeStudent) => {
         setLoadingAdd(true);
-        await restClient.asyncPost(`/subject/${idSubject}/add-student`,
+        await restClient.asyncPost(`/course/${idSubject}/add-student`,
             { idStudent: codeStudent })
             .then(res => {
                 setLoadingAdd(false);

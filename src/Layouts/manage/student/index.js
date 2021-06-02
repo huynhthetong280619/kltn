@@ -28,7 +28,7 @@ const Student = () => {
 
     useEffect(async () => {
         setLoadingData(true)
-        await restClient.asyncGet(`/subject/${idSubject}/score`)
+        await restClient.asyncGet(`/course/${idSubject}/score`)
             .then(res => {
                 console.log('submissioin core', res)
                 if (!res.hasError) {
@@ -36,7 +36,7 @@ const Student = () => {
                 }
             })
 
-        await restClient.asyncGet(`/subject/${idSubject}/transcript`)
+        await restClient.asyncGet(`/course/${idSubject}/transcript`)
             .then(res => {
                 console.log('class core', res)
                 if (!res.hasError) {

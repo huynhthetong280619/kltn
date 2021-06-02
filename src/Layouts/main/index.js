@@ -56,20 +56,21 @@ const MainAppLayout = () => {
 
         const restClientApi = new RestClient({ token })
 
-        await restClientApi.asyncGet('/subject')
+        await restClientApi.asyncGet('/course')
             .then(res => {
                 if (!res.hasError) {
-                    const { allSubject } = res.data
-                    setListSubjectJoined(allSubject)
+                    const { allCourses } = res.data
+                    setListSubjectJoined(allCourses)
                 }
             })
 
 
-        await restClientApi.asyncGet('/subject/public')
+        await restClientApi.asyncGet('/course/public')
             .then(res => {
+                console.log('response', res)
                 if (!res.hasError) {
-                    const { allSubject } = res.data
-                    setPublicSubject(allSubject)
+                    const { allCourses } = res.data
+                    setPublicSubject(allCourses)
                 }
                 setLoadingCourse(false)
             })
