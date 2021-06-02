@@ -24,7 +24,7 @@ const TranscriptManage = ({ lstClassScore, idSubject }) => {
     const putTotalScore = async () => {
         //console.log('data', ratios)
         setLoading(true);
-        await restClient.asyncPut(`/subject/${idSubject}/ratio`, ratios)
+        await restClient.asyncPut(`/course/${idSubject}/ratio`, ratios)
             .then(res => {
                 setLoading(false);
                 if (!res.hasError) {

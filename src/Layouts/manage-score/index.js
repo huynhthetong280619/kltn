@@ -22,7 +22,7 @@ const ManageScore = () => {
         // this.setState({
         //     lstSubmissionCore: this.props.lstSubmissionCore,
         // })
-        restClient.asyncGet(`/subject/${idSubject}/score`)
+        restClient.asyncGet(`/course/${idSubject}/score`)
             .then(res => {
                 console.log(res);
                 if (!res.hasError) {
