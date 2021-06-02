@@ -66,7 +66,7 @@ const AssignmentCheck = () => {
         let grade = form.getFieldValue('grade');
         if (grade < 0 || grade > 10) { setState({ ...state, isConfirm: false }); return; }
         const data = {
-            idSubject: idSubject,
+            idCourse: idSubject,
             idTimeline: idTimeline,
             grade: grade
         }

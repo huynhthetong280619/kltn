@@ -79,7 +79,7 @@ const AddSurvey = ({ timelinesList, surveyList, createSurvey, updateSurvey, idSu
 
     const handleCreateSurvey = async (survey, idTimelineAdd) => {
         const data = {
-            idSubject: idSubject,
+            idCourse: idSubject,
             idTimeline: idTimelineAdd,
             data: survey
         }
@@ -98,7 +98,7 @@ const AddSurvey = ({ timelinesList, surveyList, createSurvey, updateSurvey, idSu
 
     const handleUpdateSurvey = async (survey, idTimelineUpdate) => {
         const data = {
-            idSubject: idSubject,
+            idCourse: idSubject,
             idTimeline: idTimelineUpdate,
             data: survey
         }

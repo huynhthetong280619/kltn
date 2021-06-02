@@ -84,10 +84,11 @@ const AddAssignment = ({ timelinesList, createAssignment, updateAssignment, idSu
 
     const handleCreateAssignment = async (assignment, idTimelineAdd) => {
         const data = {
-            idSubject: idSubject,
+            idCourse: idSubject,
             idTimeline: idTimelineAdd,
             data: assignment
         }
+        console.log(JSON.stringify(data))
         setLoading(true);
         await restClient.asyncPost('/assignment', data)
             .then(res => {
@@ -103,7 +104,7 @@ const AddAssignment = ({ timelinesList, createAssignment, updateAssignment, idSu
 
     const handleUpdateAssignment = async (assignment, idTimelineUpdate) => {
         const data = {
-            idSubject: idSubject,
+            idCourse: idSubject,
             idTimeline: idTimelineUpdate,
             data: assignment
         }

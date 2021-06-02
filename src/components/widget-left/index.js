@@ -220,7 +220,7 @@ const WidgetLeft = ({
     const createInformation = async ({ information, idTimeline }) => {
         // this.setState({ isLoading: true });
         const data = {
-            idSubject: location.state._id,
+            idCourse: location.state._id,
             idTimeline: idTimeline,
             data: information
         }
@@ -309,7 +309,7 @@ const WidgetLeft = ({
         // })
 
         const data = {
-            idSubject: location.state._id,
+            idCourse: location.state._id,
             data: timeline
         }
 

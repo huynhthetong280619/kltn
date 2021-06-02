@@ -55,7 +55,7 @@ const AddFile = ({ timelinesList, createFile, updateFile, idSubject, idTimeline,
 
     const handleCreateFile = async (file, idTimelineAdd) => {
         const data = {
-            idSubject: idSubject,
+            idCourse: idSubject,
             idTimeline: idTimelineAdd,
             data: file
         }
@@ -73,7 +73,7 @@ const AddFile = ({ timelinesList, createFile, updateFile, idSubject, idTimeline,
 
     const handleUpdateFile = async (file, idTimelineUpdate) => {
         const data = {
-            idSubject: idSubject,
+            idCourse: idSubject,
             data: file
         }
         await restClient.asyncPut(`/timeline/${idTimelineUpdate}/files/${idFile}`, data, token)

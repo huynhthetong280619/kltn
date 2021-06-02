@@ -64,7 +64,7 @@ const AddForum = ({timelinesList, createForum, updateForum, idSubject, idTimelin
 
     const handleCreateForum = async (forum, idTimelineAdd) => {
         const data = {
-            idSubject: idSubject,
+            idCourse: idSubject,
             idTimeline: idTimelineAdd,
             data: forum
         }
@@ -83,7 +83,7 @@ const AddForum = ({timelinesList, createForum, updateForum, idSubject, idTimelin
 
     const handleUpdateForum = async (forum, idTimelineUpdate) => {
         const data = {
-            idSubject: idSubject,
+            idCourse: idSubject,
             idTimeline: idTimelineUpdate,
             data: forum
         }

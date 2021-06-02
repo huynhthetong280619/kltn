@@ -74,7 +74,7 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
     const handleCreateExam = async (ex, idTimelineAdd) => {
         console.log(ex)
         const data = {
-            idSubject: idSubject,
+            idCourse: idSubject,
             idTimeline: idTimelineAdd,
             data: ex
         }
@@ -94,7 +94,7 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
 
     const handleUpdateExam = async (ex, idTimelineUpdate) => {
         const data = {
-            idSubject: idSubject,
+            idCourse: idSubject,
             idTimeline: idTimelineUpdate,
             data: ex
         }
