@@ -30,19 +30,19 @@ const Survey = () => {
 
     useEffect(async () => {
         setIsLoading(true)
-        await restClient.asyncGet(`/survey/${surveyId}?idSubject=${idSubject}&idTimeline=${timelineId}`)
+        await restClient.asyncGet(`/survey/${surveyId}?idCourse=${idSubject}&idTimeline=${timelineId}`)
             .then(res => {
                 if (!res.hasError) {
                     setSurvey(get(res, 'data').survey)
                 }
             })
 
-        await restClient.asyncGet(`/survey/${surveyId}/view?idSubject=${idSubject}&idTimeline=${timelineId}`)
+        await restClient.asyncGet(`/survey/${surveyId}/view?idCourse=${idSubject}&idTimeline=${timelineId}`)
             .then(res => {
                 setRelyCurrent(get(res, 'data'))
             })
 
-        await restClient.asyncGet(`/survey/${surveyId}/responses?idSubject=${idSubject}&idTimeline=${timelineId}`)
+        await restClient.asyncGet(`/survey/${surveyId}/responses?idCourse=${idSubject}&idTimeline=${timelineId}`)
             .then(res => {
                 if (!res.hasError) {
                     setResponseSurvey(get(res, 'data'))

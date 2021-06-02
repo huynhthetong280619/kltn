@@ -190,7 +190,7 @@ const Subject = () => {
             history.push('check-assignment', { ...obj, idSubject: location.state._id })
         } else {
             setIsTodoModal(true)
-            await restClient.asyncGet(`/assignment/${obj.idTodo}?idSubject=${location.state._id}&idTimeline=${obj.idTimeline}`)
+            await restClient.asyncGet(`/assignment/${obj.idTodo}?idCourse=${location.state._id}&idTimeline=${obj.idTimeline}`)
                 .then(res => {
                     console.log('getRequirementTodo', res)
                     if (!res.hasError) {
@@ -217,7 +217,7 @@ const Subject = () => {
 
     const commentAssignmentGrade = async ({ comment, idAssignment }) => {
         setIsCommentAssignment(true);
-        await restClient.asyncPost(`/assignment/${idAssignment}/comment/${submissionAssigmentId}?idSubject=${location.state._id}&idTimeline=${idTimelineRequired}`, { idSubject: location.state._id, idTimeline: idTimelineRequired, comment: comment }, token)
+        await restClient.asyncPost(`/assignment/${idAssignment}/comment/${submissionAssigmentId}?idCourse=${location.state._id}&idTimeline=${idTimelineRequired}`, { idSubject: location.state._id, idTimeline: idTimelineRequired, comment: comment }, token)
             .then(res => {
                 setIsCommentAssignment(false);
                 if (!res.hasError) {

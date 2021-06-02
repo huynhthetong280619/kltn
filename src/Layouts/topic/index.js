@@ -26,7 +26,7 @@ const Topic = () => {
 
     useEffect(async () => {
         setIsLoading(true)
-        await restClient.asyncGet(`/forum/${forumId}?idSubject=${idSubject}&idTimeline=${idTimeline}`)
+        await restClient.asyncGet(`/forum/${forumId}?idCourse=${idSubject}&idTimeline=${idTimeline}`)
             .then(res => {
                 if (!res.hasError) {
                     console.log(res)
@@ -57,7 +57,7 @@ const Topic = () => {
         }
         console.log(data)
 
-        await restClient.asyncPost(`/topic?idSubject=${idSubject}&idTimeline=${idTimeline}&idForum=${forumId}`, data)
+        await restClient.asyncPost(`/topic?idCourse=${idSubject}&idTimeline=${idTimeline}&idForum=${forumId}`, data)
             .then(res => {
                 if (!res.hasError) {
                     notifySuccess(t('success'), t('add_topic_success'))

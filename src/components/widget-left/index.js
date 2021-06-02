@@ -563,7 +563,7 @@ const WidgetLeft = ({
                     </div></>
             }
 
-            <div onClick={(e) => { e.preventDefault(); history.push(`zoom-meeting?idSubject=${location.state._id}`, { idSubject: location.state._id }) }}>
+            <div onClick={(e) => { e.preventDefault(); history.push(`zoom-meeting?idCourse=${location.state._id}`, { idSubject: location.state._id }) }}>
                 <i><FontAwesomeIcon icon="video" /></i>
                 <span>{t('call_video')}</span>
             </div>

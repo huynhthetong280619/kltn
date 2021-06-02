@@ -40,7 +40,7 @@ const AddAssignment = ({ timelinesList, createAssignment, updateAssignment, idSu
         console.log('timelineList', timelinesList)
 
         if (idAssignment) {
-            restClient.asyncGet(`/assignment/${idAssignment}/update/?idSubject=${idSubject}&idTimeline=${idTimeline}`)
+            restClient.asyncGet(`/assignment/${idAssignment}/update/?idCourse=${idSubject}&idTimeline=${idTimeline}`)
                 .then(res => {
                     if (!res.hasError) {
                         const assign = res.data.assignment;

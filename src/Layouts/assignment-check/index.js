@@ -26,7 +26,7 @@ const AssignmentCheck = () => {
 
     useEffect(() => {
         setIsLoading(true)
-        restClient.asyncGet(`/assignment/${idTodo}?idSubject=${idSubject}&idTimeline=${idTimeline}`)
+        restClient.asyncGet(`/assignment/${idTodo}?idCourse=${idSubject}&idTimeline=${idTimeline}`)
             .then(res => {
                 console.log('Assignment', res)
                 if (!res.hasError) {

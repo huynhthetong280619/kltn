@@ -36,7 +36,7 @@ const AddSurvey = ({ timelinesList, surveyList, createSurvey, updateSurvey, idSu
 
     useEffect(async () => {
         if (idSurvey) {
-            await restClient.asyncGet(`/survey/${idSurvey}/update/?idSubject=${idSubject}&idTimeline=${idTimeline}`)
+            await restClient.asyncGet(`/survey/${idSurvey}/update/?idCourse=${idSubject}&idTimeline=${idTimeline}`)
                 .then(res => {
                     console.log('Survey', res)
                     if (!res.hasError) {

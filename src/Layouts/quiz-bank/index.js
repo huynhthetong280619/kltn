@@ -54,7 +54,7 @@ const QuizBank = ({ idSubject,
 
 	const onFinish = (values) => {
 		if (!isEmpty(quizBankData)) {
-			restClient.asyncPost(`/quiz-bank/?idSubject=${idSubject}`, { idSubject, data: quizBankData })
+			restClient.asyncPost(`/quiz-bank/?idCourse=${idSubject}`, { idSubject, data: quizBankData })
 				.then(res => {
 					if (!res.hasError) {
 						console.log(res)

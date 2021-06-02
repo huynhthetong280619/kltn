@@ -33,7 +33,7 @@ const AddFile = ({ timelinesList, createFile, updateFile, idSubject, idTimeline,
 
     useEffect(() => {
         if (idFile) {
-            restClient.asyncGet(`/timeline/${idTimeline}/files/${idFile}/?idSubject=${idSubject}`, token)
+            restClient.asyncGet(`/timeline/${idTimeline}/files/${idFile}/?idCourse=${idSubject}`, token)
                 .then(res => {
                     if (!res.hasError) {
                         setFile(res.data.file);
@@ -59,7 +59,7 @@ const AddFile = ({ timelinesList, createFile, updateFile, idSubject, idTimeline,
             idTimeline: idTimelineAdd,
             data: file
         }
-        await restClient.asyncPost(`/timeline/${idTimelineAdd}/upload?idSubject=${idSubject}`, data)
+        await restClient.asyncPost(`/timeline/${idTimelineAdd}/upload?idCourse=${idSubject}`, data)
             .then(res => {
                 //console.log('handleCreateFile', res)
                 setLoading(false);

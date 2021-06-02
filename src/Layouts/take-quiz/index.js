@@ -29,7 +29,7 @@ const TakeQuiz = () => {
 
 
     useEffect(() => {
-        restClient.asyncGet(`/exam/${examId}/attempt/${idSubmission}?idSubject=${idSubject}&idTimeline=${idTimeline}`)
+        restClient.asyncGet(`/exam/${examId}/attempt/${idSubmission}?idCourse=${idSubject}&idTimeline=${idTimeline}`)
             .then(res => {
                 if (!res.hasError) {
                     const examQuestion = get(res, 'data').quiz
@@ -82,7 +82,7 @@ const TakeQuiz = () => {
         }
 
         console.log(data)
-        await restClient.asyncPost(`/exam/${examId}/submit/${idSubmission}?idSubject=${idSubject}&idTimeline=${idTimeline}`, data)
+        await restClient.asyncPost(`/exam/${examId}/submit/${idSubmission}?idCourse=${idSubject}&idTimeline=${idTimeline}`, data)
             .then(res => {
                 if (!res.hasError) {
                     notification.success({

@@ -105,7 +105,7 @@ const Discussion = () => {
 
         setLoadingDiscussion(true)
 
-        restClient.asyncGet(`/topic/${idTopic}?idSubject=${idSubject}&idTimeline=${idTimeline}&idForum=${forumId}`)
+        restClient.asyncGet(`/topic/${idTopic}?idCourse=${idSubject}&idTimeline=${idTimeline}&idForum=${forumId}`)
             .then(res => {
                 console.log(res)
                 if (!res.hasError) {

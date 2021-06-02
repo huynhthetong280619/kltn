@@ -47,7 +47,7 @@ const Quiz = () => {
 
         setIsLoading(true)
 
-        restClient.asyncGet(`/exam/${examId}?idSubject=${idSubject}&idTimeline=${idTimeline}`)
+        restClient.asyncGet(`/exam/${examId}?idCourse=${idSubject}&idTimeline=${idTimeline}`)
             .then(res => {
                 console.log(res)
                 if (!res.hasError) {
@@ -58,7 +58,7 @@ const Quiz = () => {
             })
 
 
-        restClient.asyncGet(`/exam/${examId}/attempt?idSubject=${idSubject}&idTimeline=${idTimeline}`)
+        restClient.asyncGet(`/exam/${examId}/attempt?idCourse=${idSubject}&idTimeline=${idTimeline}`)
             .then(res => {
                 if (!res.hasError) {
                     setIdSubmission(get(res, 'data')?.idSubmission)

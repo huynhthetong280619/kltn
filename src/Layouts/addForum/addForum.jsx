@@ -29,7 +29,7 @@ const AddForum = ({timelinesList, createForum, updateForum, idSubject, idTimelin
 
     useEffect(() => {
         if (idForum) {
-            restClient.asyncGet(`/forum/${idForum}/update/?idSubject=${idSubject}&idTimeline=${idTimeline}`, token)
+            restClient.asyncGet(`/forum/${idForum}/update/?idCourse=${idSubject}&idTimeline=${idTimeline}`, token)
                 .then(res => {
                     if (!res.hasError) {
                         setForum(res.data.forum);

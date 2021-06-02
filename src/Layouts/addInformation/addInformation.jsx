@@ -17,7 +17,7 @@ const AddInformation = ({ timelinesList, isLoading, createInformation, idSubject
 
     useEffect(() => {
         if (idInformation) {
-            restClient.asyncGet(`/announcement/${idInformation}?idSubject=${idSubject}&idTimeline=${idTimeline}`)
+            restClient.asyncGet(`/announcement/${idInformation}?idCourse=${idSubject}&idTimeline=${idTimeline}`)
                 .then(res => {
                     if (!res.hasError) {
                         setInformation(res.data.announcements);

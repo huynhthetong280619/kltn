@@ -34,7 +34,7 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
     useEffect(() => {
         console.log('Exam id: ', idExam)
         if (idExam) {
-            restClient.asyncGet(`/exam/${idExam}/update/?idSubject=${idSubject}&idTimeline=${idTimeline}`, token)
+            restClient.asyncGet(`/exam/${idExam}/update/?idCourse=${idSubject}&idTimeline=${idTimeline}`, token)
                 .then(res => {
                     if (!res.hasError) {
                         const ex = res.data.exam;
