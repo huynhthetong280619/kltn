@@ -1263,175 +1263,238 @@ const Subject = () => {
                         setExportState={setExportState} /> */}
                 </>
                 ) : (
-                    detailSubject.map(({ _id, name, description, assignments, exams, forums, announcements, files, surveys }, index) => {
-                        return (
-                            <div className="subject-container" key={index.toString()}>
-                                <div className="subject-wrapper">
-                                    <div className="subject-header">
-                                        <div className="text-center">{`${t('week')} ${index < 9 ? ('0' + (index + 1)) : (index + 1)}: ${name}`}</div>
-                                        <div className="description text-center">{description}</div>
-                                    </div>
-                                    <div className="wrapper-body">
-
-                                        {
-
-                                            !isEmpty(announcements) && (
-                                                <div className="subject-body">
-                                                    <div className="announce-wrapper">
-                                                        {announcements.map((info, indexAnnounce) => {
-                                                            return (<div key={indexAnnounce}>
-                                                                <div className="announce-name">{info.name}</div>
-                                                                <div className="announce-content">{info.content}</div>
-                                                            </div>
-                                                            )
-                                                        })}
-                                                    </div>
+                    <Row>
+                        <Col span={16}>
+                            {
+                                detailSubject.map(({ _id, name, description, assignments, exams, forums, announcements, files, surveys }, index) => {
+                                    return (
+                                        <div className="subject-container" key={index.toString()}>
+                                            <div className="subject-wrapper">
+                                                <div className="subject-header">
+                                                    <div className="text-center">{`${t('week')} ${index < 9 ? ('0' + (index + 1)) : (index + 1)}: ${name}`}</div>
+                                                    <div className="description text-center">{description}</div>
                                                 </div>
-                                            )
-                                        }
-
-                                        {
-
-                                            !isEmpty(surveys) && (<>
-                                                {
-                                                    surveys.map((survey, index) => (
-                                                        <div className="subject-body" onClick={() => directSurvey({ surveyId: survey._id, idSubject: location.state._id, timelineId: _id })}>
-                                                            <div className="subject-main">
-                                                                <div className="subject-icon">
-                                                                    {/* <FontAwesomeIcon icon='file-powerpoint' style={{ width: 30, height: 30, color: '#d04424' }} /> */}
-                                                                    <FontAwesomeIcon icon="poll" style={{ width: 30, height: 30, color: '#ff4000' }} />
+                                                <div className="wrapper-body">
+            
+                                                    {
+            
+                                                        !isEmpty(announcements) && (
+                                                            <div className="subject-body">
+                                                                <div className="announce-wrapper">
+                                                                    {announcements.map((info, indexAnnounce) => {
+                                                                        return (<div key={indexAnnounce}>
+                                                                            <div className="announce-name">{info.name}</div>
+                                                                            <div className="announce-content">{info.content}</div>
+                                                                        </div>
+                                                                        )
+                                                                    })}
                                                                 </div>
-                                                                <div className="subject-content">{survey.name}</div>
                                                             </div>
+                                                        )
+                                                    }
+            
+                                                    {
+            
+                                                        !isEmpty(surveys) && (<>
+                                                            {
+                                                                surveys.map((survey, index) => (
+                                                                    <div className="subject-body" onClick={() => directSurvey({ surveyId: survey._id, idSubject: location.state._id, timelineId: _id })}>
+                                                                        <div className="subject-main">
+                                                                            <div className="subject-icon">
+                                                                                {/* <FontAwesomeIcon icon='file-powerpoint' style={{ width: 30, height: 30, color: '#d04424' }} /> */}
+                                                                                <FontAwesomeIcon icon="poll" style={{ width: 30, height: 30, color: '#ff4000' }} />
+                                                                            </div>
+                                                                            <div className="subject-content">{survey.name}</div>
+                                                                        </div>
+            
+                                                                    </div>
+                                                                ))
+                                                            }
+                                                        </>
+                                                        )
+                                                    }
+            
+                                                    {
+            
+                                                        !isEmpty(files) && (<>
+                                                            {
+                                                                files.map((file, index) => (
+                                                                    <div className="subject-body">
+                                                                        <div className="subject-main">
+                                                                            <div className="subject-icon">
+                                                                                {file.type.includes('doc') && (
+                                                                                    <i>
+                                                                                        <FontAwesomeIcon icon='file-word' style={{ width: 30, height: 30, color: '#2d5898' }} />
+                                                                                    </i>
+                                                                                )}
+                                                                                {file.type.includes('pdf') && (
+                                                                                    <i>
+                                                                                        <FontAwesomeIcon icon='file-pdf' style={{ width: 30, height: 30, color: '#f44236' }} />
+                                                                                    </i>
+                                                                                )}
+                                                                                {file.type.includes('ppt') && (
+                                                                                    <i>
+                                                                                        <FontAwesomeIcon icon='file-powerpoint' style={{ width: 30, height: 30, color: '#d04424' }} />
+                                                                                    </i>
+                                                                                )}
+                                                                                {(file.type.includes('xls') || file.type.includes('csv')) && (
+                                                                                    <i>
+                                                                                        <FontAwesomeIcon icon='file-excel' style={{ width: 30, height: 30, color: '#1a7243' }} />
+                                                                                    </i>
+                                                                                )}
+            
+                                                                                {(file.type.includes('rar') || (file.type.includes('zip')) && (
+                                                                                    <i>
+                                                                                        <FontAwesomeIcon icon='archive' style={{ width: 30, height: 30, color: '#9e6fb2' }} />
+                                                                                    </i>
+                                                                                ))}
+            
+                                                                                {!(file.type.includes('ppt')) && !(file.type.includes('doc')) && !(file.type.includes('pdf'))
+                                                                                    && !(file.type.includes('xls')) && !(file.type.includes('csv')) && !(file.type.includes('rar')) && !(file.type.includes('zip'))
+                                                                                    && (
+                                                                                        <i>
+                                                                                            <FontAwesomeIcon icon='file-alt' style={{ width: 30, height: 30, color: '#273c75' }} />
+                                                                                        </i>
+                                                                                    )}
+                                                                            </div>
+                                                                            <div className="subject-content" onClick={(e) => { downloadFile(file) }}>{file.name}</div>
+                                                                        </div>
+            
+                                                                    </div>
+                                                                ))
+                                                            }
+                                                        </>
+                                                        )
+                                                    }
+            
+                                                    {
+                                                        !isEmpty(assignments) && (<>
+                                                            {
+                                                                assignments.map((assignment, index) => (
+                                                                    <div className="subject-body" onClick={() => getRequirementTodo({ idTodo: assignment._id, idTimeline: _id })}>
+                                                                        <div className="subject-main">
+                                                                            <div className="subject-icon">
+                                                                                <FontAwesomeIcon icon="tasks" style={{ width: 30, height: 30, color: '#009432' }} />
+                                                                            </div>
+                                                                            <div className="subject-content">{assignment.name}</div>
+                                                                        </div>
+            
+                                                                    </div>
+                                                                ))
+                                                            }
+                                                        </>
+                                                        )
+                                                    }
+            
+            
+                                                    {
+                                                        !isEmpty(forums) && (<>
+                                                            {
+                                                                forums.map((forum, index) => (
+                                                                    <div className="subject-body" onClick={() => directForum({ forumId: forum._id, idSubject: location.state._id, idTimeline: _id })}>
+                                                                        <div className="subject-main">
+                                                                            <div className="subject-icon">
+                                                                                <img src={FORUM} width={30} />
+                                                                            </div>
+                                                                            <div className="subject-content">{forum.name}</div>
+                                                                        </div>
+            
+                                                                    </div>
+                                                                ))
+                                                            }
+                                                        </>
+                                                        )
+                                                    }
+            
+            
+                                                    {
+                                                        !isEmpty(exams) && (<>
+                                                            {
+                                                                exams.map((exam, index) => (
+                                                                    <div className="subject-body" onClick={() => directExams({ examId: exam._id, idSubject: location.state._id, idTimeline: _id })}>
+                                                                        <div className="subject-main">
+                                                                            <div className="subject-icon">
+                                                                                <FontAwesomeIcon icon="spell-check" style={{ width: 40, height: 40, color: '#F79F1F' }} />
+                                                                            </div>
+                                                                            <div className="subject-content">{exam.name}</div>
+                                                                        </div>
+            
+                                                                    </div>
+                                                                ))
+                                                            }
+                                                        </>
+                                                        )
+                                                    }
+            
+                                                </div>
+            
+            
+                                            </div>
+            
+                                        </div>
+            
+                                    )
+                                })
+                            }
+                        </Col>
+                        <Col span={8} style={{ padding: '10px', display: 'flex', flexDirection: 'column', rowGap: '0.75rem' }}>
+                            <ModalWrapper>
+                                <div style={{ textAlign: 'center', marginBottom: '0.5rem', color: '#f9f9f9' }}>QUẢN LÝ & TIỆN ÍCH</div>
+                                <Row style={{ justifyContent: 'space-between', columnGap: '0.5rem' }}>
+                                    <Col span={7} className="action-select-add-content" style={{
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        background: '#3498db',
+                                        color: '#fff',
+                                        padding: '0.5rem',
+                                        borderRadius: '0.5rem',
+                                        cursor: 'pointer',
+                                        height: '6rem'
+                                    }}
+                                        onClick={() => isTeacherFlag ? directManageStudent() : directManageScore()}
+                                    >
+                                        {isTeacherFlag ? t('manage_student') : t('manage_point')}
+                                    </Col>
+                                    <Col span={7} className="action-select-add-content" style={{
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        background: '#f1c40f',
+                                        color: '#fff',
+                                        padding: '0.5rem',
+                                        borderRadius: '0.5rem',
+                                        cursor: 'pointer',
+                                        height: '6rem'
+                                    }}
+                                        onClick={(e) => { e.preventDefault(); history.push(`zoom-meeting?idCourse=${location.state._id}`, { idSubject: location.state._id }) }}
+                                    >
+                                        {t('call_video')}
+                                    </Col>
+                                    <Col span={7} className="action-select-add-content" style={{
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        background: '#2c3e50',
+                                        color: '#fff',
+                                        padding: '0.5rem',
+                                        borderRadius: '0.5rem',
+                                        cursor: 'pointer',
+                                        height: '6rem'
+                                    }}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            setIsOnEdit(!isOnEdit)
+                                        }}
+                                    >
+                                        {t('update')}
+                                    </Col>
+                                </Row>
+                            </ModalWrapper>
+                        </Col>
+                    </Row>
 
-                                                        </div>
-                                                    ))
-                                                }
-                                            </>
-                                            )
-                                        }
-
-                                        {
-
-                                            !isEmpty(files) && (<>
-                                                {
-                                                    files.map((file, index) => (
-                                                        <div className="subject-body">
-                                                            <div className="subject-main">
-                                                                <div className="subject-icon">
-                                                                    {file.type.includes('doc') && (
-                                                                        <i>
-                                                                            <FontAwesomeIcon icon='file-word' style={{ width: 30, height: 30, color: '#2d5898' }} />
-                                                                        </i>
-                                                                    )}
-                                                                    {file.type.includes('pdf') && (
-                                                                        <i>
-                                                                            <FontAwesomeIcon icon='file-pdf' style={{ width: 30, height: 30, color: '#f44236' }} />
-                                                                        </i>
-                                                                    )}
-                                                                    {file.type.includes('ppt') && (
-                                                                        <i>
-                                                                            <FontAwesomeIcon icon='file-powerpoint' style={{ width: 30, height: 30, color: '#d04424' }} />
-                                                                        </i>
-                                                                    )}
-                                                                    {(file.type.includes('xls') || file.type.includes('csv')) && (
-                                                                        <i>
-                                                                            <FontAwesomeIcon icon='file-excel' style={{ width: 30, height: 30, color: '#1a7243' }} />
-                                                                        </i>
-                                                                    )}
-
-                                                                    {(file.type.includes('rar') || (file.type.includes('zip')) && (
-                                                                        <i>
-                                                                            <FontAwesomeIcon icon='archive' style={{ width: 30, height: 30, color: '#9e6fb2' }} />
-                                                                        </i>
-                                                                    ))}
-
-                                                                    {!(file.type.includes('ppt')) && !(file.type.includes('doc')) && !(file.type.includes('pdf'))
-                                                                        && !(file.type.includes('xls')) && !(file.type.includes('csv')) && !(file.type.includes('rar')) && !(file.type.includes('zip'))
-                                                                        && (
-                                                                            <i>
-                                                                                <FontAwesomeIcon icon='file-alt' style={{ width: 30, height: 30, color: '#273c75' }} />
-                                                                            </i>
-                                                                        )}
-                                                                </div>
-                                                                <div className="subject-content" onClick={(e) => { downloadFile(file) }}>{file.name}</div>
-                                                            </div>
-
-                                                        </div>
-                                                    ))
-                                                }
-                                            </>
-                                            )
-                                        }
-
-                                        {
-                                            !isEmpty(assignments) && (<>
-                                                {
-                                                    assignments.map((assignment, index) => (
-                                                        <div className="subject-body" onClick={() => getRequirementTodo({ idTodo: assignment._id, idTimeline: _id })}>
-                                                            <div className="subject-main">
-                                                                <div className="subject-icon">
-                                                                    <FontAwesomeIcon icon="tasks" style={{ width: 30, height: 30, color: '#009432' }} />
-                                                                </div>
-                                                                <div className="subject-content">{assignment.name}</div>
-                                                            </div>
-
-                                                        </div>
-                                                    ))
-                                                }
-                                            </>
-                                            )
-                                        }
-
-
-                                        {
-                                            !isEmpty(forums) && (<>
-                                                {
-                                                    forums.map((forum, index) => (
-                                                        <div className="subject-body" onClick={() => directForum({ forumId: forum._id, idSubject: location.state._id, idTimeline: _id })}>
-                                                            <div className="subject-main">
-                                                                <div className="subject-icon">
-                                                                    <img src={FORUM} width={30} />
-                                                                </div>
-                                                                <div className="subject-content">{forum.name}</div>
-                                                            </div>
-
-                                                        </div>
-                                                    ))
-                                                }
-                                            </>
-                                            )
-                                        }
-
-
-                                        {
-                                            !isEmpty(exams) && (<>
-                                                {
-                                                    exams.map((exam, index) => (
-                                                        <div className="subject-body" onClick={() => directExams({ examId: exam._id, idSubject: location.state._id, idTimeline: _id })}>
-                                                            <div className="subject-main">
-                                                                <div className="subject-icon">
-                                                                    <FontAwesomeIcon icon="spell-check" style={{ width: 40, height: 40, color: '#F79F1F' }} />
-                                                                </div>
-                                                                <div className="subject-content">{exam.name}</div>
-                                                            </div>
-
-                                                        </div>
-                                                    ))
-                                                }
-                                            </>
-                                            )
-                                        }
-
-                                    </div>
-
-
-                                </div>
-
-                            </div>
-
-                        )
-                    })
+                    
                 )
             }
             {/* <WidgetLeft
