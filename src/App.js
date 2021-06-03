@@ -17,7 +17,7 @@ function App() {
   useEffect(() => {
     setTimeout(() => {
       setIsLoading(false)
-    }, 3000)
+    }, 1000)
 
   }, [])
 
@@ -30,7 +30,7 @@ function App() {
     <>
       <I18nextProvider i18n={i18n}>
         {/* <Router> */}
-        <Suspense fallback={<LoadingView />}>
+        <Suspense fallback={<></>}>
           <StoreTrading>
             <Switch>
               <Route path="/login" component={Login} />

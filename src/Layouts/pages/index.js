@@ -55,13 +55,13 @@ function Child() {
             return <Survey />
         case 'manage-student':
             return <Student />
-            case 'manage-score':
-                return <ManageScore />
+        case 'manage-score':
+            return <ManageScore />
         case 'take-quiz':
             return <TakeQuiz />
         case 'check-assignment':
             return <AssignmentCheck />
-        case 'survey-take': 
+        case 'survey-take':
             return <SurveyTake />
         default:
             break
@@ -87,13 +87,11 @@ const PagesView = () => {
             </Header>
 
             <Content style={{ overflow: 'auto', background: '#232323', paddingTop: 25, paddingBottom: 25 }}>
-                <Suspense fallback={<LoadingView />}>
-                    <Switch>
-                        <Route exact path="/" component={MainPages} />
-                        <Route exact path="/home" component={MainPages} />
-                        <Route path="/home/:link" children={<Child />} />
-                    </Switch>
-                </Suspense>
+                <Switch>
+                    <Route exact path="/" component={MainPages} />
+                    <Route exact path="/home" component={MainPages} />
+                    <Route path="/home/:link" children={<Child />} />
+                </Switch>
             </Content>
             <LeftBar isOpen={isOpen} setOpen={setOpen} />
         </Layout>

@@ -258,7 +258,7 @@ const WidgetLeft = ({
 
         setFocusForumEdit(false)
         setOpenCreateContent(false)
-        setOpenCreateContent(false)
+        setIsOpenModalFunction(false)
         //console.log(timelineUpdate)
 
         // this.setState({
@@ -550,11 +550,11 @@ const WidgetLeft = ({
     return (<>
         <div className="container-left">
             {
-                isTeacherFlag && <><div onClick={(e) => { e.preventDefault(); setOpenCreateContent(true) }}>
+                isTeacherFlag && <><div style={{cursor: 'pointer'}} onClick={(e) => { e.preventDefault(); setOpenCreateContent(true) }}>
                     <i><FontAwesomeIcon icon="wrench" /></i>
                     <span>{t('setting')}</span>
                 </div>
-                    <div onClick={(e) => {
+                    <div style={{cursor: 'pointer'}} onClick={(e) => {
                         e.preventDefault();
                         setIsOnEdit(!isOnEdit)
                     }}>
@@ -563,7 +563,7 @@ const WidgetLeft = ({
                     </div></>
             }
 
-            <div onClick={(e) => { e.preventDefault(); history.push(`zoom-meeting?idCourse=${location.state._id}`, { idSubject: location.state._id }) }}>
+            <div style={{cursor: 'pointer'}} onClick={(e) => { e.preventDefault(); history.push(`zoom-meeting?idCourse=${location.state._id}`, { idSubject: location.state._id }) }}>
                 <i><FontAwesomeIcon icon="video" /></i>
                 <span>{t('call_video')}</span>
             </div>
@@ -596,7 +596,8 @@ const WidgetLeft = ({
                     color: '#fff',
                     padding: '0.5rem',
                     borderRadius: '0.5rem',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    height: '6rem'
                 }} onClick={() => {
                     openModalFunction('create_information');
                     focusNotification();
@@ -611,7 +612,8 @@ const WidgetLeft = ({
                     color: '#fff',
                     padding: '0.5rem',
                     borderRadius: '0.5rem',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    height: '6rem'
                 }}
                     onClick={() => {
                         openModalFunction('create_document');
@@ -628,7 +630,8 @@ const WidgetLeft = ({
                     color: '#fff',
                     padding: '0.5rem',
                     borderRadius: '0.5rem',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    height: '6rem'
                 }}
                     onClick={() => {
                         openModalFunction('create_assign');
@@ -647,7 +650,8 @@ const WidgetLeft = ({
                     color: '#fff',
                     padding: '0.5rem',
                     borderRadius: '0.5rem',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    height: '6rem'
                 }}
                     onClick={() => {
                         openModalFunction('create_quiz');
@@ -663,7 +667,8 @@ const WidgetLeft = ({
                     color: '#fff',
                     padding: '0.5rem',
                     borderRadius: '0.5rem',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    height: '6rem'
                 }} onClick={() => {
                     openModalFunction('create_survey');
                     focusSurvey();
@@ -678,7 +683,8 @@ const WidgetLeft = ({
                     color: '#fff',
                     borderRadius: '0.5rem',
                     padding: '0.5rem',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    height: '6rem'
                 }} onClick={() => {
                     openModalFunction('create_timeline');
                     focusTimeline();
@@ -699,15 +705,48 @@ const WidgetLeft = ({
                     color: '#fff',
                     padding: '0.5rem',
                     borderRadius: '0.5rem',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    height: '6rem'
                 }} onClick={() => {
                     openModalFunction('create_forum');
                     focusForum();
                 }} >
                     {t('forum')}
                 </Col>
+                <Col span={6} className="action-select-add-content" style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    background: '#0c2461',
+                    color: '#fff',
+                    padding: '0.5rem',
+                    borderRadius: '0.5rem',
+                    cursor: 'pointer',
+                    height: '6rem'
+                }} onClick={() => {
+                    openModalFunction('create_forum');
+                    focusQuizBank();
+                }} >
+                    {t('Quiz Bank')}
+                </Col>
+                <Col span={6} className="action-select-add-content" style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    background: '#0c2461',
+                    color: '#fff',
+                    padding: '0.5rem',
+                    borderRadius: '0.5rem',
+                    cursor: 'pointer',
+                    height: '6rem'
+                }} onClick={() => {
+                    openModalFunction('create_forum');
+                    focusSurveyBank();
+                }} >
+                    {t('Survey bank')}
+                </Col>
             </Row>
-
+{/* 
             <Row style={{ justifyContent: 'space-around', marginTop: '10px' }}>
                 <Col span={6} className="action-select-add-content" style={{
                     display: 'flex',
@@ -742,9 +781,9 @@ const WidgetLeft = ({
                 }} >
                     {t('import')}
                 </Col>
-            </Row>
+            </Row> */}
 
-            <Row style={{ justifyContent: 'space-around', marginTop: '10px' }}>
+            {/* <Row style={{ justifyContent: 'space-around', marginTop: '10px' }}>
                 <Col span={6} className="action-select-add-content" style={{
                     display: 'flex',
                     justifyContent: 'center',
@@ -778,7 +817,7 @@ const WidgetLeft = ({
                 }} >
                     {t('Survey bank')}
                 </Col>
-            </Row>
+            </Row> */}
 
         </Modal>
         {isOpenModalFunction && <Modal className="modal-function-customize"
@@ -807,8 +846,8 @@ const WidgetLeft = ({
                 {notificationState && (<AddInformation timelinesList={timelinesList} isLoading={null} createInformation={createInformation} idSubject={location.state._id} idTimeline={null} idInformation={null} />)}
                 {timelineState && (<AddTimeline createTimeline={createTimeline} isLoading={null} />)}
                 {(forumState || focusForumEdit) && (<AddForum timelinesList={timelinesList} createForum={createForum} updateForum={updateForum} idSubject={location.state._id} idTimeline={timelineIdEdit} idForum={forumIdEdit} />)}
-                {importState && (<ImportSubject isLoading={null} handleImportSubject={handleImportSubject} />)}
-                {exportState && (<ExportSubject idSubject={location.state._id} nameSubject={null} />)}
+                {/* {importState && (<ImportSubject isLoading={null} handleImportSubject={handleImportSubject} />)}
+                {exportState && (<ExportSubject idSubject={location.state._id} nameSubject={null} />)} */}
                 {quizBankState && (<QuizBank idSubject={location.state._id} closeModalCurrentQuizBank={closeModalCurrentQuizBank}/>)}
             </ModalWrapper>
         </Modal>}
