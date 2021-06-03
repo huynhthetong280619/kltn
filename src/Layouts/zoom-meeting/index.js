@@ -84,7 +84,6 @@ const ZoomMeeting = () => {
     const location = useLocation()
     const idSubject = useRef('')
     const [socket, setSocket] = useState(null)
-    const [peer, setPeer] = useState(new Peer());
 
     const [isMute, setMute] = React.useState(false);
     const [isHideCamera, setCamera] = React.useState(false);
@@ -289,10 +288,13 @@ const ZoomMeeting = () => {
         notify.notifyError("Error!", message);
     }
 
+    const peer = new Peer();
+
     useEffect(() => {
         if (socket && !localStream && !shareScreen) {
             peer.on('open', (id) => {
                 socket.emit('join-zoom', idSubject.current, id);
+
                 socket.on('403', (message) => {
                     handleWhenHasAlreadyJoinInAnotherPlace(message);
                 })
@@ -306,6 +308,8 @@ const ZoomMeeting = () => {
                             dispatchLocalScreen({ method: 'set', stream });
 
                             addVideoStream(peer._id, stream, currentUser);
+
+                            socket.emit('share-screen');
 
                             socket.on('user-connected', (peerId, user) => {
                                 connectToNewUser(peerId, stream, user);
@@ -337,7 +341,8 @@ const ZoomMeeting = () => {
                             });
                         }).catch(err => {
                             if (err.message === 'Permission denied') {
-
+                                notify.notifyError("Fail to access device", "Please turn on camera and mic to join zoom");
+                                socket.emit("leave");
                             }
                         })
                     socket.on('user-disconnected', (peerId) => {
@@ -351,26 +356,32 @@ const ZoomMeeting = () => {
                     })
                 });
             });
+
             return () => {
                 //Component Unmount
-                if (socket) {
-                    socket.emit("leave");
-                }
 
-                dispatchLocalScreen({ method: 'remove' });
+                socket.emit("leave");
 
-                dispatchShareScreen({ method: 'remove' });
+                removeAllScreen();
+
             };
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [socket]);
 
+    const removeAllScreen = () => {
+
+        dispatchShareScreen({ method: 'remove' });
+
+        dispatchLocalScreen({ method: 'remove' });
+    }
+
     const muteMic = () => {
         if (localStream) {
             const enabled = localStream.getAudioTracks()[0].enabled
             localStream.getAudioTracks()[0].enabled = !enabled;
-            setMute(enabled)
+            setMute(enabled);
         }
     }
 
