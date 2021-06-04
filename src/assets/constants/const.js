@@ -3,4 +3,4 @@ export const GOOGLE_CLIENT_ID = '505292012597-1iljdvj992fmflo3tr2p7ai2fo3a7mn7.a
 export const FACEBOOK_CLIENT_ID = '755327351725177';
 //export const SERVER_SOCKET= 'https://lms-api-server.herokuapp.com';
 
-export const SERVER_SOCKET= 'http://localhost:8000/';
+export const SERVER_SOCKET= 'http://localhost:8000';

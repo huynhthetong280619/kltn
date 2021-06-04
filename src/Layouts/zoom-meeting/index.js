@@ -288,7 +288,12 @@ const ZoomMeeting = () => {
         notify.notifyError("Error!", message);
     }
 
-    const peer = new Peer();
+    const [peer, setPeer] = useState(new Peer(currentUser._id, {
+        secure: true, 
+        host: 'lms-api-server.herokuapp.com',
+        port: 443,
+        path: '/'
+    }))
 
     useEffect(() => {
         if (socket && !localStream && !shareScreen) {
