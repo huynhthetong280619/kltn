@@ -1,9 +1,8 @@
-import { withTranslation } from 'react-i18next';
+import { Button, Form, Input, Select } from 'antd';
 import { useEffect, useState } from 'react';
-import { Input, Select, Button, Form } from 'antd'
-import RestClient from '../../utils/restClient';
-import { notifyError } from '../../assets/common/core/notify';
 import { useTranslation } from 'react-i18next';
+import { notifyError } from '../../assets/common/core/notify';
+import RestClient from '../../utils/restClient';
 // import Loading from '../../loading/loading.jsx';
 const { Option } = Select;
 const { TextArea } = Input;
@@ -57,8 +56,18 @@ const AddInformation = ({ timelinesList, isLoading, createInformation, idSubject
                     <div>Loading</div>
                     : (
                         <Form
+                        {
+                            ...{
+                                labelCol: {
+                                    span: 4
+                                },
+                                wrapperCol: {
+                                    span: 20
+                                }
+                            }
+                        }
                             onFinish={onFinish}
-                            layout="vertical"
+                            layout="horizontal"
                             form={form}
                         >
                             <Form.Item
@@ -108,8 +117,8 @@ const AddInformation = ({ timelinesList, isLoading, createInformation, idSubject
                                 />
                             </Form.Item>
 
-                            <Form.Item>
-                                <Button type="primary" htmlType="submit" className="lms-btn">
+                            <Form.Item wrapperCol={{span: 24}}>
+                                <Button type="primary" htmlType="submit">
                                     {t('submit')}</Button>
                             </Form.Item>
                         </Form>

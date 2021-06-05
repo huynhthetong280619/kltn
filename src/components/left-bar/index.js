@@ -59,16 +59,16 @@ const LeftBar = ({ isOpen, setOpen }) => {
             <Divider />
             {
                 isTeacherFlag ? <>
-                    {/* <Title level={5} style={{ color: '#f9f9f9' }}>Giảng dạy</Title>
+                    <Title level={5} style={{ color: '#f9f9f9' }}>Giảng dạy</Title>
                     <div className="drawer-item-app">
                         <div className="mask-hover"></div>
                         <div className="drawer-item__i">
                             <IC_FOLDER />
                         </div>
-                        <div className="drawer-item__c color-default">Để đánh giá</div>
+                        <div className="drawer-item__c color-default">Lớp học public</div>
                     </div>
-                    <Divider /> */}
-                    {/* <div className="drawer-item-app">
+                    {/* <Divider />
+                    <div className="drawer-item-app">
                 <div className="mask-hover"></div>
                 <div className="drawer-item__i">
                     <IC_STORAGE />

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import { Row, Table, Space, Col, Tabs, Button, Select, InputNumber } from 'antd'
-
-import { useTranslation, withTranslation } from 'react-i18next'
+import { Button, InputNumber, Row, Table } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { CSVLink } from "react-csv";
-import excel from '../../../assets/images/contents/excel.png'
-import RestClient from '../../../utils/restClient';
+import { useTranslation } from 'react-i18next';
 import { notifyError, notifySuccess } from '../../../assets/common/core/notify';
+import excel from '../../../assets/images/contents/excel.png';
+import RestClient from '../../../utils/restClient';
+
 
 const TranscriptManage = ({ lstClassScore, idSubject }) => {
 
@@ -75,6 +75,8 @@ const TranscriptManage = ({ lstClassScore, idSubject }) => {
             key: c
         }
     })
+
+    console.log('lstClassScore', lstClassScore)
 
     return (<>
         <Row >

@@ -1,5 +1,5 @@
 import { Button, Form, Input, Select } from 'antd';
-import { useTranslation, withTranslation } from 'react-i18next';
+import { useTranslation, } from 'react-i18next';
 const { Option } = Select;
 const { TextArea } = Input;
 
@@ -19,9 +19,17 @@ const AddTimeline = ({ createTimeline, isLoading }) => {
     return (
         <>
             <Form
+            {...{
+                labelCol: {
+                    span: 4
+                },
+                wrapperCol: {
+                    span: 20
+                }
+            }}
                 onFinish={onFinish}
                 form={form}
-                layout="vertical"
+                layout="horizontal"
             >
                 <Form.Item
                     label={t('name')}
@@ -52,8 +60,10 @@ const AddTimeline = ({ createTimeline, isLoading }) => {
                     />
                 </Form.Item>
 
-                <Form.Item>
-                    <Button type="primary"  htmlType="submit" className="lms-btn">
+                <Form.Item wrapperCol={{
+                    span: 24
+                }}>
+                    <Button type="primary"  htmlType="submit">
                         {t('submit')}
                     </Button>
                 </Form.Item>
@@ -63,4 +73,4 @@ const AddTimeline = ({ createTimeline, isLoading }) => {
 }
 
 
-export default withTranslation('translations')(AddTimeline)
+export default AddTimeline

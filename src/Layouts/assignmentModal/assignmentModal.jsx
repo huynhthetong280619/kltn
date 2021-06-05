@@ -1,17 +1,17 @@
-import React, { useState } from 'react'
+import { Button, Input, Modal, Row, Tabs, Typography } from 'antd';
 import { get } from 'lodash';
-import { useTranslation, withTranslation } from 'react-i18next';
-import { Row, Input, Modal, Tabs, Button, Typography } from 'antd'
-import { notifyError, notifyWarning } from '../../assets/common/core/notify.js';
+import moment from 'moment';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import downloadFile from '../../assets/common/core/downloadFile.js';
-import moment from 'moment'
-import file from '../../assets/images/contents/file.png'
-import word from '../../assets/images/contents/word.png'
-import rar from '../../assets/images/contents/rar.png'
-import pdf from '../../assets/images/contents/pdf.png'
-import RestClient from '../../utils/restClient.js';
+import { notifyError, notifyWarning } from '../../assets/common/core/notify.js';
+import file from '../../assets/images/contents/file.png';
 // import Loading from '../../loading/loading.jsx'
-import { ReactComponent as IC_CLOSE } from '../../assets/images/contents/ic_close.svg'
+import { ReactComponent as IC_CLOSE } from '../../assets/images/contents/ic_close.svg';
+import pdf from '../../assets/images/contents/pdf.png';
+import rar from '../../assets/images/contents/rar.png';
+import word from '../../assets/images/contents/word.png';
+import RestClient from '../../utils/restClient.js';
 import LoadingRequest from '../loading-request/loading.jsx';
 
 

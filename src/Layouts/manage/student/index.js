@@ -1,16 +1,16 @@
+import { Tabs } from 'antd'
+import { get } from 'lodash'
 import React, { useEffect, useState } from 'react'
-import { Row, Col, Tabs } from 'antd'
-import { useTranslation, withTranslation } from 'react-i18next'
-import './overwrite.css'
-import RestClient from '../../../utils/restClient'
-import { useHistory, useLocation } from 'react-router';
-import StudentManage from '../student-manage';
-import ExamManage from '../exam-manage';
-import TranscriptManage from '../transcript-manage';
-import { get } from 'lodash';
-import ModalWrapper from '../../../components/basic/modal-wrapper'
-import ModalLoadingLogin from '../../login/modal-loading-login';
+import { useTranslation } from 'react-i18next'
+import { useHistory, useLocation } from 'react-router'
 import { ReactComponent as Logout } from '../../../assets/images/contents/logout.svg'
+import ModalWrapper from '../../../components/basic/modal-wrapper'
+import RestClient from '../../../utils/restClient'
+import ModalLoadingLogin from '../../login/modal-loading-login'
+import ExamManage from '../exam-manage'
+import StudentManage from '../student-manage'
+import TranscriptManage from '../transcript-manage'
+import './overwrite.css'
 
 
 const { TabPane } = Tabs;
@@ -32,7 +32,7 @@ const Student = () => {
             .then(res => {
                 console.log('submissioin core', res)
                 if (!res.hasError) {
-                    setLstSubmissionCore(get(res, 'data'))
+                    setLstSubmissionCore(get(res, 'data')?.transcript)
                 }
             })
 
@@ -51,6 +51,8 @@ const Student = () => {
     if (loadingData) {
         return <ModalLoadingLogin visible={loadingData} content={t("loading_class")} />
     }
+
+    console.log('lstClassScore', lstClassScore);
 
 
     return (
@@ -72,4 +74,4 @@ const Student = () => {
         </ModalWrapper>
     )
 }
-export default withTranslation('translations')(Student)
+export default Student

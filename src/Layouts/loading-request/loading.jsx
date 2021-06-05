@@ -1,5 +1,4 @@
-import { withTranslation } from 'react-i18next'
-import { Spin, Alert } from 'antd'
+import { Alert, Spin } from 'antd'
 import { useTranslation } from 'react-i18next'
 
 const LoadingRequest = () => {

@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
-import { useTranslation, withTranslation } from 'react-i18next';
-import formatTime from '../../assets/common/core/formatTime';
-import { Input, Select, Button, Checkbox, Form, DatePicker, Skeleton } from 'antd'
-import downloadFile from '../../assets/common/core/downloadFile.js';
-import { notifyError } from '../../assets/common/core/notify.js';
+import { Button, Checkbox, DatePicker, Form, Input, Select, Skeleton } from 'antd';
 // import Loading from '../../loading/loading.jsx';
-import moment from 'moment'
-import word from '../../assets/images/contents/word.png'
-import pdf from '../../assets/images/contents/pdf.png'
+import moment from 'moment';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import downloadFile from '../../assets/common/core/downloadFile.js';
+import formatTime from '../../assets/common/core/formatTime';
+import { notifyError } from '../../assets/common/core/notify.js';
+import pdf from '../../assets/images/contents/pdf.png';
+import word from '../../assets/images/contents/word.png';
 import RestClient from '../../utils/restClient';
 const { Option } = Select;
 const { TextArea } = Input;
@@ -182,9 +182,19 @@ const AddAssignment = ({ timelinesList, createAssignment, updateAssignment, idSu
                     // <Loading />
                     <Skeleton />
                     : (<Form
+                        {
+                        ...{
+                            labelCol: {
+                                span: 4
+                            },
+                            wrapperCol: {
+                                span: 20
+                            }
+                        }
+                        }
                         onFinish={onFinish}
                         form={form}
-                        layout="vertical"
+                        layout="horizontal"
                     >
                         <Form.Item
                             label={t('timeline')}
@@ -233,65 +243,60 @@ const AddAssignment = ({ timelinesList, createAssignment, updateAssignment, idSu
                                 autoSize={{ minRows: 3, maxRows: 5 }}
                             />
                         </Form.Item>
-                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Form.Item
-                                label={t('startTime')}
-                                name={['assignment', 'setting', 'startTime']}
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: t('req_begin_time'),
-                                    }
-                                ]}
-                                style={{ width: '30%' }}
-                                hasFeedback>
-                                <DatePicker className="alt-date-picker" showTime format="YYYY-MM-DD HH:mm:ss" />
-                            </Form.Item>
+                        <Form.Item
+                            label={t('startTime')}
+                            name={['assignment', 'setting', 'startTime']}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: t('req_begin_time'),
+                                }
+                            ]}
+                            hasFeedback>
+                            <DatePicker className="alt-date-picker" showTime format="YYYY-MM-DD HH:mm:ss" />
+                        </Form.Item>
 
-                            <Form.Item
-                                dependencies={['assignment', 'setting', 'startTime']}
-                                label={t('expireTime')}
-                                name={['assignment', 'setting', 'expireTime']}
-                                style={{ width: '30%' }}
-                                hasFeedback
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: t('req_end_time'),
+                        <Form.Item
+                            dependencies={['assignment', 'setting', 'startTime']}
+                            label={t('expireTime')}
+                            name={['assignment', 'setting', 'expireTime']}
+                            hasFeedback
+                            rules={[
+                                {
+                                    required: true,
+                                    message: t('req_end_time'),
+                                },
+                                ({ getFieldValue }) => ({
+                                    validator(rule, value) {
+                                        if (!value || value.isAfter(getFieldValue(['assignment', 'setting', 'startTime']))) {
+                                            return Promise.resolve();
+                                        } else {
+                                            return Promise.reject(t('condition_start_end'));
+                                        }
                                     },
-                                    ({ getFieldValue }) => ({
-                                        validator(rule, value) {
-                                            if (!value || value.isAfter(getFieldValue(['assignment', 'setting', 'startTime']))) {
-                                                return Promise.resolve();
-                                            } else {
-                                                return Promise.reject(t('condition_start_end'));
-                                            }
-                                        },
-                                    }),
-                                ]}
-                            >
-                                <DatePicker className="alt-date-picker" showTime format="YYYY-MM-DD HH:mm:ss" />
-                            </Form.Item>
+                                }),
+                            ]}
+                        >
+                            <DatePicker className="alt-date-picker" showTime format="YYYY-MM-DD HH:mm:ss" />
+                        </Form.Item>
 
-                            <Form.Item
-                                label={t('fileSize')}
-                                name={['assignment', 'setting', 'fileSize']}
-                                style={{ width: '30%' }}
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: t('req_size_file')
-                                    }
-                                ]}
-                                hasFeedback>
-                                <Select dropdownClassName="ant-customize-dropdown">
-                                    <Option value="5">5</Option>
-                                    <Option value="10">10</Option>
-                                    <Option value="15">15</Option>
-                                    <Option value="20">20</Option>
-                                </Select>
-                            </Form.Item>
-                        </div>
+                        <Form.Item
+                            label={t('fileSize')}
+                            name={['assignment', 'setting', 'fileSize']}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: t('req_size_file')
+                                }
+                            ]}
+                            hasFeedback>
+                            <Select dropdownClassName="ant-customize-dropdown">
+                                <Option value="5">5</Option>
+                                <Option value="10">10</Option>
+                                <Option value="15">15</Option>
+                                <Option value="20">20</Option>
+                            </Select>
+                        </Form.Item>
 
 
 
@@ -308,7 +313,7 @@ const AddAssignment = ({ timelinesList, createAssignment, updateAssignment, idSu
                                     }}>
                                         {f.type.includes('doc')
                                             ? <img src={word} width={20} /> : <img src={pdf} width={20} />}
-                                        <span style={{ marginLeft: 10 }}  onClick={e => e.preventDefault()}>
+                                        <span style={{ marginLeft: 10 }} onClick={e => e.preventDefault()}>
                                             <span onClick={() => downloadFile(f)}>{f.name}.{f.type}</span>
                                         </span>
                                     </span>
@@ -321,25 +326,21 @@ const AddAssignment = ({ timelinesList, createAssignment, updateAssignment, idSu
                         >
                             <Input type="file" style={{ overflow: 'hidden' }} onChange={e => handleProcessFile(e)} />
                         </Form.Item>
-                        <div style={{ display: 'flex' }}>
-                            <Form.Item
-                                label={t('isOverDue')}
-                                name={['assignment', 'setting', 'isOverDue']}
-                                valuePropName="checked"
-                                style={{ flexDirection: 'row', width: '49%', alignItems: 'baseline' }}
-                            >
-                                <Checkbox onChange={e => handleOnchangeOverDue(e)} />
-                            </Form.Item>
+                        <Form.Item
+                            label={t('isOverDue')}
+                            name={['assignment', 'setting', 'isOverDue']}
+                            valuePropName="checked"
+                        >
+                            <Checkbox onChange={e => handleOnchangeOverDue(e)} />
+                        </Form.Item>
 
-                            <Form.Item
-                                label={t('display')}
-                                name={['assignment', 'isDeleted']}
-                                valuePropName="checked"
-                                style={{ flexDirection: 'row', width: '49%', alignItems: 'baseline' }}
-                            >
-                                <Checkbox />
-                            </Form.Item>
-                        </div>
+                        <Form.Item
+                            label={t('display')}
+                            name={['assignment', 'isDeleted']}
+                            valuePropName="checked"
+                        >
+                            <Checkbox />
+                        </Form.Item>
                         {isOverDue && (
                             <Form.Item
                                 label={t('overDueDate')}
@@ -367,8 +368,8 @@ const AddAssignment = ({ timelinesList, createAssignment, updateAssignment, idSu
                         )}
 
 
-                        <Form.Item >
-                            <Button type="primary" loading={isLoading} htmlType="submit" className="lms-btn">
+                        <Form.Item wrapperCol={{ span: 24 }}>
+                            <Button type="primary" loading={isLoading} htmlType="submit" >
                                 {t('submit')}</Button>
                         </Form.Item>
 

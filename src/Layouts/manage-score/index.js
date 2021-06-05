@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import { useTranslation, withTranslation } from 'react-i18next'
-import { Row, Col, Table, Typography } from 'antd'
-import statisticsPoint from '../../assets/images/contents/statistics-point.png'
-import RestClient from '../../utils/restClient';
+import { Row, Table, Typography } from 'antd';
+import { get } from 'lodash';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
-import { get } from 'lodash'
+import statisticsPoint from '../../assets/images/contents/statistics-point.png';
 import ModalWrapper from '../../components/basic/modal-wrapper';
+import RestClient from '../../utils/restClient';
 const { Text } = Typography;
 
 const ManageScore = () => {

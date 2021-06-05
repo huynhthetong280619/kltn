@@ -7,14 +7,14 @@ import { useTranslation } from 'react-i18next';
 const { Option } = Select;
 const { TextArea } = Input;
 
-const AddForum = ({timelinesList, createForum, updateForum, idSubject, idTimeline, idForum, token }) => {
+const AddForum = ({ timelinesList, createForum, updateForum, idSubject, idTimeline, idForum, token }) => {
 
     const [form] = Form.useForm();
 
     const [isLoading, setLoading] = useState(false);
 
     const [forum, setForum] = useState(null);
-    const {t} = useTranslation()
+    const { t } = useTranslation()
     const restClient = new RestClient({ token: '' })
 
 
@@ -100,6 +100,16 @@ const AddForum = ({timelinesList, createForum, updateForum, idSubject, idTimelin
             })
     }
 
+    const formItemLayout = {
+        labelCol: {
+            span: 4,
+
+        },
+        wrapperCol: {
+            span: 20
+        }
+    };
+
     return (
         <>
             {
@@ -107,10 +117,11 @@ const AddForum = ({timelinesList, createForum, updateForum, idSubject, idTimelin
                     <Skeleton />
                     :
                     (<Form
+                        {...formItemLayout}
                         onFinish={onFinish}
                         form={form}
-                        layout="vertical"
-                        
+                        layout="horizontal"
+
                     >
                         <Form.Item
                             label={t('timeline')}
@@ -162,13 +173,13 @@ const AddForum = ({timelinesList, createForum, updateForum, idSubject, idTimelin
                             label={t('display')}
                             name={['forum', 'isDeleted']}
                             valuePropName="checked"
-                            style={{flexDirection: 'row', alignItems: 'baseline'}}
+                            style={{ flexDirection: 'row', alignItems: 'baseline' }}
                         >
                             <Checkbox />
                         </Form.Item>
 
-                        <Form.Item >
-                            <Button type="primary" loading={isLoading} htmlType="submit" className="lms-btn">
+                        <Form.Item wrapperCol={{span: 24}}>
+                            <Button type="primary" loading={isLoading} htmlType="submit">
                                 {t('submit')}</Button>
                         </Form.Item>
                     </Form>)}

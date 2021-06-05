@@ -1,10 +1,9 @@
-import { useState } from 'react';
-import { withTranslation } from 'react-i18next';
-import { Button, Form, Row, Checkbox } from 'antd'
-import { notifyError } from '../../assets/common/core/notify.js';
+import { Button, Checkbox, Form } from 'antd';
 import fileDownload from 'js-file-download';
-import RestClient from '../../utils/restClient.js';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { notifyError } from '../../assets/common/core/notify.js';
+import RestClient from '../../utils/restClient.js';
 
 const ExportSubject = ({ idSubject, nameSubject }) => {
 

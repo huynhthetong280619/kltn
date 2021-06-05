@@ -1,37 +1,31 @@
-import React, { useContext, useEffect, useState } from 'react'
-import WidgetLeft from '../../components/widget-left'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Skeleton, Timeline, Tooltip, Row, Col, Modal } from 'antd'
-import './styles.scss'
+import { Col, Row, Tooltip } from 'antd';
+import { get, head, isEmpty, pick } from 'lodash';
+import React, { useContext, useEffect, useState } from 'react';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { useTranslation } from 'react-i18next';
-import FORUM from '../../assets/images/contents/forum.png'
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import RestClient from '../../utils/restClient';
-import { StoreTrading } from '../../store-trading';
 import { useHistory, useLocation } from 'react-router';
-import { get, isEmpty, pick, head } from 'lodash';
-import ModalLoadingLogin from '../login/modal-loading-login';
-import AssignmentModal from '../assignmentModal/assignmentModal';
-import AddAssignment from '../addAssignment/addAssignment.jsx';
-import WidgeRight from '../../components/widget-right';
-import { notifyError, notifySuccess } from '../../assets/common/core/notify';
-
-import { ReactComponent as DashManage } from '../../assets/images/contents/dashboard.svg'
-import { CSVLink } from 'react-csv';
 import downloadFile from '../../assets/common/core/downloadFile';
-import { ReactComponent as ManageSubject } from '../../assets/images/mn.svg'
+import { notifyError, notifySuccess } from '../../assets/common/core/notify';
+import FORUM from '../../assets/images/contents/forum.png';
+import { ReactComponent as Logout } from '../../assets/images/contents/logout.svg';
 import ModalWrapper from '../../components/basic/modal-wrapper';
-
+import { StoreTrading } from '../../store-trading';
+import RestClient from '../../utils/restClient';
+import AddAssignment from '../addAssignment/addAssignment.jsx';
+import AddFile from '../addFile/addFile';
+import AddForum from '../addForum/addForum';
+import AddInformation from '../addInformation/addInformation';
 import AddQuiz from '../addQuiz/addQuiz';
 import AddSurvey from '../addSurvey/addSurvey';
-
-import AddInformation from '../addInformation/addInformation';
 import AddTimeline from '../addTimeline/addTimeline';
-import AddForum from '../addForum/addForum';
-import { ReactComponent as IC_CLOSE } from '../../assets/images/contents/ic_close.svg'
+import AssignmentModal from '../assignmentModal/assignmentModal';
+import ModalLoadingLogin from '../login/modal-loading-login';
 import QuizBank from '../quiz-bank';
-import AddFile from '../addFile/addFile';
-import { ReactComponent as Logout } from '../../assets/images/contents/logout.svg'
+import './styles.scss';
+
+
+
 
 
 const Subject = () => {
@@ -87,6 +81,8 @@ const Subject = () => {
     const [quizBankState, setQuizBankState] = useState(false)
     const [submissionAssigmentId, setSubmissionAssigmentId] = useState('')
     const [isExecuteClass, setIsExecuteClass] = useState(false)
+
+    const [isUpdate, setIsUpdate] = useState(false)
 
     const history = useHistory()
     const restClient = new RestClient({ token })
@@ -150,6 +146,7 @@ const Subject = () => {
     const querySurveyList = () => {
         restClient.asyncGet(`/survey-bank?idCourse=${location.state._id}`)
             .then(res => {
+                console.log('survey-list', res)
                 if (!res.hasError) {
                     setSurveyList(res?.data?.surveyBank)
                 }
@@ -291,97 +288,61 @@ const Subject = () => {
     }
 
     const focusEditSurvey = (surveyId, timelineId) => {
+        setCurrentTitle('Cập nhật bài khảo sát')
         console.log('focusEditSurvey', surveyId, timelineId)
         setSurveyIdEdit(surveyId);
         setTimelineIdEdit(timelineId)
         setFocusSurveyEdit(true)
-        setIsOpenModalFunction(true)
+
+        setIsUpdate(true)
+
     }
 
     const focusEditFile = (fileId, timelineId) => {
+        setCurrentTitle('Cập nhật tài liệu')
+
         console.log('focusEditFile', fileId, timelineId)
         setFileIdEdit(fileId);
         setTimelineIdEdit(timelineId)
         setFocusFileEdit(true)
-        setIsOpenModalFunction(true)
+
+        setIsUpdate(true)
+
     }
 
     const focusEditAssignment = (assignmentId, timelineId) => {
+        setCurrentTitle('Cập nhật bài tập')
+
         console.log('focusEditAssignment', assignmentId, timelineId)
         setAssignmentIdEdit(assignmentId);
         setTimelineIdEdit(timelineId)
         setFocusAssignmentEdit(true)
-        setIsOpenModalFunction(true)
+
+        setIsUpdate(true)
+
     }
 
     const focusEditForum = (forumId, timelineId) => {
+        setCurrentTitle('Cập nhật diễn đàn')
+
         console.log('focusEditForum', forumId, timelineId)
         setForumIdEdit(forumId);
         setTimelineIdEdit(timelineId)
         setFocusForumEdit(true)
-        setIsOpenModalFunction(true)
+
+        setIsUpdate(true)
+
     }
 
     const focusEditExams = (examId, timelineId) => {
+        setCurrentTitle('Cập nhật bài kiểm tra')
+
         console.log('focusEditExam', examId, timelineId)
         setExamIdEdit(examId);
         setTimelineIdEdit(timelineId)
         setFocusExamEdit(true)
-        setIsOpenModalFunction(true)
-    }
 
-    const openModalFunction = (type) => {
-        setIsOpenModalFunction(true)
-        setCurrentTitle(type)
-
-    }
-
-    const focusTodos = () => {
-        setTodosState(true)
-        setOpenCreateContent(false)
-    }
-
-    const focusNotification = () => {
-        setNotificationState(true)
-        setOpenCreateContent(false)
-    }
-
-    const focusDocument = () => {
-        setDocumentState(true)
-        setOpenCreateContent(false)
-    }
-
-    const focusSurvey = () => {
-        setSurveyState(true)
-        setOpenCreateContent(false)
-    }
-
-    const focusQuiz = () => {
-        setQuizState(true)
-        setOpenCreateContent(false)
-    }
-
-    const focusTimeline = () => {
-        setTimelineState(true)
-        setOpenCreateContent(false)
-    }
-
-    const focusForum = () => {
-        setForumState(true)
-        setOpenCreateContent(false)
-    }
-
-    const focusExportData = () => {
-        setExportState(true)
-        setOpenCreateContent(false)
-
-    }
-
-
-    const focusQuizBank = () => {
-        setQuizBankState(true)
-        setOpenCreateContent(false)
-
+        setIsUpdate(true)
     }
 
     const createAssignment = async ({ assignment, idTimeline }) => {
@@ -395,61 +356,39 @@ const Subject = () => {
         setDetailSubject([...detailSubject])
         setTimelinesIndex([...detailSubject])
 
-
-        setIsOpenModalFunction(false)
-        setTodosState(false)
-        setOpenCreateContent(false)
+        handleLogoutExecute()
     }
 
     const updateAssignment = ({ assignment, idTimeline }) => {
         notifySuccess(t('success'), t('update_assign_success'))
         let timelineUpdate = detailSubject.filter(({ _id }) => _id === idTimeline)
 
-        //console.log('timelineUpdate', timelineUpdate)
         let target = head(timelineUpdate).assignments.find(({ _id }) => _id === assignment._id);
-        //console.log('targetAssignment', target);
         let index = head(timelineUpdate).assignments.indexOf(target);
 
         head(timelineUpdate).assignments.splice(index, 1, assignment);
 
-        setIsOpenModalFunction(false)
-        setFocusAssignmentEdit(false)
-        setOpenCreateContent(false)
-
-        // setState({
-        //     timelines: [...timelines],
-        // }, () => {
-        //     setState({
-        //         timelinesIndex: timelines
-        //     })
-        //     //console.log(timelines)
-
-        //     onCloseModalAction();
-        // })
+        handleLogoutExecute()
     }
 
     const createInformation = async ({ information, idTimeline }) => {
-        // this.setState({ isLoading: true });
         const data = {
             idCourse: location.state._id,
             idTimeline: idTimeline,
             data: information
         }
-        //console.log('createInformation', data);
         await restClient.asyncPost(`/announcement`, data)
             .then(res => {
                 console.log('Res', res)
                 if (!res.hasError) {
                     notifySuccess(t('success'), t('add_quiz_information'))
-                    //console.log('information', res)
                     let timelineUpdate = detailSubject.filter(({ _id }) => _id === data.idTimeline)
                     console.log('Timeline update', timelineUpdate, res.data)
                     head(timelineUpdate).announcements.push(res.data.announcement)
                     setDetailSubject([...detailSubject])
                     setTimeout(() => setTimelinesIndex(detailSubject), 1000)
-                    setOpenCreateContent(false);
-                    setIsOpenModalFunction(false)
-                    setNotificationState(false)
+
+                    handleLogoutExecute()
                 } else {
                     notifyError(t('failure'), res.data.message);
                 }
@@ -462,25 +401,11 @@ const Subject = () => {
         let timelineUpdate = detailSubject.filter(({ _id }) => _id === idTimeline)
 
         let target = head(timelineUpdate).forums.find(({ _id }) => _id === forum._id);
-        //console.log('targetForum', target);
         let index = head(timelineUpdate).forums.indexOf(target);
 
         head(timelineUpdate).forums.splice(index, 1, forum);
 
-        setFocusForumEdit(false)
-        setOpenCreateContent(false)
-        setIsOpenModalFunction(false)
-        //console.log(timelineUpdate)
-
-        // this.setState({
-        //     timelines: [...timelinesList],
-        // }, () => {
-        //     //console.log(timelinesList)
-        //     this.setState({
-        //         timelinesIndex: timelinesList
-        //     })
-        //     this.onCloseModalAction();
-        // })
+        handleLogoutExecute()
     }
 
     const createForum = async ({ forum, idTimeline }) => {
@@ -496,28 +421,14 @@ const Subject = () => {
 
 
         setTimelinesIndex([...detailSubject])
-        setOpenCreateContent(false)
-        setIsOpenModalFunction(false)
-        setForumState(false)
+        handleLogoutExecute()
 
-
-        // this.setState({
-        //     timelines: [...timelinesList],
-        // }, () => {
-        //     this.setState({
-        //         timelinesIndex: timelinesList
-        //     })
-        //     this.onCloseModalAction();
-        // })
     }
 
 
 
 
     const createTimeline = async (timeline) => {
-        // this.setState({
-        //     isLoading: true
-        // })
 
         const data = {
             idCourse: location.state._id,
@@ -526,28 +437,12 @@ const Subject = () => {
 
         await restClient.asyncPost('/timeline', data)
             .then(res => {
-                // this.setState({ isLoading: false });
                 if (!res.hasError) {
                     notifySuccess(t('success'), t('add_quiz_timeline'))
                     setDetailSubject([...detailSubject, get(res, 'data')?.timeline])
                     setTimelinesIndex([...detailSubject, get(res, 'data')?.timeline])
-                    setOpenCreateContent(false)
-                    setIsOpenModalFunction(false)
-                    setTimelineState(false)
-                    // this.setState({
-                    //     timelines: [...timelinesList, get(res, 'data').timeline],
-                    //     lstTimelines: [...this.state.lstTimelines, {
-                    //         _id: get(res, 'data').timeline._id,
-                    //         isDeleted: get(res, 'data').timeline.isDeleted,
-                    //         name: get(res, 'data').timeline.name,
-                    //         description: get(res, 'data').timeline.description
-                    //     }],
-                    // }, () => {
-                    //     this.setState({
-                    //         timelinesIndex: timelinesList
-                    //     })
-                    // });
-                    // this.onCloseModalAction();
+
+                    handleLogoutExecute()
 
                 } else {
                     notifyError(t('failure'), res.data.message);
@@ -563,47 +458,21 @@ const Subject = () => {
 
         head(timelineUpdate).files.push(file)
 
-        //console.log(timelineUpdate)
-
         setDetailSubject([...detailSubject])
 
         setTimelinesIndex([...detailSubject])
 
-        setIsOpenModalFunction(false)
-        setOpenCreateContent(false)
-        setDocumentState(false)
-
-        // this.setState({
-        //     timelines: [...timelinesList],
-        // }, () => {
-        //     //console.log(timelinesList)
-        //     this.setState({
-        //         timelinesIndex: timelinesList
-        //     })
-        //     this.onCloseModalAction();
-        // })
+        handleLogoutExecute()
     }
 
     const updateFile = ({ file, idTimeline }) => {
         notifySuccess(t('success'), t('update_document_success'))
         let timelineUpdate = detailSubject.filter(({ _id }) => _id === idTimeline)
         let target = head(timelineUpdate).files.find(({ _id }) => _id === file._id);
-        //console.log('targetFile', target);
         let index = head(timelineUpdate).files.indexOf(target);
         head(timelineUpdate).files.splice(index, 1, file);
 
-        setIsOpenModalFunction(false)
-        setOpenCreateContent(false)
-        setFocusFileEdit(false)
-        // this.setState({
-        //     timelines: [...timelinesList],
-        // }, () => {
-        //     //console.log(timelinesList)
-        //     this.setState({
-        //         timelinesIndex: timelinesList
-        //     })
-        //     this.onCloseModalAction();
-        // })
+        handleLogoutExecute()
     }
 
 
@@ -617,9 +486,7 @@ const Subject = () => {
         setDetailSubject([...detailSubject])
         setTimelinesIndex(timelinesList)
 
-        setOpenCreateContent(false)
-        setIsOpenModalFunction(false)
-        setQuizState(false)
+        handleLogoutExecute()
 
 
     }
@@ -627,27 +494,12 @@ const Subject = () => {
     const updateQuiz = ({ exam, idTimeline }) => {
         notifySuccess(t('success'), t('update_quiz_success'))
         let timelineUpdate = detailSubject.filter(({ _id }) => _id === idTimeline)
-
-        //console.log('timelineUpdate', timelineUpdate)
-        //console.log('updateExam', exam);
         let target = head(timelineUpdate).exams.find(({ _id }) => _id === exam._id);
-        //console.log('targetExam', target);
         let index = head(timelineUpdate).exams.indexOf(target);
 
         head(timelineUpdate).exams.splice(index, 1, exam);
 
-        setFocusExamEdit(false)
-        setOpenCreateContent(false)
-        setOpenCreateContent(false)
-        // this.setState({
-        //     timelines: [...timelinesList],
-        // }, () => {
-        //     //console.log(timelinesList)
-        //     this.setState({
-        //         timelinesIndex: timelinesList
-        //     })
-        //     this.onCloseModalAction();
-        // })
+        handleLogoutExecute()
     }
 
 
@@ -656,7 +508,6 @@ const Subject = () => {
         notifySuccess(t('success'), t('add_quiz_survey'))
         let timelineUpdate = detailSubject.filter(({ _id }) => _id === idTimeline)
 
-        //console.log('timelineUpdate', timelineUpdate)
         head(timelineUpdate).surveys.push(survey)
 
         setDetailSubject([...detailSubject])
@@ -664,20 +515,7 @@ const Subject = () => {
         setTimelinesIndex(timelinesList)
 
 
-        setIsOpenModalFunction(false)
-        setOpenCreateContent(false)
-        setSurveyState(false)
-        //console.log(timelineUpdate)
-
-        // this.setState({
-        //     timelines: [...timelinesList],
-        // }, () => {
-        //     //console.log(timelinesList)
-        //     this.setState({
-        //         timelinesIndex: timelinesList
-        //     })
-        //     this.onCloseModalAction();
-        // })
+        handleLogoutExecute()
 
     }
     const updateSurvey = ({ survey, idTimeline }) => {
@@ -685,73 +523,16 @@ const Subject = () => {
         notifySuccess(t('success'), t('add_quiz_survey'))
         let timelineUpdate = detailSubject.filter(({ _id }) => _id === idTimeline)
 
-        //console.log('timelineUpdate', timelineUpdate)
         console.log(head(timelineUpdate))
         let target = head(timelineUpdate).surveys.find(({ _id }) => _id === survey._id);
-        //console.log('targetSurvey', target);
         let index = head(timelineUpdate).surveys.indexOf(target);
 
         head(timelineUpdate).surveys.splice(index, 1, survey);
 
-        setIsOpenModalFunction(false)
-        setOpenCreateContent(false)
-        setFocusSurveyEdit(false)
-        //console.log(timelineUpdate)
-
-        // this.setState({
-        //     timelines: [...timelinesList],
-        // }, () => {
-        //     //console.log(timelinesList)
-        //     this.setState({
-        //         timelinesIndex: timelinesList
-        //     })
-        //     this.onCloseModalAction();
-        // })
+        handleLogoutExecute()
+     
     }
 
-    const onCloseModalAction = () => {
-        if (focusSurveyEdit || focusFileEdit || focusAssignmentEdit || focusForumEdit || focusExamEdit) {
-            setOpenCreateContent(false)
-            setFocusSurveyEdit(false)
-            setFocusFileEdit(false)
-            setFocusAssignmentEdit(false)
-            setFocusForumEdit(false)
-            setFocusExamEdit(false)
-        } else if (importState || exportState) {
-            setOpenCreateContent(false)
-        } else {
-            setOpenCreateContent(true)
-        }
-        setIsOpenModalFunction(false);
-        setNotificationState(false)
-        setDocumentState(false)
-        setTodosState(false)
-        setQuizState(false)
-        setSurveyState(false)
-        setTimelineState(false)
-        setForumState(false)
-        setImportState(false)
-        setExportState(false)
-        setQuizBankState(false)
-    }
-
-    const handleImportSubject = async (data) => {
-        await restClient.asyncPost(`/course/${location.state._id}/import`, data)
-            .then(res => {
-                console.log('res', res);
-                if (!res.hasError) {
-                    setDetailSubject(res.data.timelines)
-                    setSurveyList(res.data.surveyBank)
-                    setQuizList(res.data.quizBank)
-                    notifySuccess(t('success'), res.data.message);
-
-                    setImportState(false)
-                    setOpenCreateContent(false)
-                } else {
-                    notifyError(t('failure'), res.data.message);
-                }
-            });
-    }
 
     const closeModalCurrentQuizBank = () => {
         setOpenCreateContent(false)
@@ -759,6 +540,36 @@ const Subject = () => {
         setQuizBankState(false)
     }
 
+    const handleLogoutExecute = () => {
+        setCurrentTitle('')
+        setIsUpdate(true)
+        setIsUpdate(false)
+        setIsOnEdit(false)
+        setIsExecuteClass(false)
+        setNotificationState(false)
+        setDocumentState(false)
+        setTodosState(false)
+        setQuizState(false)
+        setSurveyState(false)
+        setTimelineState(false)
+        setForumState(false)
+        setQuizBankState(false)
+        resetEdit()
+    }
+
+    const resetEdit = () => {
+        setFocusAssignmentEdit(false)
+        setFocusExamEdit(false)
+        setFocusSurveyEdit(false)
+        setFocusFileEdit(false)
+        setFocusForumEdit(false)
+
+        setSurveyIdEdit('')
+        setSurveyIdEdit('')
+        setTimelineIdEdit('')
+        setFileIdEdit('')
+        setAssignmentIdEdit('')
+    }
     if (loadingSubject) {
         return <ModalLoadingLogin visible={loadingSubject} content={t("loading_class")} />
     } else {
@@ -770,14 +581,21 @@ const Subject = () => {
                             isExecuteClass ? <Col span={16}>
                                 <div className="subject-container">
                                     <div className="subject-wrapper">
-                                        <div className="subject-header" style={{display: 'flex', justifyContent: 'space-between', alignContent: 'center'}}>
+                                        <div className="subject-header" style={{ display: 'flex', justifyContent: 'space-between', alignContent: 'center' }}>
                                             <div className="text-center">{currentTitle}</div>
-                                            <div className="description text-center" style={{lineHeight: 10}}>
-                                                <Logout height={20}/>
+                                            <div className="description text-center" onClick={() => handleLogoutExecute()}>
+                                                <Logout height={20} style={{ display: 'block', cursor: 'pointer' }} />
                                             </div>
                                         </div>
                                         <div className="wrapper-body">
                                             {notificationState && (<AddInformation timelinesList={timelinesList} isLoading={null} createInformation={createInformation} idSubject={location.state._id} idTimeline={null} idInformation={null} />)}
+                                            {(todosState || focusAssignmentEdit) && (<AddAssignment timelinesList={timelinesList} createAssignment={createAssignment} updateAssignment={updateAssignment} idSubject={location.state._id} idTimeline={timelineIdEdit} idAssignment={assignmentIdEdit} />)}
+                                            {(quizState || focusExamEdit) && (<AddQuiz quizList={quizList} timelinesList={timelinesList} createQuiz={createQuiz} updateQuiz={updateQuiz} idSubject={location.state._id} idTimeline={timelineIdEdit} idExam={examIdEdit} />)}
+                                            {(surveyState || focusSurveyEdit) && (<AddSurvey timelinesList={timelinesList} surveyList={surveyList} createSurvey={createSurvey} updateSurvey={updateSurvey} idSubject={location.state._id} idTimeline={timelineIdEdit} idSurvey={surveyIdEdit} />)}
+                                            {(documentState || focusFileEdit) && (<AddFile timelinesList={timelinesList} createFile={createFile} updateFile={updateFile} idSubject={location.state._id} idTimeline={timelineIdEdit} idFile={fileIdEdit} />)}
+                                            {timelineState && (<AddTimeline createTimeline={createTimeline} isLoading={null} />)}
+                                            {(forumState || focusForumEdit) && (<AddForum timelinesList={timelinesList} createForum={createForum} updateForum={updateForum} idSubject={location.state._id} idTimeline={timelineIdEdit} idForum={forumIdEdit} />)}
+                                            {quizBankState && (<QuizBank idSubject={location.state._id} closeModalCurrentQuizBank={closeModalCurrentQuizBank} quizList={quizList}/>)}
                                         </div>
                                     </div>
                                 </div>
@@ -834,7 +652,7 @@ const Subject = () => {
                                                                                                         {
                                                                                                             isOnEdit && <div>
                                                                                                                 <Tooltip title={t('edit_file')}>
-                                                                                                                    <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditSurvey(survey._id, _id) }} />
+                                                                                                                    <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); setIsExecuteClass(true); focusEditSurvey(survey._id, _id) }} />
                                                                                                                 </Tooltip>
                                                                                                             </div>
                                                                                                         }
@@ -905,7 +723,7 @@ const Subject = () => {
                                                                                                         {
                                                                                                             isOnEdit && <div>
                                                                                                                 <Tooltip title={t('edit_file')}>
-                                                                                                                    <FontAwesomeIcon icoăn="edit" onClick={(e) => { e.stopPropagation(); focusEditFile(file._id, _id) }} />
+                                                                                                                    <FontAwesomeIcon icoăn="edit" onClick={(e) => { e.stopPropagation(); setIsExecuteClass(true); focusEditFile(file._id, _id) }} />
                                                                                                                 </Tooltip>
                                                                                                             </div>
                                                                                                         }
@@ -942,7 +760,7 @@ const Subject = () => {
                                                                                                         {
                                                                                                             isOnEdit && <div>
                                                                                                                 <Tooltip title={t('edit_file')}>
-                                                                                                                    <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditAssignment(assignment._id, _id) }} />
+                                                                                                                    <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); setIsExecuteClass(true); focusEditAssignment(assignment._id, _id) }} />
                                                                                                                 </Tooltip>
                                                                                                             </div>
                                                                                                         }
@@ -980,7 +798,7 @@ const Subject = () => {
                                                                                                         {
                                                                                                             isOnEdit && <div>
                                                                                                                 <Tooltip title={t('edit_file')}>
-                                                                                                                    <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditForum(forum._id, _id) }} />
+                                                                                                                    <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); setIsExecuteClass(true); focusEditForum(forum._id, _id) }} />
                                                                                                                 </Tooltip>
                                                                                                             </div>
                                                                                                         }
@@ -1018,7 +836,7 @@ const Subject = () => {
                                                                                                         {
                                                                                                             isOnEdit && <div>
                                                                                                                 <Tooltip title={t('edit_file')}>
-                                                                                                                    <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); focusEditExams(exam._id, _id) }} />
+                                                                                                                    <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); setIsExecuteClass(true); focusEditExams(exam._id, _id) }} />
                                                                                                                 </Tooltip>
                                                                                                             </div>
                                                                                                         }
@@ -1094,7 +912,7 @@ const Subject = () => {
                                     >
                                         {t('call_video')}
                                     </Col>
-                                    {isTeacherFlag &&
+                                    {isTeacherFlag  && (!isUpdate ?
                                         <Col span={7} className="action-select-add-content" style={{
                                             display: 'flex',
                                             justifyContent: 'center',
@@ -1112,7 +930,7 @@ const Subject = () => {
                                             }}
                                         >
                                             {t('update')}
-                                        </Col>}
+                                        </Col> : <Col span={7}></Col>)}
                                 </Row>
                             </ModalWrapper>
                             <ModalWrapper>
@@ -1130,6 +948,9 @@ const Subject = () => {
                                         height: '6rem'
                                     }}
                                         onClick={() => {
+                                            handleLogoutExecute();
+                                            resetEdit();
+                                            setIsUpdate(true)
                                             setIsExecuteClass(true)
                                             setCurrentTitle(t('create_information'))
                                             setNotificationState(true)
@@ -1151,8 +972,12 @@ const Subject = () => {
                                         height: '6rem'
                                     }}
                                         onClick={() => {
-                                            openModalFunction('create_document');
-                                            focusDocument();
+                                            handleLogoutExecute();
+                                            resetEdit();
+                                            setIsUpdate(true)
+                                            setIsExecuteClass(true)
+                                            setCurrentTitle(t('create_document'))
+                                            setDocumentState(true)
                                         }}
                                     >
                                         {t('document')}
@@ -1169,8 +994,12 @@ const Subject = () => {
                                         height: '6rem'
                                     }}
                                         onClick={() => {
-                                            openModalFunction('create_assign');
-                                            focusTodos();
+                                            handleLogoutExecute();
+                                            resetEdit();
+                                            setIsUpdate(true)
+                                            setIsExecuteClass(true)
+                                            setCurrentTitle(t('create_assign'))
+                                            setTodosState(true)
                                         }}
                                     >
                                         {t('exercise')}
@@ -1189,8 +1018,12 @@ const Subject = () => {
                                         height: '6rem'
                                     }}
                                         onClick={() => {
-                                            openModalFunction('create_quiz');
-                                            focusQuiz();
+                                            handleLogoutExecute();
+                                            resetEdit();
+                                            setIsUpdate(true)
+                                            setIsExecuteClass(true)
+                                            setCurrentTitle(t('create_quiz'))
+                                            setQuizState(true)
                                         }}
                                     >
                                         {t('quiz')}
@@ -1207,8 +1040,12 @@ const Subject = () => {
                                         height: '6rem'
                                     }}
                                         onClick={() => {
-                                            openModalFunction('create_survey');
-                                            focusSurvey();
+                                            handleLogoutExecute();
+                                            resetEdit();
+                                            setIsUpdate(true)
+                                            setIsExecuteClass(true)
+                                            setCurrentTitle(t('create_survey'))
+                                            setSurveyState(true)
                                         }}
                                     >
                                         {t('survey')}
@@ -1225,8 +1062,12 @@ const Subject = () => {
                                         height: '6rem'
                                     }}
                                         onClick={() => {
-                                            openModalFunction('create_timeline');
-                                            focusTimeline();
+                                            handleLogoutExecute();
+                                            resetEdit();
+                                            setIsUpdate(true)
+                                            setIsExecuteClass(true)
+                                            setCurrentTitle(t('create_timeline'))
+                                            setTimelineState(true)
                                         }}
                                     >
                                         {t('timeline')}
@@ -1248,8 +1089,12 @@ const Subject = () => {
                                         height: '6rem'
                                     }}
                                         onClick={() => {
-                                            openModalFunction('create_forum');
-                                            focusForum();
+                                            handleLogoutExecute();
+                                            resetEdit();
+                                            setIsUpdate(true)
+                                            setIsExecuteClass(true)
+                                            setCurrentTitle(t('create_forum'))
+                                            setForumState(true)
                                         }}
                                     >
                                         {t('forum')}
@@ -1266,8 +1111,12 @@ const Subject = () => {
                                         height: '6rem'
                                     }}
                                         onClick={() => {
-                                            openModalFunction('Quiz Bank');
-                                            focusQuizBank();
+                                            handleLogoutExecute();
+                                            resetEdit();
+                                            setIsUpdate(true)
+                                            setIsExecuteClass(true)
+                                            setCurrentTitle(t('Quiz Bank'))
+                                            setQuizBankState(true)
                                         }}
                                     >
                                         {t('Quiz Bank')}
@@ -1516,7 +1365,7 @@ const Subject = () => {
                 )
             }
 
-            {isOpenModalFunction && <Modal className="modal-function-customize"
+            {/* {isOpenModalFunction && <Modal className="modal-function-customize"
                 onCancel={() => onCloseModalAction()}
                 visible={isOpenModalFunction}
                 closable={false}
@@ -1543,9 +1392,9 @@ const Subject = () => {
                     {(forumState || focusForumEdit) && (<AddForum timelinesList={timelinesList} createForum={createForum} updateForum={updateForum} idSubject={location.state._id} idTimeline={timelineIdEdit} idForum={forumIdEdit} />)}
                     {/* {importState && (<ImportSubject isLoading={null} handleImportSubject={handleImportSubject} />)}
                 {exportState && (<ExportSubject idSubject={location.state._id} nameSubject={null} />)} */}
-                    {quizBankState && (<QuizBank idSubject={location.state._id} closeModalCurrentQuizBank={closeModalCurrentQuizBank} />)}
+            {/* {quizBankState && (<QuizBank idSubject={location.state._id} closeModalCurrentQuizBank={closeModalCurrentQuizBank} />)}
                 </ModalWrapper>
-            </Modal>}
+            </Modal>} */}
 
 
             <AssignmentModal

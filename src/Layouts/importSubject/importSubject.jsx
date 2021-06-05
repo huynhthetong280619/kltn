@@ -1,6 +1,6 @@
+import { Button, Form, Input } from 'antd';
 import { useState } from 'react';
-import { useTranslation, withTranslation } from 'react-i18next';
-import { Input, Button, Form, Row } from 'antd'
+import { useTranslation } from 'react-i18next';
 import { notifyWarning } from '../../assets/common/core/notify.js';
 
 const ImportSubject = ({ isLoading, handleImportSubject }) => {
@@ -85,4 +85,4 @@ const ImportSubject = ({ isLoading, handleImportSubject }) => {
 }
 
 
-export default withTranslation('translations')(ImportSubject)
+export default ImportSubject

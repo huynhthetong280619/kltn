@@ -1,14 +1,12 @@
-import { useState, useEffect } from 'react';
-import { withTranslation } from 'react-i18next';
-import { Input, Select, Button, Form, Checkbox, Skeleton } from 'antd'
+import { Button, Checkbox, Form, Input, Select, Skeleton } from 'antd';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 // import Loading from '../../loading/loading.jsx';
 import downloadFile from '../../assets/common/core/downloadFile.js';
-import word from '../../assets/images/contents/word.png'
-import pdf from '../../assets/images/contents/pdf.png'
-import rar from '../../assets/images/contents/rar.png'
-import RestClient from '../../utils/restClient.js';
 import { notifyError, notifyWarning } from '../../assets/common/core/notify.js';
-import { useTranslation } from 'react-i18next';
+import pdf from '../../assets/images/contents/pdf.png';
+import word from '../../assets/images/contents/word.png';
+import RestClient from '../../utils/restClient.js';
 const { Option } = Select;
 
 const AddFile = ({ timelinesList, createFile, updateFile, idSubject, idTimeline, idFile, token }) => {
@@ -133,9 +131,19 @@ const AddFile = ({ timelinesList, createFile, updateFile, idSubject, idTimeline,
                 (idFile && !file) ?
                     <Skeleton />
                     : (<Form
+                    {
+                        ...{
+                            labelCol: {
+                                span: 4
+                            },
+                            wrapperCol: {
+                                span: 20
+                            }
+                        }
+                    }
                         onFinish={onFinish}
                         form={form}
-                        layout="vertical"
+                        layout="horizontal"
                     >
                         <Form.Item
                             label={t('timeline')}
@@ -190,8 +198,8 @@ const AddFile = ({ timelinesList, createFile, updateFile, idSubject, idTimeline,
                         </Form.Item>
 
 
-                        <Form.Item>
-                            <Button type="primary" loading={isLoading} htmlType="submit" className="lms-btn">
+                        <Form.Item wrapperCol={{span: 24}}>
+                            <Button type="primary" loading={isLoading} htmlType="submit" >
                                 {t('submit')}</Button>
                         </Form.Item>
 
@@ -201,4 +209,4 @@ const AddFile = ({ timelinesList, createFile, updateFile, idSubject, idTimeline,
 }
 
 
-export default withTranslation('translations')(AddFile)
+export default AddFile

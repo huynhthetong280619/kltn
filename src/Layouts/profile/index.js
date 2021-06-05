@@ -1,23 +1,20 @@
-import React, { useState, useEffect } from 'react'
-import { Row, Col, Input, Button, Upload } from 'antd'
-import { Form, Divider, Tag } from 'antd'
 import {
-    FacebookOutlined,
-    DisconnectOutlined
+    DisconnectOutlined, FacebookOutlined
 } from '@ant-design/icons'
-import { useTranslation, withTranslation } from 'react-i18next'
-
-import profileImg from '../../assets/images/contents/profileN.png'
-
-import { notifyError, notifySuccess } from '../../assets/common/core/notify'
-import { getCookie } from '../../assets/common/core/localStorage'
-import { FACEBOOK_CLIENT_ID } from '../../assets/constants/const'
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+import { Button, Col, Divider, Form, Input, Row, Tag, Upload } from 'antd'
 // import HeadPage from '../headPage/headPage.jsx';
-import 'antd/dist/antd.css';
-import './overwrite.css';
-import RestClient from '../../utils/restClient'
+import 'antd/dist/antd.css'
+import React, { useEffect, useState } from 'react'
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+import { useTranslation } from 'react-i18next'
+import { getCookie } from '../../assets/common/core/localStorage'
+import { notifyError, notifySuccess } from '../../assets/common/core/notify'
+import { FACEBOOK_CLIENT_ID } from '../../assets/constants/const'
 import ModalWrapper from '../../components/basic/modal-wrapper'
+import RestClient from '../../utils/restClient'
+import './overwrite.css'
+
+
 
 const fileTypes = [
     "image/jpeg",

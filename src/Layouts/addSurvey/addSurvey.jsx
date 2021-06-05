@@ -1,16 +1,16 @@
-import { useState, useEffect } from 'react';
-import { withTranslation } from 'react-i18next';
-import { Input, Select, Button, Form, DatePicker, Checkbox, Skeleton } from 'antd'
+import { Button, Checkbox, DatePicker, Form, Input, Select, Skeleton, Row, Col, notification } from 'antd';
 // import Loading from '../../loading/loading.jsx';
 import moment from 'moment';
-import RestClient from '../../utils/restClient';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import formatTime from '../../assets/common/core/formatTime.js';
 import { notifyError } from '../../assets/common/core/notify';
-import { useTranslation } from 'react-i18next';
+import ModalWrapper from '../../components/basic/modal-wrapper/index.js';
+import RestClient from '../../utils/restClient';
 const { Option } = Select;
 const { TextArea } = Input;
 
-const AddSurvey = ({ timelinesList, surveyList, createSurvey, updateSurvey, idSubject, idTimeline, idSurvey, token }) => {
+const AddSurvey = ({ timelinesList, surveyList, createSurvey, updateSurvey, idSubject, idTimeline, idSurvey }) => {
 
     const [form] = Form.useForm();
 
@@ -18,6 +18,7 @@ const AddSurvey = ({ timelinesList, surveyList, createSurvey, updateSurvey, idSu
 
     const [survey, setSurvey] = useState(null);
 
+    const [surveyQuestion, setSurveyQuestion] = useState({})
     const [isLoading, setLoading] = useState(false);
 
     const { t } = useTranslation()
@@ -62,11 +63,23 @@ const AddSurvey = ({ timelinesList, surveyList, createSurvey, updateSurvey, idSu
     }, []);
 
     const onFinish = (fieldsValue) => {
-
+        if (Object.values(surveyQuestion).length < 1) {
+            notification.warning({
+                message: "Vui lòng chọn câu hỏi khảo săt!",
+                description: "Thông báo hệ thống",
+                placement: 'bottomRight'
+                
+            })
+            return
+        }
         const data = {
             ...fieldsValue.survey,
-            expireTime: formatTime(fieldsValue.survey.expireTime),
-            isDeleted: !fieldsValue.survey.isDeleted
+            setting: {
+                startTime: formatTime(fieldsValue.survey.setting.startTime),
+                expireTime: formatTime(fieldsValue.survey.setting.expireTime),
+            },
+            isDeleted: !fieldsValue.survey.isDeleted,
+            questions: Object.values(surveyQuestion)
         };
 
         if (!idSurvey) {
@@ -84,7 +97,8 @@ const AddSurvey = ({ timelinesList, surveyList, createSurvey, updateSurvey, idSu
             data: survey
         }
         setLoading(true);
-        await restClient.asyncPost('/survey', data, token)
+        console.log(data)
+        await restClient.asyncPost('/survey', data)
             .then(res => {
                 //console.log('createSurvey', res)
                 setLoading(false);
@@ -103,7 +117,7 @@ const AddSurvey = ({ timelinesList, surveyList, createSurvey, updateSurvey, idSu
             data: survey
         }
         setLoading(true);
-        await restClient.asyncPut(`/survey/${idSurvey}`, data, token)
+        await restClient.asyncPut(`/survey/${idSurvey}`, data)
             .then(res => {
                 //console.log('UpdateSurvey', res)
                 setLoading(false);
@@ -115,6 +129,16 @@ const AddSurvey = ({ timelinesList, surveyList, createSurvey, updateSurvey, idSu
             })
     }
 
+    const handleChangeSelectSurvey = (selected) => {
+        console.log(selected)
+        if (surveyQuestion[`${selected.identity}`]) {
+            delete surveyQuestion[`${selected.identity}`]
+            setSurveyQuestion(surveyQuestion);
+            return;
+        }
+        setSurveyQuestion({ ...surveyQuestion, [`${selected.identity}`]: selected })
+    }
+
 
     return (<>
         {
@@ -123,7 +147,15 @@ const AddSurvey = ({ timelinesList, surveyList, createSurvey, updateSurvey, idSu
                 : (<Form
                     onFinish={onFinish}
                     form={form}
-                    layout="vertical"
+                    layout="horizontal"
+                    {...{
+                        labelCol: {
+                            span: 4
+                        },
+                        wrapperCol: {
+                            span: 20
+                        }
+                    }}
                 >
                     <Form.Item
                         label={t('timeline')}
@@ -165,9 +197,9 @@ const AddSurvey = ({ timelinesList, surveyList, createSurvey, updateSurvey, idSu
                     </Form.Item>
 
                     <Form.Item
-                        dependencies={['exam', 'startTime']}
-                        label={t('expireTime')}
-                        name={['survey', 'expireTime']}
+                        dependencies={['survey', 'startTime']}
+                        label={t('startTime')}
+                        name={['survey', 'setting', 'startTime']}
                         hasFeedback
                         rules={[
                             {
@@ -178,38 +210,52 @@ const AddSurvey = ({ timelinesList, surveyList, createSurvey, updateSurvey, idSu
                     >
                         <DatePicker className="alt-date-picker" showTime format="YYYY-MM-DD HH:mm:ss" />
                     </Form.Item>
-
                     <Form.Item
-                        label={t('code_survey')}
-                        name={['survey', 'code']}
+                        dependencies={['survey', 'expireTime']}
+                        label={t('expireTime')}
+                        name={['survey', 'setting', 'expireTime']}
+                        hasFeedback
                         rules={[
                             {
                                 required: true,
-                                message: t('req_code_survey'),
+                                message: t('req_end_time'),
                             }
                         ]}
-                        hasFeedback
                     >
-                        <Select dropdownClassName="ant-customize-dropdown">
-                            {
-                                surveyList.map(q => (<Option value={q._id} key={q._id}>{q.name}</Option>))
-                            }
-                        </Select>
+                        <DatePicker className="alt-date-picker" showTime format="YYYY-MM-DD HH:mm:ss" />
                     </Form.Item>
-
 
                     <Form.Item
                         label={t('display')}
                         name={['survey', 'isDeleted']}
                         valuePropName="checked"
                         style={{ flexDirection: 'row', alignItems: 'baseline' }}
-
                     >
                         <Checkbox />
                     </Form.Item>
 
-                    <Form.Item >
-                        <Button type="primary" loading={isLoading} htmlType="submit" className="lms-btn">
+                    {
+                        surveyList.map((survey, index) => {
+
+                            return <ModalWrapper style={{ minHeight: 0, background: '#232323', marginBottom: '0.15rem' }}>
+                                <Row>
+                                    <Col span={23}>
+                                        <div style={{ color: '#f9f9f9' }}>Câu {index}: {survey['content']}</div>
+                                        <div style={{ color: '#f9f9f9' }}><span style={{ color: "#c0c0c0" }}>Loại câu hỏi: </span>{survey['typeQuestion']}</div>
+                                    </Col>
+                                    <Col span={1}>
+                                        <Checkbox onChange={() => handleChangeSelectSurvey(survey)} />
+                                    </Col>
+                                </Row>
+                            </ModalWrapper>
+                        })
+                    }
+
+
+
+
+                    <Form.Item wrapperCol={{ span: 24 }}>
+                        <Button type="primary" loading={isLoading} htmlType="submit">
                             {t('submit')}</Button>
                     </Form.Item>
 
@@ -219,4 +265,4 @@ const AddSurvey = ({ timelinesList, surveyList, createSurvey, updateSurvey, idSu
 }
 
 
-export default withTranslation('translations')(AddSurvey)
+export default AddSurvey

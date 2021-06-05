@@ -44,12 +44,13 @@ const ExamManage = ({ lstSubmissionCore }) => {
         { label: t('grade'), key: 'grade' }
     ]
 
+    console.log('lstSubmissionCore', lstSubmissionCore)
     return (<>
         <Row style={{ width: "100%", display: 'flex', justifyContent: 'space-between' }} className="mb-4">
             <div >
                 <Select dropdownClassName="ant-customize-dropdown" defaultValue={test?._id} style={{ width: 200 }} onChange={e => handleSelectTest(e)}>
                     {
-                        (lstSubmissionCore || []).map(q => (<Option value={q._id} key={q._id} style={{ width: '100%' }}>{q.name}</Option>))
+                        (lstSubmissionCore).map(q => (<Option value={q._id} key={q._id} style={{ width: '100%' }}>{q.name}</Option>))
                     }
                 </Select>
             </div>

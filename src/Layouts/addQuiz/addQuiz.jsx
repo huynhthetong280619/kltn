@@ -1,16 +1,15 @@
-import { useState, useEffect } from 'react';
-import { useTranslation, withTranslation } from 'react-i18next';
+import { PlusOutlined } from '@ant-design/icons';
+import { Button, Checkbox, DatePicker, Form, Input, InputNumber, Select, Skeleton } from 'antd';
 // import Loading from '../../loading/loading.jsx';
-import moment from 'moment'
+import moment from 'moment';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { notifyError } from '../../assets/common/core/notify.js';
-import { Input, Select, Button, InputNumber, DatePicker, Checkbox, Form, Skeleton, Space, Col, Row, Typography } from 'antd'
 import RestClient from '../../utils/restClient';
-import formatTime from '../../assets/common/core/formatTime.js';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 const { Option } = Select;
 const { TextArea } = Input;
 
-const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, idTimeline, idExam, token }) => {
+const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, idTimeline, idExam }) => {
 
     const [form] = Form.useForm();
 
@@ -36,7 +35,7 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
     useEffect(() => {
         console.log('Exam id: ', idExam)
         if (idExam) {
-            restClient.asyncGet(`/exam/${idExam}/update/?idCourse=${idSubject}&idTimeline=${idTimeline}`, token)
+            restClient.asyncGet(`/exam/${idExam}/update/?idCourse=${idSubject}&idTimeline=${idTimeline}`)
                 .then(res => {
                     if (!res.hasError) {
                         const ex = res.data.exam;
@@ -101,7 +100,7 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
             data: ex
         }
         setLoading(true);
-        await restClient.asyncPut(`/exam/${idExam}`, data, token)
+        await restClient.asyncPut(`/exam/${idExam}`, data)
             .then(res => {
                 //console.log('handleUpdateExam', res)
                 setLoading(false);
@@ -148,10 +147,10 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
                         layout="horizontal"
                         {...{
                             labelCol: {
-                                span: 6,
+                                span: 4,
                             },
                             wrapperCol: {
-                                span: 18,
+                                span: 20,
                             }
                         }}
                     >
@@ -346,7 +345,7 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
                             <Checkbox />
                         </Form.Item>
 
-                        <Form.Item wrapperCol={{ wrapperCol: 18, offset: 6 }}>
+                        <Form.Item wrapperCol={{ span: 24 }}>
                             <Button type="primary" loading={isLoading} htmlType="submit" style={{ marginTop: 0 }}>
                                 {t('submit')}</Button>
                         </Form.Item>
@@ -357,4 +356,4 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
 }
 
 
-export default withTranslation('translations')(AddQuiz)
+export default AddQuiz

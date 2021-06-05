@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, notification } from 'antd'
+import { Form, Input, Button, Table } from 'antd'
 import { useTranslation } from 'react-i18next';
 import readXlsxFile from 'read-excel-file'
 import { isEmpty } from 'lodash';
 import RestClient from '../../utils/restClient';
 
 const QuizBank = ({ idSubject,
-	closeModalCurrentQuizBank }) => {
+	closeModalCurrentQuizBank, quizList }) => {
 	const { t } = useTranslation()
 	const [form] = Form.useForm();
 	const [quizBankData, setQuizBankData] = useState({})
 	const restClient = new RestClient({ token: '' })
 	const formItemLayout = {
 		labelCol: {
-			span: 8,
+			span: 4,
 
 		},
 	};
@@ -64,7 +64,30 @@ const QuizBank = ({ idSubject,
 		}
 	}
 
-	return <Form
+	
+	  
+	  const columns = [
+		{
+		  title: 'STT',
+		  dataIndex: '_id',
+		  key: '_id',
+		  render: (data, row, index) => index
+		},
+		{
+		  title: 'Tên ngân hàng',
+		  dataIndex: 'name',
+		  key: 'name',
+		},
+		{
+		  title: 'Số lượng câu hỏi',
+		  dataIndex: 'questionCount',
+		  key: 'questionCount',
+		  fixed: 'center'
+		},
+	  ];
+
+
+	return <><Form
 		{...formItemLayout}
 		onFinish={onFinish}
 		form={form}
@@ -81,6 +104,9 @@ const QuizBank = ({ idSubject,
 		</Form.Item>
 
 	</Form>
+	<div>Ngân hàng đề hiện tại</div>
+	<Table dataSource={quizList} columns={columns} pagination={false} />
+	</>
 }
 
 export default QuizBank
