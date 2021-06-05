@@ -173,7 +173,6 @@ const ZoomMeeting = () => {
     }, []);
 
     const connectToNewUser = (peerId, stream, user) => {
-        console.log(localStream, shareScreen);
         const call = peer.call(peerId, stream);
         var isReceive = false;
         call.on('stream', (remoteStream) => {
@@ -295,18 +294,16 @@ const ZoomMeeting = () => {
         path: '/',
         config: {
             iceServers: [
-                { url: 'stun:stun1.l.google.com:19302' },
+                {
+                    urls: [
+                        'stun:stun1.l.google.com:19302',
+                        'stun:stun2.l.google.com:19302',
+                    ],
+                },
+                { urls: 'stun:stun.services.mozilla.com' },
+                { urls: 'turn:numb.viagenie.ca', credential: 'lapth82@gmail.com', username: 'lapth82@gmail.com' }
             ]
         }
-        // 'iceServers': [
-        //     { url: 'stun:stun.ekiga.net' },
-        //     { url: 'stun:stun1.l.google.com:19302' },
-        //     { url: 'stun:stun2.l.google.com:19302' },
-        //     { url: 'stun:stun3.l.google.com:19302' },
-        //     { url: 'stun:stun4.l.google.com:19302' },
-        //     { url: 'stun:stun01.sipphone.com' },
-        //     { url: 'stun:stun.l.google.com:19302' }
-        // ]
     }));
 
     useEffect(() => {
