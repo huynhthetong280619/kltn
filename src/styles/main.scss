@@ -758,11 +758,14 @@ h5.ant-typography{
 }
 
 .ant-modal{
-    top: 50px !important
+    top: 25px !important;
+    left: -66px !important;
 }
 
 .ant-form-item-control-input-content{
     text-align: center;
+    display: flex;
+    column-gap: 0.5rem;
 }
 
 .ant-input-number{
@@ -904,4 +907,17 @@ h5.ant-typography{
 
 .ant-drawer-content-wrapper{
     height: 540px !important
+}
+
+.ant-space-item{
+    width: 100%;
+}
+
+.customize-add-form{
+    .ant-form-item:nth-child(1){
+        width: 100%;
+        .ant-form-item-label{
+            margin-right: 0.97rem
+        }
+    }
 }

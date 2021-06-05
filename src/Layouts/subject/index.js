@@ -729,6 +729,7 @@ const Subject = () => {
         setForumState(false)
         setImportState(false)
         setExportState(false)
+        setQuizBankState(false)
     }
 
     const handleImportSubject = async (data) => {
@@ -1071,6 +1072,7 @@ const Subject = () => {
                                     >
                                         {t('call_video')}
                                     </Col>
+                                    {isTeacherFlag &&
                                     <Col span={7} className="action-select-add-content" style={{
                                         display: 'flex',
                                         justifyContent: 'center',
@@ -1088,7 +1090,7 @@ const Subject = () => {
                                         }}
                                     >
                                         {t('update')}
-                                    </Col>
+                                    </Col>}
                                 </Row>
                             </ModalWrapper>
                             <ModalWrapper>

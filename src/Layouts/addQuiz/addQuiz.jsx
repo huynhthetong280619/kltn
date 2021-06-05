@@ -3,9 +3,10 @@ import { useTranslation, withTranslation } from 'react-i18next';
 // import Loading from '../../loading/loading.jsx';
 import moment from 'moment'
 import { notifyError } from '../../assets/common/core/notify.js';
-import { Input, Select, Button, InputNumber, DatePicker, Checkbox, Form, Skeleton } from 'antd'
+import { Input, Select, Button, InputNumber, DatePicker, Checkbox, Form, Skeleton, Space, Col, Row, Typography } from 'antd'
 import RestClient from '../../utils/restClient';
 import formatTime from '../../assets/common/core/formatTime.js';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 const { Option } = Select;
 const { TextArea } = Input;
 
@@ -13,9 +14,10 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
 
     const [form] = Form.useForm();
 
-    const [quizBank, setQuizBank] = useState(quizList[0]);
+    const [quizBank, setQuizBank] = useState({});
 
     const [exam, setExam] = useState(null);
+    const [quantityBankSelect, setQuantityBankSelect] = useState({})
 
     const [isLoading, setLoading] = useState(false);
     const restClient = new RestClient({ token: '' })
@@ -79,7 +81,7 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
             data: ex
         }
         setLoading(true);
-        console.log('data', data)
+        console.log('data', JSON.stringify(data))
         await restClient.asyncPost('/exam', data)
             .then(res => {
                 console.log('handleCreateExam', res)
@@ -112,11 +114,12 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
     }
 
     const onFinish = (fieldsValue) => {
+        console.log('fieldsValue', fieldsValue)
         const data = {
             ...fieldsValue.exam,
             isDeleted: !fieldsValue.exam.isDeleted,
-            startTime: formatTime(fieldsValue.exam.startTime),
-            expireTime: formatTime(fieldsValue.exam.expireTime)
+            // startTime: formatTime(fieldsValue.exam.startTime),
+            // expireTime: formatTime(fieldsValue.exam.expireTime)
         };
 
         createQuiz({ exam: data, idTimeline: fieldsValue.idTimeline });
@@ -127,9 +130,9 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
         }
     }
 
-    const handleChangeQuizBank = value => {
+    const handleChangeQuizBank = (key, value) => {
         const data = quizList.find(quiz => quiz._id === value);
-        setQuizBank(data);
+        setQuizBank({...quizBank,[`${key}`]: data});
     }
 
 
@@ -142,7 +145,15 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
                     : (<Form
                         onFinish={onFinish}
                         form={form}
-                        layout="vertical"
+                        layout="horizontal"
+                        {...{
+                            labelCol: {
+                                span: 6,
+                            },
+                            wrapperCol: {
+                                span: 18,
+                            }
+                        }}
                     >
                         <Form.Item
                             label={t('timeline')}
@@ -189,119 +200,141 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
                                 autoSize={{ minRows: 3, maxRows: 5 }}
                             />
                         </Form.Item>
-                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Form.Item
-                                label={t('startTime')}
-                                name={['exam', 'setting', 'startTime']}
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: t('req_begin_time'),
-                                    }
-                                ]}
-                                hasFeedback>
-                                <DatePicker className="alt-date-picker" showTime format="YYYY-MM-DD HH:mm:ss" />
-                            </Form.Item>
 
-                            <Form.Item
-                                dependencies={['exam', 'startTime']}
-                                label={t('expireTime')}
-                                name={['exam', 'setting', 'expireTime']}
-                                hasFeedback
-                                style={{ width: '30%' }}
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: t('req_end_time'),
-                                    },
-                                    ({ getFieldValue }) => ({
-                                        validator(rule, value) {
-                                            if (!value || value.isAfter(getFieldValue(['exam', 'startTime']))) {
-                                                return Promise.resolve();
-                                            }
-
-                                            return Promise.reject(t('condition_start_end'));
-                                        },
-                                    }),
-                                ]}
-                            >
-                                <DatePicker className="alt-date-picker" showTime format="YYYY-MM-DD HH:mm:ss" />
-                            </Form.Item>
-
-                            <Form.Item
-                                label={t('questionCount')}
-                                name={['exam', 'setting', 'questionCount']}
-                                style={{ width: '30%' }}
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: t('req_qty_question'),
-                                    }
-                                ]}
-                                hasFeedback>
-                                <InputNumber min={1} max={quizBank ? quizBank.questions : 30} />
-
-                            </Form.Item>
-                        </div>
                         <Form.Item
-                            label={t('code_quiz_bank')}
-                            name={['exam', 'setting', 'code']}
+                            label={t('startTime')}
+                            name={['exam', 'setting', 'startTime']}
                             rules={[
                                 {
                                     required: true,
-                                    message: t('req_code_quiz'),
+                                    message: t('req_begin_time'),
                                 }
                             ]}
-                            hasFeedback
-                        >
-                            <Select dropdownClassName="ant-customize-dropdown" onChange={handleChangeQuizBank} >
-                                {
-                                    quizList.map(q => (<Option value={q._id} key={q._id}>{q.name}</Option>))
-                                }
-                            </Select>
+                            hasFeedback>
+                            <DatePicker className="alt-date-picker" showTime format="YYYY-MM-DD HH:mm:ss" />
                         </Form.Item>
-                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Form.Item
-                                label={t('timeTodo')}
-                                name={['exam', 'setting', 'timeToDo']}
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: t('req_time_take_quiz'),
-                                    }
-                                ]}
-                                style={{ width: '49%' }}
 
-                                hasFeedback>
-                                <InputNumber min={1} max={180}
-                                    formatter={value => `${value} ${t('minutes')}`}
-                                    parser={value => value.replace(` ${t('minutes')}`, '')} />
+                        <Form.Item
+                            dependencies={['exam', 'startTime']}
+                            label={t('expireTime')}
+                            name={['exam', 'setting', 'expireTime']}
+                            hasFeedback
+                            rules={[
+                                {
+                                    required: true,
+                                    message: t('req_end_time'),
+                                },
+                                ({ getFieldValue }) => ({
+                                    validator(rule, value) {
+                                        if (!value || value.isAfter(getFieldValue(['exam', 'startTime']))) {
+                                            return Promise.resolve();
+                                        }
 
-                            </Form.Item>
+                                        return Promise.reject(t('condition_start_end'));
+                                    },
+                                }),
+                            ]}
+                        >
+                            <DatePicker className="alt-date-picker" showTime format="YYYY-MM-DD HH:mm:ss" />
+                        </Form.Item>
 
-                            <Form.Item
-                                label={t('attemptQuantity')}
-                                name={['exam', 'setting', 'attemptCount']}
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: t('req_count_attempt'),
-                                    }
-                                ]}
-                                style={{ width: '49%' }}
+                        <Form.List name={['exam', 'setting', 'questionnaires']}>
+                            {(fields, { add, remove }) => (
+                                <>
+                                    {fields.map(({ key, name, fieldKey, ...restField }) => (
+                                        <div>
+                                            <Form.Item
+                                                {...restField}
+                                                label={t('code_quiz_bank') + ' ' + key}
+                                                name={[fieldKey, 'id']}
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message: t('req_code_quiz'),
+                                                    }
+                                                ]}
+                                                hasFeedback
+                                            >
+                                                <Select dropdownClassName="ant-customize-dropdown" onChange={(value) => handleChangeQuizBank(fieldKey, value)} >
+                                                    {
+                                                        quizList.map(q => (<Option value={q._id} key={q._id}>{q.name}</Option>))
+                                                    }
+                                                </Select>
+                                            </Form.Item>
+                                            <Form.Item className="customize-add-form" wrapperCol={{span: 24}}>
+                                                <Form.Item
+                                                    {...restField}
+                                                    labelCol={{ span: 6 }}
+                                                    wrapperCol={{ span: 18 }}
+                                                    label={t('Quantity')}
+                                                    name={[fieldKey, 'questionCount']}
+                                                    rules={[
+                                                        {
+                                                            required: true,
+                                                            message: t('req_qty_question'),
+                                                        }
+                                                    ]}
+                                                    hasFeedback>
+                                                    {/* <InputNumber min={1} max={quizBank ? quizBank.questions : 30} /> */}
+                                                    <Select dropdownClassName="ant-customize-dropdown" onChange={(value) => setQuantityBankSelect({ ...quantityBankSelect, [`${fieldKey}`]: value })} >
+                                                        {
+                                                            [5, 10, 15, 20, 30, 40, 45].map(q => (<Option value={q} key={q}>{q}</Option>))
+                                                        }
+                                                    </Select>
+                                                </Form.Item>
+                                                <Form.Item>
+                                                    <Button onClick={() => remove(name)}>Xóa</Button>
+                                                </Form.Item>
+                                            </Form.Item>
 
-                                hasFeedback>
-                                <InputNumber min={1} max={10}
+                                        </div>
+                                    ))}
+                                    <Form.Item wrapperCol={{ wrapperCol: 18, offset: 6 }}>
+                                        <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                                            Add quiz bank
+              </Button>
+                                    </Form.Item>
+                                </>
+                            )}
+                        </Form.List>
+                        <Form.Item
+                            label={t('timeTodo')}
+                            name={['exam', 'setting', 'timeToDo']}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: t('req_time_take_quiz'),
+                                }
+                            ]}
+                            hasFeedback>
+                            <InputNumber min={1} max={180}
+                                formatter={value => `${value} ${t('minutes')}`}
+                                parser={value => value.replace(` ${t('minutes')}`, '')} />
+
+                        </Form.Item>
+
+                        <Form.Item
+                            label={t('Quantity join')}
+                            name={['exam', 'setting', 'attemptCount']}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: t('req_count_attempt'),
+                                }
+                            ]}
+
+                            hasFeedback>
+                            {/* <InputNumber min={1} max={10}
                                     formatter={value => `${value} ${t('times')}`}
                                     parser={value => value.replace(` ${t('times')}`, '')}
-                                />
+                                /> */}
+                            <Select dropdownClassName="ant-customize-dropdown" onChange={handleChangeQuizBank} >
+                                {
+                                    [1, 2, 3, 5, 7, 10, 100].map(q => (<Option value={q} key={q}>{q}</Option>))
+                                }
+                            </Select>
 
-                            </Form.Item>
-
-
-
-                        </div>
-
+                        </Form.Item>
 
 
                         <Form.Item
@@ -313,8 +346,8 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
                             <Checkbox />
                         </Form.Item>
 
-                        <Form.Item>
-                            <Button type="primary" loading={isLoading} htmlType="submit" className="lms-btn" style={{marginTop: 0}}>
+                        <Form.Item wrapperCol={{ wrapperCol: 18, offset: 6 }}>
+                            <Button type="primary" loading={isLoading} htmlType="submit" style={{ marginTop: 0 }}>
                                 {t('submit')}</Button>
                         </Form.Item>
 
