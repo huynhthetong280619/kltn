@@ -23,13 +23,16 @@ const VideoContainer = ({ id, stream, user }) => {
             }
 
             video.srcObject = stream;
+
+            console.log(stream.getAudioTracks()[0]);
+
+            return () => {
+
+                video.pause();
+                video.srcObject = null;
+
+            }
         }
-        // return () => {
-        //     if (video) {
-        //         video.pause();
-        //         video.srcObject = null;
-        //     }
-        // }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [stream])
 
