@@ -119,4 +119,4 @@ const AddInformation = ({ timelinesList, isLoading, createInformation, idSubject
 }
 
 
-export default withTranslation('translations')(AddInformation)
+export default AddInformation
