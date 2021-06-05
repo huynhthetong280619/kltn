@@ -22,6 +22,7 @@ import CreateAccount from '../createAccount';
 import FooterLayout from '../footer-layout';
 import SurveyTake from '../survey-take';
 import ManageScore from '../manage-score';
+import PublicClass from '../public-class';
 
 const { Header, Content, Footer } = Layout
 
@@ -63,6 +64,8 @@ function Child() {
             return <AssignmentCheck />
         case 'survey-take':
             return <SurveyTake />
+            case 'public-class':
+                return <PublicClass />
         default:
             break
     }

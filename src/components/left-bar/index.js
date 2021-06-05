@@ -60,7 +60,7 @@ const LeftBar = ({ isOpen, setOpen }) => {
             {
                 isTeacherFlag ? <>
                     <Title level={5} style={{ color: '#f9f9f9' }}>Giảng dạy</Title>
-                    <div className="drawer-item-app">
+                    <div className="drawer-item-app" onClick={() => navigationTo('/home/public-class')}>
                         <div className="mask-hover"></div>
                         <div className="drawer-item__i">
                             <IC_FOLDER />

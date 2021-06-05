@@ -19,13 +19,12 @@ const SurveyTake = () => {
 
 
     useEffect(() => {
-        console.log('Survey take')
 
         restClient.asyncGet(`/survey/${idSurvey}/attempt?idCourse=${idSubject}&idTimeline=${idTimeline}`)
             .then(res => {
                 console.log('Question', res)
                 if (!res.hasError) {
-                    setQuestion(get(res, 'data').questionnaire?.questions)
+                    setQuestion(get(res, 'data').questionnaire)
                 }
             })
     }, [])
@@ -73,11 +72,15 @@ const SurveyTake = () => {
 
         // Push up to server
         const data = {
-            data: convert
+            data: convert,
+            idCourse: idSubject,
+            idTimeline
         }
 
-        await restClient.asyncPost(`/survey/${idSurvey}/submit?idCourse=${idSubject}&idTimeline=${idTimeline}`, data)
+        console.log(data)
+        await restClient.asyncPost(`/survey/${idSurvey}/submit`, data)
             .then(res => {
+                console.log(res)
                 if (!res.hasError) {
                     history.go(-1)
                     notifySuccess(t('success'), res.data.message)

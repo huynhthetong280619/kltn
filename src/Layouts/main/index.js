@@ -58,6 +58,7 @@ const MainAppLayout = () => {
 
         await restClientApi.asyncGet('/course')
             .then(res => {
+                console.log(res)
                 if (!res.hasError) {
                     const { allCourses } = res.data
                     setListSubjectJoined(allCourses)
