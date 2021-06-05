@@ -13,17 +13,38 @@ const PublicClass = () => {
     const restClient = new RestClient({ token: '' })
 
     const [curriculum, setCurriculum] = useState([])
+    const [currId, setCurrId] = useState('')
+    const [subject, setSubject] = useState([])
 
     useEffect(() => {
         restClient.asyncGet('/curriculum')
             .then(res => {
+                console.log(res)
                 if(!res.hasError){
-                    // setCurriculum(res?.curriculums)
+                    setCurriculum(res?.data.curriculums)
                 }
             })
     }, [])
-    const onFinish = () => {
+    const onFinish = (fieldValues) => {
+        const data = {
+            ...fieldValues,
+            config: {
+                acceptEnroll: Boolean(fieldValues.config.acceptEnroll),
+            }
+        };
 
+        console.log(data)
+    }
+
+    const onChangeCurriculum = (curr) => {
+        console.log(curr)
+        // restClient.asyncGet(`/curriculum/${curr}/subjects`)
+        // .then(res => {
+        //     if(!res.hasError){
+        //         console.log(res)
+        //         setSubject(res?.data.subjects)
+        //     }
+        // })
     }
 
     return <div>
@@ -56,7 +77,7 @@ const PublicClass = () => {
                     </Form.Item>
                     <Form.Item
                         label={t('Hệ đào tạo')}
-                        name={['curriculumnId']}
+                        name={['idSubject']}
                         rules={[
                             {
                                 required: true,
@@ -64,19 +85,34 @@ const PublicClass = () => {
                             }
                         ]}
                         hasFeedback>
-                        {/* <InputNumber min={1} max={quizBank ? quizBank.questions : 30} /> */}
-                        <Select dropdownClassName="ant-customize-dropdown" onChange={() => {}} >
+                        <Select dropdownClassName="ant-customize-dropdown" onChange={(selected) => onChangeCurriculum(selected)} >
                             {
-                                curriculum.map(q => (<Option value={q} key={q}>{q}</Option>))
+                                curriculum.map(curr => (<Option value={curr['_id']} key={curr['_id']}>{curr['name']}</Option>))
                             }
                         </Select>
                     </Form.Item>
+                    {/* <Form.Item
+                        label={t('Môn học (Tuy chọn)')}
+                        name={['subjectId']}
+                        rules={[
+                            {
+                                required: true,
+                                message: t('req_qty_question'),
+                            }
+                        ]}
+                        hasFeedback>
+                        <Select dropdownClassName="ant-customize-dropdown">
+                            {
+                                subject.map(sub => (<Option value={sub['_id']} key={sub['_id']}>{sub['name']}</Option>))
+                            }
+                        </Select>
+                    </Form.Item> */}
                     <Form.Item
                         label={t('Enroll acception')}
                         name={['config', 'acceptEnroll']}
                         valuePropName="checked"
                     >
-                        <Checkbox />
+                        <Checkbox/>
                     </Form.Item>
                     <Form.Item wrapperCol={{ span: 24 }}>
                         <Button type="primary" loading={isLoading} htmlType="submit" style={{ marginTop: 0 }}>
