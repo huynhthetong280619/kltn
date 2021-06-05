@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import Title from 'antd/lib/typography/Title'
 import { useTranslation } from 'react-i18next'
-import { Input, Form, Checkbox, Button, Select } from 'antd'
+import { Input, Form, Checkbox, Button, Select, notification } from 'antd'
 import RestClient from '../../utils/restClient'
+import { useHistory } from 'react-router'
 
-const {Option} = Select
+const { Option } = Select
 
 const PublicClass = () => {
     const { t } = useTranslation()
     const [form] = Form.useForm();
+    const history = useHistory()
     const [isLoading, setIsLoading] = useState(false)
     const restClient = new RestClient({ token: '' })
 
@@ -20,7 +22,7 @@ const PublicClass = () => {
         restClient.asyncGet('/curriculum')
             .then(res => {
                 console.log(res)
-                if(!res.hasError){
+                if (!res.hasError) {
                     setCurriculum(res?.data.curriculums)
                 }
             })
@@ -33,7 +35,20 @@ const PublicClass = () => {
             }
         };
 
-        console.log(data)
+        restClient.asyncPost(`/course`, data)
+            .then(res => {
+                if (!res.hasError) {
+                    notification.success({
+                        message: res.data.message,
+                        placement: 'topRight'
+                    })
+                    history.push('/home/main-app')
+                }
+                notification.warning({
+                    message: res.data.message,
+                    placement: 'topRight'
+                })
+            })
     }
 
     const onChangeCurriculum = (curr) => {
@@ -112,7 +127,7 @@ const PublicClass = () => {
                         name={['config', 'acceptEnroll']}
                         valuePropName="checked"
                     >
-                        <Checkbox/>
+                        <Checkbox />
                     </Form.Item>
                     <Form.Item wrapperCol={{ span: 24 }}>
                         <Button type="primary" loading={isLoading} htmlType="submit" style={{ marginTop: 0 }}>
