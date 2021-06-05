@@ -35,8 +35,10 @@ const PublicClass = () => {
             }
         };
 
+        console.log(data)
         restClient.asyncPost(`/course`, data)
             .then(res => {
+                console.log(res)
                 if (!res.hasError) {
                     notification.success({
                         message: res.data.message,
