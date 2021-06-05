@@ -35,7 +35,7 @@ const PublicClass = () => {
             }
         };
 
-        console.log(data)
+        console.log(JSON.stringify(data))
         restClient.asyncPost(`/course`, data)
             .then(res => {
                 console.log(res)
@@ -46,22 +46,25 @@ const PublicClass = () => {
                     })
                     history.push('/home/main-app')
                 }
-                notification.warning({
-                    message: res.data.message,
-                    placement: 'topRight'
-                })
+                else{
+                    notification.warning({
+                        message: res.data.message,
+                        placement: 'topRight'
+                    })
+                }
+               
             })
     }
 
     const onChangeCurriculum = (curr) => {
         console.log(curr)
-        // restClient.asyncGet(`/curriculum/${curr}/subjects`)
-        // .then(res => {
-        //     if(!res.hasError){
-        //         console.log(res)
-        //         setSubject(res?.data.subjects)
-        //     }
-        // })
+        restClient.asyncGet(`/curriculum/${curr}/subjects`)
+        .then(res => {
+            if(!res.hasError){
+                console.log(res)
+                setSubject(res?.data.subjects)
+            }
+        })
     }
 
     return <div>
@@ -93,8 +96,7 @@ const PublicClass = () => {
                         <Input id="antd-customize" className="ant-input-customize" placeholder={t('Tên lớp học')} />
                     </Form.Item>
                     <Form.Item
-                        label={t('Hệ đào tạo')}
-                        name={['idSubject']}
+                        label={t('Curriculum')}
                         rules={[
                             {
                                 required: true,
@@ -108,9 +110,9 @@ const PublicClass = () => {
                             }
                         </Select>
                     </Form.Item>
-                    {/* <Form.Item
-                        label={t('Môn học (Tuy chọn)')}
-                        name={['subjectId']}
+                    <Form.Item
+                        label={t('Subject')}
+                        name={['idSubject']}
                         rules={[
                             {
                                 required: true,
@@ -123,7 +125,7 @@ const PublicClass = () => {
                                 subject.map(sub => (<Option value={sub['_id']} key={sub['_id']}>{sub['name']}</Option>))
                             }
                         </Select>
-                    </Form.Item> */}
+                    </Form.Item>
                     <Form.Item
                         label={t('Enroll acception')}
                         name={['config', 'acceptEnroll']}
