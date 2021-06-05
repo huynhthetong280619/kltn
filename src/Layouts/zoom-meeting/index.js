@@ -294,17 +294,20 @@ const ZoomMeeting = () => {
         port: 443,
         path: '/',
         config: {
-            'iceServers': [
-                { url: 'stun:stun.ekiga.net' },
+            iceServers: [
                 { url: 'stun:stun1.l.google.com:19302' },
-                { url: 'stun:stun2.l.google.com:19302' },
-                { url: 'stun:stun3.l.google.com:19302' },
-                { url: 'stun:stun4.l.google.com:19302' },
-                { url: 'stun:stun01.sipphone.com' },
-                { url: 'stun:stun.l.google.com:19302' }
             ]
         }
-    }))
+        // 'iceServers': [
+        //     { url: 'stun:stun.ekiga.net' },
+        //     { url: 'stun:stun1.l.google.com:19302' },
+        //     { url: 'stun:stun2.l.google.com:19302' },
+        //     { url: 'stun:stun3.l.google.com:19302' },
+        //     { url: 'stun:stun4.l.google.com:19302' },
+        //     { url: 'stun:stun01.sipphone.com' },
+        //     { url: 'stun:stun.l.google.com:19302' }
+        // ]
+    }));
 
     useEffect(() => {
         if (socket && !localStream && !shareScreen) {
@@ -348,7 +351,7 @@ const ZoomMeeting = () => {
                                 call.on('stream', (remoteStream) => {
                                     if (!isReceive) {
                                         socket.emit('get-user', call.peer);
-                                        socket.on('receive-user', (user) => {
+                                        socket.on(`receive-user-${call.peer}`, (user) => {
                                             addVideoStream(call.peer, remoteStream, user);
                                         });
                                         isReceive = true;
