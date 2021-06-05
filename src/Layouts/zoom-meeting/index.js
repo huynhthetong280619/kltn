@@ -296,11 +296,20 @@ const ZoomMeeting = () => {
             iceServers: [
                 {
                     urls: [
-                        "stun:stun.l.google.com:19302"
+                        "stun:stun1.l.google.com:19302",
+                        "stun:stun2.l.google.com:19302",
+
                     ]
+                },
+                { urls: 'stun:stun.services.mozilla.com' },
+                {
+                    urls: 'turn:numb.viagenie.ca',
+                    credential: 'lapth82@gmail.com',
+                    username: 'lapth82@gmail.com'
                 }
             ],
-            iceCandidatePoolSize: 3
+            iceCandidatePoolSize: 3, 
+            iceTransportPolicy: 'all'
         }
     }));
 
