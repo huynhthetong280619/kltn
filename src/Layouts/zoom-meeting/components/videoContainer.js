@@ -22,17 +22,14 @@ const VideoContainer = ({ id, stream, user }) => {
                 video.muted = true;
             }
 
-            video.srcObject = stream
-            video.addEventListener('loadedmetadata', () => {
-                video.play()
-            });
+            video.srcObject = stream;
         }
-        return () => {
-            if (video) {
-                video.pause();
-                video.srcObject = null;
-            }
-        }
+        // return () => {
+        //     if (video) {
+        //         video.pause();
+        //         video.srcObject = null;
+        //     }
+        // }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [stream])
 
