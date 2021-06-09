@@ -89,6 +89,7 @@ const Subject = () => {
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'));
+        console.log('Priviledge', user)
         if (user?.idPrivilege == 'student') {
             setIsTeacherFlag(false)
         }
@@ -930,7 +931,9 @@ const Subject = () => {
                                             }}
                                         >
                                             {t('update')}
-                                        </Col> : <Col span={7}></Col>)}
+                                        </Col>
+                                         : 
+                                         <Col span={7}></Col>)}
                                 </Row>
                             </ModalWrapper>
                             <ModalWrapper>
@@ -1339,24 +1342,27 @@ const Subject = () => {
                                     >
                                         {t('call_video')}
                                     </Col>
-                                    <Col span={7} className="action-select-add-content" style={{
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        background: '#2c3e50',
-                                        color: '#fff',
-                                        padding: '0.5rem',
-                                        borderRadius: '0.5rem',
-                                        cursor: 'pointer',
-                                        height: '6rem'
-                                    }}
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            setIsOnEdit(!isOnEdit)
+                                    {
+                                        isTeacherFlag ?  <Col span={7} className="action-select-add-content" style={{
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            background: '#2c3e50',
+                                            color: '#fff',
+                                            padding: '0.5rem',
+                                            borderRadius: '0.5rem',
+                                            cursor: 'pointer',
+                                            height: '6rem'
                                         }}
-                                    >
-                                        {t('update')}
-                                    </Col>
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                setIsOnEdit(!isOnEdit)
+                                            }}
+                                        >
+                                            {t('update')}
+                                        </Col> : <Col span={7}></Col>
+                                    }
+                                   
                                 </Row>
                             </ModalWrapper>
                         </Col>

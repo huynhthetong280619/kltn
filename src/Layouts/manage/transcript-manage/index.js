@@ -64,7 +64,7 @@ const TranscriptManage = ({ lstClassScore, idSubject }) => {
                 dataIndex: c,
                 key: c,
                 width: 200,
-                render: data => data !== null ? data : <span style={{ fontStyle: 'italic', color: '#ff4000' }}>Chưa nộp bài</span>
+                render: data => data !== null ? data == "NaN" ? 0 : data : <span style={{ fontStyle: 'italic', color: '#ff4000' }}>Chưa nộp bài</span>
             }
         })
     }
