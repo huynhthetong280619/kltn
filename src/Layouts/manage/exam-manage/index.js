@@ -75,7 +75,7 @@ const ExamManage = ({ lstSubmissionCore }) => {
                 </Tooltip>
             </div>
         </Row >
-        <Row style={{ border: '2px solid #cacaca' }}>
+        <Row style={{ border: '2px solid #cacaca' }} className="style-table">
             <Table pagination={false} columns={columns} dataSource={test?.submissions} style={{ width: '100%' }} />
         </Row>
     </>)

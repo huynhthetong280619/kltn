@@ -63,6 +63,8 @@ const Survey = () => {
         lineHeight: '30px'
     };
 
+    console.log(replyCurrent.questionnaire)
+
 return <>
         <ModalWrapper style={{ width: '90%', margin: '0 auto', display: 'flex', rowGap: '1rem', flexDirection: 'column' }}>
             <ModalWrapper style={{ backgroundColor: '#494949' }}>
@@ -104,7 +106,7 @@ return <>
                                         (replyCurrent.questionnaire).map((q, index) => (
                                             q.typeQuestion == 'choice' ?
                                                 (<div style={{ marginBottom: '20px', textAlign: 'left' }} key={q._id}>
-                                                    <div style={{ fontWeight: 600, color: '#f9f9f9' }}><span>{t('question')} {index + 1}: </span>{q.question}</div>
+                                                    <div style={{ fontWeight: 600, color: '#f9f9f9' }}><span>{t('question')} {index + 1}: </span>{q.content}</div>
                                                     <div>
                                                         <Radio.Group disabled value={replyCurrent.response.answerSheet[index].answer}>
                                                             {

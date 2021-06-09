@@ -26,6 +26,7 @@ const StudentManage = ({ idSubject }) => {
     useEffect(() => {
         restClient.asyncGet(`/course/${idSubject}/students`)
             .then(res => {
+                console.log('student', res)
                 if (!res.hasError) {
                     setList(get(res, 'data').students)
                 }
@@ -90,7 +91,7 @@ const StudentManage = ({ idSubject }) => {
             title: t('avatar'),
             dataIndex: 'urlAvatar',
             key: 'urlAvatar',
-            render: (data) => <img src={data} width="102px" />
+            render: (data) => <img src={data} width="50px" />
         },
         {
             title: t('code_student'),
@@ -104,13 +105,13 @@ const StudentManage = ({ idSubject }) => {
         },
         {
             title: t('surName'),
-            dataIndex: 'surName',
-            key: 'surName',
+            dataIndex: 'firstName',
+            key: 'firstName',
         },
         {
             title: t('firstName'),
-            dataIndex: 'firstName',
-            key: 'firstName',
+            dataIndex: 'lastName',
+            key: 'lastName',
         },
 
 
@@ -191,7 +192,7 @@ const StudentManage = ({ idSubject }) => {
                     </div>
 
                 </Row>
-                <Row style={{ width: '100%' }}>
+                <Row style={{ width: '100%' }} className="style-table">
                     <Table columns={columns} dataSource={list} style={{ width: '100%' }} pagination={false} />
                 </Row>
             </div>

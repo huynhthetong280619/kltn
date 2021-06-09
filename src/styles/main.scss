@@ -921,3 +921,18 @@ h5.ant-typography{
         }
     }
 }
+
+.style-table{
+    th, tr{
+        background-color: #232323 !important;
+        color: #f9f9f9 !important;
+    }
+
+    .ant-table-tbody > tr.ant-table-row:hover > td{
+        background: transparent !important;
+    }
+    
+    .ant-table-thead > tr > th, .ant-table-tbody > tr > td{
+        border-bottom: transparent !important;
+    }
+}

@@ -912,7 +912,7 @@ const Subject = () => {
                                     >
                                         {t('call_video')}
                                     </Col>
-                                    {isTeacherFlag  && (!isUpdate ?
+                                    {isTeacherFlag  && ((!isUpdate && isTeacherFlag)?
                                         <Col span={7} className="action-select-add-content" style={{
                                             display: 'flex',
                                             justifyContent: 'center',

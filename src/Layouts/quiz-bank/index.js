@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import readXlsxFile from 'read-excel-file'
 import { isEmpty } from 'lodash';
 import RestClient from '../../utils/restClient';
+import ModalWrapper from '../../components/basic/modal-wrapper';
 
 const QuizBank = ({ idSubject,
 	closeModalCurrentQuizBank, quizList }) => {
@@ -64,27 +65,27 @@ const QuizBank = ({ idSubject,
 		}
 	}
 
-	
-	  
-	  const columns = [
+
+
+	const columns = [
 		{
-		  title: 'STT',
-		  dataIndex: '_id',
-		  key: '_id',
-		  render: (data, row, index) => index
+			title: 'STT',
+			dataIndex: '_id',
+			key: '_id',
+			render: (data, row, index) => index
 		},
 		{
-		  title: 'Tên ngân hàng',
-		  dataIndex: 'name',
-		  key: 'name',
+			title: 'Tên ngân hàng',
+			dataIndex: 'name',
+			key: 'name',
 		},
 		{
-		  title: 'Số lượng câu hỏi',
-		  dataIndex: 'questionCount',
-		  key: 'questionCount',
-		  fixed: 'center'
+			title: 'Số lượng câu hỏi',
+			dataIndex: 'questionCount',
+			key: 'questionCount',
+			fixed: 'center'
 		},
-	  ];
+	];
 
 
 	return <><Form
@@ -104,8 +105,12 @@ const QuizBank = ({ idSubject,
 		</Form.Item>
 
 	</Form>
-	<div>Ngân hàng đề hiện tại</div>
-	<Table dataSource={quizList} columns={columns} pagination={false} />
+		<ModalWrapper>
+			<div>Ngân hàng đề hiện tại</div>
+			<div className="style-table">
+				<Table dataSource={quizList} columns={columns} pagination={false} />
+			</div>
+		</ModalWrapper>
 	</>
 }
 

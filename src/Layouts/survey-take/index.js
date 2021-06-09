@@ -105,7 +105,7 @@ const SurveyTake = () => {
                     question.map((q, index) => (
                         q.typeQuestion == 'choice' ?
                             (<div style={{ marginBottom: '0.5rem', textAlign: 'left' }} key={q._id}>
-                                <div style={{ fontWeight: 600 }}><span>{t('question')} {index + 1}: </span>{q.question}</div>
+                                <div style={{ fontWeight: 600 }}><span>{t('question')} {index + 1}: </span>{q.content}</div>
                                 <div>
                                     <Radio.Group onChange={e => onChoice(e, q._id)} value={get(answer, q._id)}>
                                         {

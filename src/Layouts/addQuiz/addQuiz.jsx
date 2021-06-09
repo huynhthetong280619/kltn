@@ -131,7 +131,7 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
 
     const handleChangeQuizBank = (key, value) => {
         const data = quizList.find(quiz => quiz._id === value);
-        setQuizBank({...quizBank,[`${key}`]: data});
+        setQuizBank({ ...quizBank, [`${key}`]: data });
     }
 
 
@@ -260,7 +260,7 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
                                                     }
                                                 </Select>
                                             </Form.Item>
-                                            <Form.Item className="customize-add-form" wrapperCol={{span: 24}}>
+                                            <Form.Item className="customize-add-form" wrapperCol={{ span: 24 }}>
                                                 <Form.Item
                                                     {...restField}
                                                     labelCol={{ span: 6 }}
@@ -288,9 +288,9 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
 
                                         </div>
                                     ))}
-                                    <Form.Item wrapperCol={{ wrapperCol: 18, offset: 6 }}>
+                                    <Form.Item wrapperCol={{ wrapperCol: 20, offset: 4 }}>
                                         <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                                            Add quiz bank
+                                            {t('add_quiz_bank')}
               </Button>
                                     </Form.Item>
                                 </>
@@ -347,7 +347,8 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
 
                         <Form.Item wrapperCol={{ span: 24 }}>
                             <Button type="primary" loading={isLoading} htmlType="submit" style={{ marginTop: 0 }}>
-                                {t('submit')}</Button>
+                                {t('submit')}
+                            </Button>
                         </Form.Item>
 
                     </Form>)}

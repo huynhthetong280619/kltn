@@ -166,8 +166,10 @@ const Quiz = () => {
                             </div></>
                     }
                 </ModalWrapper>
-                <ModalWrapper style={{ background: '#494949', width: '100%' }}>
-                    {!isLoading ? <Table pagination={false} columns={columns} dataSource={submissions} rowKey='key' scroll={{ y: 240 }} /> : <Skeleton />}
+                <ModalWrapper style={{ background: '#494949', width: '100%' }} >
+                    <div className="style-table">
+                        {!isLoading ? <Table pagination={false} columns={columns} dataSource={submissions} rowKey='key' scroll={{ y: 240 }} /> : <Skeleton />}
+                    </div>
                 </ModalWrapper>
                 <ModalLoadingLogin visible={isLoading} content={t('loading_survey')} />
             </ModalWrapper>

@@ -51,6 +51,7 @@ const TranscriptManage = ({ lstClassScore, idSubject }) => {
     if (transcript) {
 
         columnsClassScore = Object.keys(transcript.fields).map((c, i) => {
+            console.log(transcript)
             return {
                 title: i > 2 && i < Object.keys(transcript.fields).length - 1 ? (<div><span>Hệ số <InputNumber
                     defaultValue={transcript.ratio[c].ratio * 100}
@@ -76,7 +77,6 @@ const TranscriptManage = ({ lstClassScore, idSubject }) => {
         }
     })
 
-    console.log('lstClassScore', lstClassScore)
 
     return (<>
         <Row >
@@ -109,7 +109,7 @@ const TranscriptManage = ({ lstClassScore, idSubject }) => {
                 </div>
             </div>
         </Row>
-        <Row style={{ overflow: 'auto' }}>
+        <Row style={{ overflow: 'auto' }} className="style-table">
             <Table pagination={false} columns={columnsClassScore} dataSource={transcript.data} style={{ width: '100%' }} scroll={{ y: 240, x: 700 }} />
         </Row>
 
