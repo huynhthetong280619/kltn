@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Tooltip } from 'antd'
+import { Tooltip, Popover, Row, Col, Typography } from 'antd'
 
 import ModalWrapper from '../../../components/basic/modal-wrapper'
 
@@ -8,6 +8,9 @@ import VideoContainer from "../components/videoContainer";
 
 import ChatTab from "../chat-tab";
 
+import IC_AVATAR from '../../../assets/images/ic_avatar.svg'
+
+const { Text } = Typography;
 
 const VideoFrame = ({ currentUser, socket, peer, userStream }) => {
 
@@ -22,6 +25,8 @@ const VideoFrame = ({ currentUser, socket, peer, userStream }) => {
     const [shareScreen, setShareScreen] = useState(null);
 
     const [peers, setPeers] = useState({});
+
+    const [isClicked, setIsClicked] = useState(false)
 
     const [stateShareScreen, dispatchShareScreen] = useReducer((state, action) => {
         switch (action.method) {
@@ -370,13 +375,84 @@ const VideoFrame = ({ currentUser, socket, peer, userStream }) => {
                         </div>
                     </Tooltip>
                     <Tooltip title="Participant">
-                        <div className="zm-center" style={{ cursor: 'pointer' }}>
-                            <div className="footer-button__participants-icon">
-                                <span className="footer-button__number-counter" >
-                                    <span>1</span>
-                                </span>
+                        <Popover
+                            style={{
+                                backgroundColor: '#494949'
+                            }}
+                            content={
+                                <div>
+                                    <Row style={{
+                                        rowGap: '0px',
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                        columnGap: '1.5rem',
+                                        padding: '0 8px',
+                                        marginBottom: '0.25rem'
+                                    }} className="item-message">
+                                        <div>
+                                            <img src={IC_AVATAR} height={35} />
+                                        </div>
+                                        <div>
+                                            <Text style={{ color: '#e4e6eb' }}>Nguyễn Anh Quân</Text>
+                                        </div>
+                                        <div className="zm-center" >
+                                            <i className={`zm-icon zm-icon-phone-unmuted`} style={{ cursor: 'pointer' }}></i>
+                                        </div>
+                                    </Row>
+                                    <Row style={{
+                                        rowGap: '0px',
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                        columnGap: '1.5rem',
+                                        padding: '0 8px',
+                                        marginBottom: '0.25rem'
+                                    }} className="item-message">
+                                        <div>
+                                            <img src={IC_AVATAR} height={35} />
+                                        </div>
+                                        <div>
+                                            <Text style={{ color: '#e4e6eb' }}>Nguyễn Anh Quân</Text>
+                                        </div>
+                                        <div className="zm-center" >
+                                            <i className={`zm-icon zm-icon-phone-unmuted`} style={{ cursor: 'pointer' }}></i>
+                                        </div>
+                                    </Row>
+                                    <Row style={{
+                                        rowGap: '0px',
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                        columnGap: '1.5rem',
+                                        padding: '0 8px',
+                                        marginBottom: '0.25rem'
+                                    }} className="item-message">
+                                        <div>
+                                            <img src={IC_AVATAR} height={35} />
+                                        </div>
+                                        <div>
+                                            <Text style={{ color: '#e4e6eb' }}>Nguyễn Anh Quân</Text>
+                                        </div>
+                                        <div className="zm-center" >
+                                            <i className={`zm-icon zm-icon-phone-unmuted`} style={{ cursor: 'pointer' }}></i>
+                                        </div>
+                                    </Row>
+                                </div>
+                            }
+                            title="Participant joining(8)"
+                            trigger="click"
+                            visible={isClicked}
+                            onVisibleChange={() => { setIsClicked(!isClicked) }}
+                        >
+                            <div className="zm-center" style={{ cursor: 'pointer' }}>
+                                <div className="footer-button__participants-icon">
+                                    <span className="footer-button__number-counter" >
+                                        <span>1</span>
+                                    </span>
+                                </div>
                             </div>
-                        </div>
+                        </Popover>
                     </Tooltip>
                     <Tooltip title="Share screen">
                         <div className="zm-center" style={{ cursor: 'pointer' }} onClick={() => handleShareScreen()}>

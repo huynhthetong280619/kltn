@@ -909,7 +909,8 @@ const Subject = () => {
                                         cursor: 'pointer',
                                         height: '6rem'
                                     }}
-                                        onClick={(e) => { e.preventDefault(); history.push(`zoom-meeting?idCourse=${location.state._id}`, { idSubject: location.state._id }) }}
+                                    // onClick={(e) => { e.preventDefault(); history.push(`zoom-meeting?idCourse=${location.state._id}`, { idSubject: location.state._id }) }}
+                                    onClick={(e) => { e.preventDefault(); history.push(`johning-zoom`, { idSubject: location.state._id }) }}
                                     >
                                         {t('call_video')}
                                     </Col>
@@ -1338,7 +1339,8 @@ const Subject = () => {
                                         cursor: 'pointer',
                                         height: '6rem'
                                     }}
-                                        onClick={(e) => { e.preventDefault(); history.push(`zoom-meeting?idCourse=${location.state._id}`, { idSubject: location.state._id }) }}
+                                        // onClick={(e) => { e.preventDefault(); history.push(`zoom-meeting?idCourse=${location.state._id}`, { idSubject: location.state._id }) }}
+                                        onClick={(e) => { e.preventDefault(); history.push(`johning-zoom`, { idSubject: location.state._id }) }}
                                     >
                                         {t('call_video')}
                                     </Col>

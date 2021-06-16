@@ -936,3 +936,18 @@ h5.ant-typography{
         border-bottom: transparent !important;
     }
 }
+
+.ant-popover-title{
+    text-align: center;
+    letter-spacing: 2px;
+    color: #f9f9f9;
+    border: 0;
+}
+
+.ant-popover-inner-content{
+    padding: 6px 10px;
+}
+
+.ant-popover-inner{
+    background-color: #494949 !important;
+}

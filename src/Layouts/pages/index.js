@@ -23,6 +23,7 @@ import FooterLayout from '../footer-layout';
 import SurveyTake from '../survey-take';
 import ManageScore from '../manage-score';
 import PublicClass from '../public-class';
+import JohningZoom from '../zoom-meeting/johning-zoom';
 
 const { Header, Content, Footer } = Layout
 
@@ -64,8 +65,10 @@ function Child() {
             return <AssignmentCheck />
         case 'survey-take':
             return <SurveyTake />
-            case 'public-class':
-                return <PublicClass />
+        case 'public-class':
+            return <PublicClass />
+        case 'johning-zoom':
+            return <JohningZoom />
         default:
             break
     }
