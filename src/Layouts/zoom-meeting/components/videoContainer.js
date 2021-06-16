@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import "./videoContainer.css"
 import * as localStorage from "../../../assets/common/core/localStorage";
 
-const VideoContainer = ({ id, stream, user }) => {
+const VideoContainer = ({ id, stream, user, isMuted }) => {
 
     const currentUser = JSON.parse(localStorage.getLocalStorage('user'));
 
@@ -18,13 +18,11 @@ const VideoContainer = ({ id, stream, user }) => {
         let video;
         if (stream) {
             video = document.getElementById(id);
-            if (user._id === currentUser._id) {
+            if (user._id === currentUser._id && video) {
                 video.muted = true;
             }
 
             video.srcObject = stream;
-
-            console.log(stream.getAudioTracks()[0]);
 
             return () => {
 
@@ -45,7 +43,7 @@ const VideoContainer = ({ id, stream, user }) => {
                 <video id={id} autoPlay></video>
                 <div>
                     <div className="user-stream">{user.firstName + " " + user.lastName}</div>
-                    <div className={stream.getAudioTracks()[0]?.enabled ? 'mic-video-unmute' : 'mic-video-mute'} onClick={(e) => { e.stopPropagation(); }}></div>
+                    <div className={!isMuted ? 'mic-video-unmute' : 'mic-video-mute'} onClick={(e) => { e.stopPropagation(); }}></div>
                 </div>
             </div>
         </>
