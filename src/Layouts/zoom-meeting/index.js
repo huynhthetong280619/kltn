@@ -18,6 +18,7 @@ import * as localStorage from "../../assets/common/core/localStorage";
 import * as notify from "../../assets/common/core/notify";
 import Peer from "peerjs";
 import VideoFrame from "./video-frame";
+import WaitingScreen from "./waiting-screen";
 
 const ZoomMeeting = () => {
     const { t } = useTranslation()
@@ -28,6 +29,8 @@ const ZoomMeeting = () => {
     const idSubject = useRef('')
 
     const [isReady, setReady] = useState(false);
+
+    const [isJoin, setJoin] = useState(false);
 
     const [socket, setSocket] = useState(null)
 
@@ -144,8 +147,10 @@ const ZoomMeeting = () => {
         display: 'flex'
     }}>
 
-        {isReady &&
+        {isJoin ?
             <VideoFrame currentUser={currentUser} socket={socket} peer={peer} userStream={userStream} />
+            :
+            <WaitingScreen currentUser={currentUser} isReady={isReady} setJoin={setJoin} stream={userStream} />
         }
 
         <Modal className="modal-function-customize"

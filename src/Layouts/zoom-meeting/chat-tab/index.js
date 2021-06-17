@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Avatar, Form, Button, List, Input, Tooltip, Comment } from 'antd'
 
@@ -62,10 +62,13 @@ const ChatTab = ({ socket, openChatTab, currentUser }) => {
     const [comments, setComments] = useState([])
     const [submitting, setSubmitting] = useState(false);
 
-    socket.on('newMessage', (message) => {
-        setComments([...comments, message]);
-        scrollToNewMessage();
-    })
+    useEffect(() => {
+        socket.on('newMessage', (message) => {
+            setComments(preState => [...preState, message]);
+            scrollToNewMessage();
+        })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const handleSubmit = () => {
 

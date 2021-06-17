@@ -381,66 +381,36 @@ const VideoFrame = ({ currentUser, socket, peer, userStream }) => {
                             }}
                             content={
                                 <div>
-                                    <Row style={{
-                                        rowGap: '0px',
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center',
-                                        columnGap: '1.5rem',
-                                        padding: '0 8px',
-                                        marginBottom: '0.25rem'
-                                    }} className="item-message">
-                                        <div>
-                                            <img src={IC_AVATAR} height={35} />
-                                        </div>
-                                        <div>
-                                            <Text style={{ color: '#e4e6eb' }}>Nguyễn Anh Quân</Text>
-                                        </div>
-                                        <div className="zm-center" >
-                                            <i className={`zm-icon zm-icon-phone-unmuted`} style={{ cursor: 'pointer' }}></i>
-                                        </div>
-                                    </Row>
-                                    <Row style={{
-                                        rowGap: '0px',
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center',
-                                        columnGap: '1.5rem',
-                                        padding: '0 8px',
-                                        marginBottom: '0.25rem'
-                                    }} className="item-message">
-                                        <div>
-                                            <img src={IC_AVATAR} height={35} />
-                                        </div>
-                                        <div>
-                                            <Text style={{ color: '#e4e6eb' }}>Nguyễn Anh Quân</Text>
-                                        </div>
-                                        <div className="zm-center" >
-                                            <i className={`zm-icon zm-icon-phone-unmuted`} style={{ cursor: 'pointer' }}></i>
-                                        </div>
-                                    </Row>
-                                    <Row style={{
-                                        rowGap: '0px',
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center',
-                                        columnGap: '1.5rem',
-                                        padding: '0 8px',
-                                        marginBottom: '0.25rem'
-                                    }} className="item-message">
-                                        <div>
-                                            <img src={IC_AVATAR} height={35} />
-                                        </div>
-                                        <div>
-                                            <Text style={{ color: '#e4e6eb' }}>Nguyễn Anh Quân</Text>
-                                        </div>
-                                        <div className="zm-center" >
-                                            <i className={`zm-icon zm-icon-phone-unmuted`} style={{ cursor: 'pointer' }}></i>
-                                        </div>
-                                    </Row>
+                                    {
+                                        arrayStream.map(({ id, user, isMuted }) => {
+                                            return <Row
+                                                key={id}
+                                                style={{
+                                                    rowGap: '0px',
+                                                    display: 'flex',
+                                                    justifyContent: 'space-between',
+                                                    alignItems: 'center',
+                                                    columnGap: '1.5rem',
+                                                    padding: '0 8px',
+                                                    marginBottom: '0.25rem'
+                                                }} className="item-message">
+                                                <div>
+                                                    <img src={user.urlAvatar} height={35} alt={user.firstName + " " + user.lastName} />
+                                                </div>
+                                                <div>
+                                                    <Text style={{ color: '#e4e6eb' }}>{user.firstName + " " + user.lastName}</Text>
+                                                </div>
+                                                <div className="zm-center" >
+                                                    <i className={`zm-icon ${isMuted ? 'zm-icon-phone-unmuted' : 'zm-icon-phone-muted'}`} style={{ cursor: 'pointer' }}></i>
+                                                </div>
+                                            </Row>
+
+                                        })
+                                    }
+
                                 </div>
                             }
-                            title="Participant joining(8)"
+                            title={`Participant joining(${arrayStream.length})`}
                             trigger="click"
                             visible={isClicked}
                             onVisibleChange={() => { setIsClicked(!isClicked) }}
@@ -460,7 +430,7 @@ const VideoFrame = ({ currentUser, socket, peer, userStream }) => {
                         </div>
                     </Tooltip>
                     <Tooltip title="Chat">
-                        <div className="zm-center" onClick={setOpenChatTab}>
+                        <div className="zm-center" onClick={() => { setOpenChatTab(!openChatTab) }}>
                             <div className="footer-button__chat-icon" style={{ cursor: 'pointer' }}></div>
                         </div>
                     </Tooltip>

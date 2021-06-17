@@ -2,7 +2,7 @@ import React from 'react'
 import { Tooltip, Switch } from 'antd'
 import { useHistory, useLocation } from 'react-router-dom'
 
-const JohningZoom = () => {
+const JoiningZoom = () => {
     const history = useHistory()
     const location = useLocation()
     const { idSubject } = location.state;
@@ -75,4 +75,4 @@ const JohningZoom = () => {
     </div>
 }
 
-export default JohningZoom;
+export default JoiningZoom;
