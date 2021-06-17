@@ -29,12 +29,16 @@ const WaitingScreen = ({ isReady, setJoin, stream, currentUser }) => {
             display: 'flex',
             justifyContent: "center",
             alignItems: 'center',
-            marginTop: '6rem'
+            
         }}>
             {
                 stream &&
-                <video id="camera-video" autoPlay style={{ display: `${isOnCamera ? 'flex' : 'none'}` }} />
+                <div style={{ width: '350px', height: '350px', borderRadius: '1rem',  display: `${isOnCamera ? 'flex' : 'none'}` }}>
+
+                    <video id="camera-video" autoPlay style={{ display: `${isOnCamera ? 'flex' : 'none'}`, borderRadius: '1rem' }} />
+                </div>
             }
+
             <div style={{
                 width: '200px',
                 height: '200px',
@@ -45,7 +49,8 @@ const WaitingScreen = ({ isReady, setJoin, stream, currentUser }) => {
                 background: '#494949',
                 padding: '2rem',
                 borderRadius: '50%',
-                display: `${isOnCamera ? 'none' : 'flex'}`
+                display: `${isOnCamera ? 'none' : 'flex'}`,
+                marginTop: '6rem'
             }}>
                 <img src={currentUser.urlAvatar} alt={currentUser.firstName + " " + currentUser.lastName} />
             </div>

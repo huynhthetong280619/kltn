@@ -2,10 +2,9 @@ import React from 'react'
 import { Tooltip, Switch } from 'antd'
 import { useHistory, useLocation } from 'react-router-dom'
 
-const JoiningZoom = () => {
+const JoiningZoom = ({ idSubject, setIsJoin }) => {
     const history = useHistory()
     const location = useLocation()
-    const { idSubject } = location.state;
 
     return <div>
         <div style={{

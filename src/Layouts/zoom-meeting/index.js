@@ -142,40 +142,39 @@ const ZoomMeeting = () => {
         return <div></div>
     }
 
-    return <div className="mt-4" style={{
-        justifyContent: 'center',
-        display: 'flex'
-    }}>
+    return <>{
+        isJoin ?
+            <div className="mt-4" style={{
+                justifyContent: 'center',
+                display: 'flex'
+            }}>
 
-        {isJoin ?
-            <VideoFrame currentUser={currentUser} socket={socket} peer={peer} userStream={userStream} />
-            :
-            <WaitingScreen currentUser={currentUser} isReady={isReady} setJoin={setJoin} stream={userStream} />
-        }
 
-        <Modal className="modal-function-customize"
-            onCancel={() => onCloseModalAction()}
-            visible={isOpenModalFunction}
-            closable={false}
-            title={<div
-                style={{
-                    padding: '1rem 0.625rem 0.625rem 0',
-                    alignItems: 'center',
-                }}
+                <VideoFrame currentUser={currentUser} socket={socket} peer={peer} userStream={userStream} />
 
-            >
-                <div style={{ color: '#f9f9f9' }}>{t(currentTitle)}</div>
-                <div className="close-icon-modal" onClick={() => onCloseModalAction()}>
-                    <IC_CLOSE />
-                </div>
-            </div>}
-            footer={null}
-        >
-            <div>
-                {
-                    renderLayoutFunction()
-                }
-                {/* <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                <Modal className="modal-function-customize"
+                    onCancel={() => onCloseModalAction()}
+                    visible={isOpenModalFunction}
+                    closable={false}
+                    title={<div
+                        style={{
+                            padding: '1rem 0.625rem 0.625rem 0',
+                            alignItems: 'center',
+                        }}
+
+                    >
+                        <div style={{ color: '#f9f9f9' }}>{t(currentTitle)}</div>
+                        <div className="close-icon-modal" onClick={() => onCloseModalAction()}>
+                            <IC_CLOSE />
+                        </div>
+                    </div>}
+                    footer={null}
+                >
+                    <div>
+                        {
+                            renderLayoutFunction()
+                        }
+                        {/* <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                     <div className="zm-center">
                         <i className="zm-icon zm-icon-join-audio"></i>
                     </div>
@@ -193,30 +192,35 @@ const ZoomMeeting = () => {
                         <div className="footer-button__chat-icon"></div>
                     </div>
                 </div> */}
-            </div>
-        </Modal>
-        <Modal className="modal-function-customize screen-share"
-            onCancel={() => setIsOpenShare(false)}
-            visible={isOpenShare}
-            closable={false}
-            title={<div
-                style={{
-                    padding: '1rem 0.625rem 0.625rem 0',
-                    alignItems: 'center',
-                }}
+                    </div>
+                </Modal>
+                <Modal className="modal-function-customize screen-share"
+                    onCancel={() => setIsOpenShare(false)}
+                    visible={isOpenShare}
+                    closable={false}
+                    title={<div
+                        style={{
+                            padding: '1rem 0.625rem 0.625rem 0',
+                            alignItems: 'center',
+                        }}
 
-            >
-                <div style={{ color: '#f9f9f9' }}>{t(currentTitle)}</div>
-                <div className="close-icon-modal" onClick={() => setIsOpenShare(false)}>
-                    <IC_CLOSE />
-                </div>
-            </div>}
-            footer={null}>
-            <div style={{ height: 470 }}>
+                    >
+                        <div style={{ color: '#f9f9f9' }}>{t(currentTitle)}</div>
+                        <div className="close-icon-modal" onClick={() => setIsOpenShare(false)}>
+                            <IC_CLOSE />
+                        </div>
+                    </div>}
+                    footer={null}>
+                    <div style={{ height: 470 }}>
 
+                    </div>
+                </Modal>
             </div>
-        </Modal>
-    </div>
+            :
+            <WaitingScreen currentUser={currentUser} isReady={isReady} setJoin={setJoin} stream={userStream} />
+    }
+    </>
+
 }
 
 export default ZoomMeeting

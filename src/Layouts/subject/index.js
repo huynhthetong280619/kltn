@@ -531,7 +531,7 @@ const Subject = () => {
         head(timelineUpdate).surveys.splice(index, 1, survey);
 
         handleLogoutExecute()
-     
+
     }
 
 
@@ -596,7 +596,7 @@ const Subject = () => {
                                             {(documentState || focusFileEdit) && (<AddFile timelinesList={timelinesList} createFile={createFile} updateFile={updateFile} idSubject={location.state._id} idTimeline={timelineIdEdit} idFile={fileIdEdit} />)}
                                             {timelineState && (<AddTimeline createTimeline={createTimeline} isLoading={null} />)}
                                             {(forumState || focusForumEdit) && (<AddForum timelinesList={timelinesList} createForum={createForum} updateForum={updateForum} idSubject={location.state._id} idTimeline={timelineIdEdit} idForum={forumIdEdit} />)}
-                                            {quizBankState && (<QuizBank idSubject={location.state._id} closeModalCurrentQuizBank={closeModalCurrentQuizBank} quizList={quizList}/>)}
+                                            {quizBankState && (<QuizBank idSubject={location.state._id} closeModalCurrentQuizBank={closeModalCurrentQuizBank} quizList={quizList} />)}
                                         </div>
                                     </div>
                                 </div>
@@ -909,12 +909,11 @@ const Subject = () => {
                                         cursor: 'pointer',
                                         height: '6rem'
                                     }}
-                                    // onClick={(e) => { e.preventDefault(); history.push(`zoom-meeting?idCourse=${location.state._id}`, { idSubject: location.state._id }) }}
-                                    onClick={(e) => { e.preventDefault(); history.push(`johning-zoom`, { idSubject: location.state._id }) }}
+                                        onClick={(e) => { e.preventDefault(); history.push(`zoom-meeting?idCourse=${location.state._id}`, { idSubject: location.state._id }) }}
                                     >
                                         {t('call_video')}
                                     </Col>
-                                    {isTeacherFlag  && ((!isUpdate && isTeacherFlag)?
+                                    {isTeacherFlag && ((!isUpdate && isTeacherFlag) ?
                                         <Col span={7} className="action-select-add-content" style={{
                                             display: 'flex',
                                             justifyContent: 'center',
@@ -933,8 +932,8 @@ const Subject = () => {
                                         >
                                             {t('update')}
                                         </Col>
-                                         : 
-                                         <Col span={7}></Col>)}
+                                        :
+                                        <Col span={7}></Col>)}
                                 </Row>
                             </ModalWrapper>
                             <ModalWrapper>
@@ -1339,13 +1338,12 @@ const Subject = () => {
                                         cursor: 'pointer',
                                         height: '6rem'
                                     }}
-                                        // onClick={(e) => { e.preventDefault(); history.push(`zoom-meeting?idCourse=${location.state._id}`, { idSubject: location.state._id }) }}
-                                        onClick={(e) => { e.preventDefault(); history.push(`johning-zoom`, { idSubject: location.state._id }) }}
+                                        onClick={(e) => { e.preventDefault(); history.push(`zoom-meeting?idCourse=${location.state._id}`, { idSubject: location.state._id }) }}
                                     >
                                         {t('call_video')}
                                     </Col>
                                     {
-                                        isTeacherFlag ?  <Col span={7} className="action-select-add-content" style={{
+                                        isTeacherFlag ? <Col span={7} className="action-select-add-content" style={{
                                             display: 'flex',
                                             justifyContent: 'center',
                                             alignItems: 'center',
@@ -1364,7 +1362,7 @@ const Subject = () => {
                                             {t('update')}
                                         </Col> : <Col span={7}></Col>
                                     }
-                                   
+
                                 </Row>
                             </ModalWrapper>
                         </Col>
