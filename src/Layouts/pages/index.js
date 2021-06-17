@@ -24,6 +24,7 @@ import SurveyTake from '../survey-take';
 import ManageScore from '../manage-score';
 import PublicClass from '../public-class';
 import JohningZoom from '../zoom-meeting/johning-zoom';
+import RestClient from '../../utils/restClient';
 
 const { Header, Content, Footer } = Layout
 
@@ -77,13 +78,27 @@ function Child() {
 const PagesView = () => {
     const [isOpen, setOpen] = useState(false)
     const history = useHistory()
-    const { authFlag } = useContext(StoreTrading)
+    const { authFlag, token } = useContext(StoreTrading)
 
-    useEffect(() => {
-        // const localStorageToken = localStorage.getItem('API_TOKEN')
-        // if(!authFlag && localStorageToken){
-        //     history.push("/login")
-        // }
+
+    useEffect(async () => {
+        const localStorageToken = localStorage.getItem('API_TOKEN')
+        let restClient;
+        if (localStorageToken) {
+            restClient = new RestClient({ localStorageToken })
+        }
+        else {
+            restClient = new RestClient({ token })
+        }
+
+
+        await restClient.asyncGet('/course/public')
+            .then(res => {
+                if (res.hasError) {
+                    history.push("/login")
+                }
+            })
+
     })
 
     return (
