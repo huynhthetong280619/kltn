@@ -61,17 +61,10 @@ const ManageScore = () => {
                     </span>
                     <span style={{ fontWeight: '700', color: '#f9f9f9' }}>[Statistics] {t('student_score_statictis')}</span>
                 </div>
-                <div style={{ width: '100%', minHeight: '150px' }}>
-                    <div style={{
-                        textAlign: 'center',
-                        padding: '45px',
-                        marginBottom: "25px",
-                        border: "2px solid #c4c4c4",
-                        borderRadius: "20px"
+                <div style={{ width: '100%', minHeight: '150px', padding: '1rem' }}>
+                    <div>
 
-                    }}>
-
-                        <Row style={{ border: '2px solid #cacaca' }}>
+                        <Row style={{ border: '2px solid #cacaca' }} className="style-table">
                             <Table rowKey="name" pagination={false} columns={columnsGrade} dataSource={lstSubmissionCore} scroll={{ y: 240 }} style={{ width: '100%' }} />
                         </Row>
 
