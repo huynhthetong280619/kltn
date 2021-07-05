@@ -135,6 +135,7 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
     }
 
 
+    console.log('quizList', quizList)
 
     return (
         <>
@@ -263,8 +264,8 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
                                             <Form.Item className="customize-add-form" wrapperCol={{ span: 24 }}>
                                                 <Form.Item
                                                     {...restField}
-                                                    labelCol={{ span: 6 }}
-                                                    wrapperCol={{ span: 18 }}
+                                                    labelCol={{ span: 4 }}
+                                                    wrapperCol={{ span: 20 }}
                                                     label={t('Quantity')}
                                                     name={[fieldKey, 'questionCount']}
                                                     rules={[
@@ -277,7 +278,7 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
                                                     {/* <InputNumber min={1} max={quizBank ? quizBank.questions : 30} /> */}
                                                     <Select dropdownClassName="ant-customize-dropdown" onChange={(value) => setQuantityBankSelect({ ...quantityBankSelect, [`${fieldKey}`]: value })} >
                                                         {
-                                                            [5, 10, 15, 20, 30, 40, 45].map(q => (<Option value={q} key={q}>{q}</Option>))
+                                                            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(q => (<Option value={q} key={q}>{q}</Option>))
                                                         }
                                                     </Select>
                                                 </Form.Item>
@@ -291,7 +292,7 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
                                     <Form.Item wrapperCol={{ wrapperCol: 20, offset: 4 }}>
                                         <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
                                             {t('add_quiz_bank')}
-              </Button>
+                                        </Button>
                                     </Form.Item>
                                 </>
                             )}
