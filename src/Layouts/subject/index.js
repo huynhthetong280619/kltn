@@ -253,7 +253,7 @@ const Subject = () => {
     };
 
     const submissionFile = async ({ file, idAssignment }) => {
-        await restClient.asyncPost(`/assignment/${idAssignment}/submit`, { idSubject: location.state._id, idTimeline: idTimelineRequired, file: file })
+        await restClient.asyncPost(`/assignment/${idAssignment}/submit`, { idCourse: location.state._id, idTimeline: idTimelineRequired, file: file })
             .then(res => {
                 setIsSubmitAssignment(false)
                 if (!res.hasError) {
@@ -1409,7 +1409,7 @@ const Subject = () => {
                 isCommentAssignment={isCommentAssignment}
                 commentAssignmentGrade={commentAssignmentGrade}
                 assignment={assignmentRequirement}
-                handleCancelModal={closeTodoModal}
+                handleCancelModal={() => closeTodoModal()}
                 submitAssignment={submissionFile}
                 onSubmitAssignment={onSubmitAssignment}
                 onCancelSubmitAssignment={onCancelSubmitAssignment} />

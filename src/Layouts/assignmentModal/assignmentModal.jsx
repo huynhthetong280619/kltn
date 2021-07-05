@@ -63,7 +63,7 @@ const AssignmentModal = (props) => {
     const handleCancel = () => {
         setFileData(null)
         setComment('')
-        // handleCancelModal();
+        props.handleCancelModal();
     }
 
     const getColor = (grade) => {

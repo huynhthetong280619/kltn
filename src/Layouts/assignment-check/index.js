@@ -98,7 +98,7 @@ const AssignmentCheck = () => {
             sortDirections: ['descend'],
             sortOrder: 'descend',
         },
-        { title: t('fullName'), dataIndex: 'student', key: 'student', render: data => <span>{get(data, 'surName') + " " + get(data, 'firstName')}</span> },
+        { title: t('fullName'), dataIndex: 'student', key: 'student', render: data => <span>{get(data, 'firstName') + " " + get(data, 'lastName')}</span> },
         {
             title: t('file_submission'), dataIndex: 'file', key: 'file',
             render: data => <span onClick={(e) => { e.preventDefault(); downloadFile(data) }} >{data.name}.{data.type}</span>
@@ -142,7 +142,7 @@ const AssignmentCheck = () => {
             render: (data) => {
                 if (isEditingRow(data)) {
                     return (
-                        <span>
+                        <div style={{display: 'flex'}}>
                             <Button
                                 onClick={() => enterGradeVerify(data._id)}
                                 style={{
@@ -154,7 +154,7 @@ const AssignmentCheck = () => {
                                 disabled={state.isConfirm}
                                 onClick={() => { setState({ ...state, editingKey: null }) }}
                             >{t('cancel')}</Button>
-                        </span>
+                        </div>
                     )
 
                 } else {
@@ -179,7 +179,7 @@ const AssignmentCheck = () => {
                 <Col span={24} style={{ padding: '25px', fontSize: '2em', color: '#f9f9f9' }}>{get(state.assignment, 'name')}</Col>
             </Row>
             <Row style={{ width: '100%', padding: 10 }}>
-                <div style={{ width: '100%', border: '1px solid #cacaca' }}>
+                <div style={{ width: '100%', border: '1px solid #cacaca' }} className="style-table">
                     <Form
                         form={form}
                     >

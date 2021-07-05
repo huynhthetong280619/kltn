@@ -127,8 +127,8 @@ const CreateAccount = () => {
                             Register
                          </Button>
                     </Form.Item>
-                    <Form.Item {...tailLayout}>
-                        <Button type="danger" onClick={() => history.go(-1)}>
+                    <Form.Item wrapperCol={{span: 24}}>
+                        <Button type="danger" style={{width: '100%'}} onClick={() => history.go(-1)}>
                             Back
                         </Button>
                     </Form.Item>

@@ -44,8 +44,8 @@ const ForgetPassword = () => {
     };
 
     const layout = {
-        labelCol: { span: 8 },
-        wrapperCol: { span: 16 },
+        labelCol: { span: 4 },
+        wrapperCol: { span: 20 },
     };
 
     const tailLayout = {
@@ -86,13 +86,13 @@ const ForgetPassword = () => {
                     </Form.Item>
 
 
-                    <Form.Item {...tailLayout}>
+                    <Form.Item wrapperCol={{span: 24}}>
                         <Button type="primary" htmlType="submit">
                             {t('reset_pwd')}
                         </Button>
                     </Form.Item>
-                    <Form.Item {...tailLayout}>
-                        <Button type="danger" onClick={() => history.go(-1)}>
+                    <Form.Item wrapperCol={{span: 24}}>
+                        <Button type="danger" style={{width: '100%'}} onClick={() => history.go(-1)}>
                             {t('go_back')}
                         </Button>
                     </Form.Item>
