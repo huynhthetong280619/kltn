@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Col, Dropdown, Row, Switch, Typography, } from 'antd'
+import { Col, Dropdown, Row, Switch, Typography, Drawer, Avatar, Form, Button, List, Input, Tooltip, Comment } from 'antd'
 // import IC_MENU from '../../assets/images/ic_menu_bar.png'
 import Menu from '../../assets/images/ic_menu.svg'
 import IC_SETTING from '../../assets/images/ic_setting.svg'
@@ -17,19 +17,75 @@ import { Link, Redirect, useHistory } from 'react-router-dom'
 import Message from '../message'
 import { StoreTrading } from '../../store-trading'
 import { DownOutlined } from '@ant-design/icons'
-import { isEmpty } from 'lodash'
+import { isEmpty, get } from 'lodash'
 import { ReactComponent as Logout } from '../../assets/images/contents/logout.svg'
+import ModalWrapper from '../basic/modal-wrapper'
 
 
 const { Text } = Typography;
+
+
+const CommentList = ({ t, comments }) => (
+    <List
+        dataSource={comments}
+        itemLayout="horizontal"
+        renderItem={props => <Comment author={<span className="color-default">{get(get(props, 'user'), 'firstName') + " " + get(get(props, 'user'), 'lastName')}</span>}
+            avatar={
+                <Avatar
+                    src={get(get(props, 'user'), 'urlAvatar')}
+                    alt={get(get(props, 'user'), 'firstName') + " " + get(get(props, 'user'), 'lastName')}
+                />
+            }
+
+            content={
+                <p className="color-default">
+                    {get(get(props, 'message'), 'message')}
+                </p>
+            }
+
+            datetime={
+                <Tooltip title={get(props, 'time')}>
+                    <span>{get(props, 'time')}</span>
+                </Tooltip>
+            }
+        />}
+
+
+    />
+);
+
+const Editor = ({ t, onChange, onSubmit, submitting, value }) => (
+    <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        columnGap: '1rem'
+    }}>
+        <Form.Item>
+            <Input onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                    onSubmit();
+                }
+            }} onChange={onChange} value={value} placeholder="Nội dung tin nhắn..." />
+        </Form.Item>
+        <Form.Item>
+            <Button htmlType="submit" loading={submitting} onClick={onSubmit} type="primary">
+                {t('send')}
+            </Button>
+        </Form.Item>
+    </div>
+);
 
 const HeaderLayout = ({ setOpen }) => {
     const { t, i18n } = useTranslation()
     const { authFlag, setAuth, language, setLanguage } = useContext(StoreTrading)
 
     const [openMessage, setOpenMessage] = useState(false)
+    const [openContainerMessage, setOpenContainerMessage] = useState(false)
     const [profile, setProfile] = useState({});
     const history = useHistory()
+    const [commentInput, setCommentInput] = useState('')
+    const [comments, setComments] = useState([])
+    const [submitting, setSubmitting] = useState(false);
 
 
 
@@ -72,6 +128,34 @@ const HeaderLayout = ({ setOpen }) => {
 
         history.push('/login')
     }
+
+    const handleSubmit = () => {
+
+        if (!commentInput) {
+            return;
+        }
+
+        setSubmitting(true)
+
+
+        setSubmitting(false)
+        setCommentInput('')
+    }
+
+    const scrollToNewMessage = () => {
+        const elm = document.querySelector('.ant-list-items')
+
+        if (elm) {
+            setTimeout(() => {
+                elm.scrollTo({ left: 0, top: elm.scrollHeight + elm.clientHeight, behavior: "smooth" })
+            }, 1000)
+        }
+    }
+
+    const handleChange = (e) => {
+        setCommentInput(e.target.value)
+    }
+
 
     return <div className="header-layout ant-col-24">
         <Col span={12} className="header-layout-left">
@@ -118,8 +202,8 @@ const HeaderLayout = ({ setOpen }) => {
                 </div>
                 <div className="user-message">{t('title_notification')}</div>
             </Col> */}
-            {/* <Col className="header-message cursor-act ml-2 mr-2" >
-                <div style={{ display: 'inline-flex' }} className="cursor-act" onClick={() => setOpenMessage(!openMessage)}>
+            <Col className="header-message cursor-act ml-2 mr-2" >
+                <div style={{ display: 'inline-flex' }} className="cursor-act" onClick={() => {setOpenMessage(!openMessage); setOpenContainerMessage(false)}}>
                     <div>
                         <img src={IC_MESSAGE} width="20px" />
                     </div>
@@ -134,7 +218,10 @@ const HeaderLayout = ({ setOpen }) => {
                         maxHeight: '262px',
                         overflowY: 'auto',
                     }}>
-                        <Row style={{ padding: '4px', margin: ' 10px 4px' }} className="item-message" onClick={() => setOpenMessage(false)}>
+                        <Row style={{ padding: '4px', margin: ' 10px 4px' }} className="item-message" onClick={() => {
+                            setOpenMessage(false);
+                            setOpenContainerMessage(true)
+                        }}>
                             <Col span={4} style={{ backgroundColor: 'red', height: 46, borderRadius: '50%', display: 'contents' }}>
                                 <img src={IC_AVATAR} height={46} />
                             </Col>
@@ -244,7 +331,7 @@ const HeaderLayout = ({ setOpen }) => {
                         </Row>
                     </div>
                 </div>
-            </Col> */}
+            </Col>
             {/* <Col span={4} className="header-setting cursor-act">
                 <div>
                     <img src={IC_SETTING} width="20px" />
@@ -280,6 +367,59 @@ const HeaderLayout = ({ setOpen }) => {
         </Col>
 
         {/* <Message /> */}
+        <Drawer
+            placement="right"
+            closable={false}
+            onClose={() => setOpenContainerMessage(false)}
+            visible={openContainerMessage}
+            maskStyle={{ backgroundColor: 'transparent' }}
+            width={350}
+            style={{ height: 500, bottom: 0, top: 'unset' }}
+            headerStyle={{ display: 'none' }}
+            footer={null}
+            className="message-content"
+        >
+            <Row style={{ padding: '4px', marginBottom: '1rem' }}>
+                <Col span={4} style={{ backgroundColor: 'red', height: 46, borderRadius: '50%', display: 'contents' }}>
+                    <img src={IC_AVATAR_THIRD} height={46} />
+                </Col>
+                <Col span={18} style={{
+                    height: 46, lineHeight: 'initial', marginLeft: 10, display: 'flex',
+                    flexDirection: 'column'
+                }}>
+                    <Text style={{ color: '#e4e6eb' }}>Nguyễn Trần Thi Văn</Text>
+                    <Text style={{ color: '#232323', fontSize: '0.75rem' }}>Active</Text>
+                </Col>
+                
+            </Row>
+            <ModalWrapper style={{ minWidth: '312px', position: 'relative', height: 403 }} className="zoom-list">
+
+
+                    {comments.length > 0 && <CommentList t={t} comments={comments} />}
+
+                    <Comment
+                        style={{
+                            position: 'absolute',
+                            bottom: 0,
+                        }}
+                        avatar={
+                            <Avatar
+                                src={''}
+                                alt="Avatar"
+                            />
+                        }
+                        content={
+                            <Editor
+                                t={t}
+                                onChange={handleChange}
+                                onSubmit={handleSubmit}
+                                submitting={submitting}
+                                value={commentInput}
+                            />
+                        }
+                    />
+                </ModalWrapper>
+        </Drawer>
     </div>
 }
 

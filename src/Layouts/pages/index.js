@@ -103,7 +103,7 @@ const PagesView = () => {
 
     return (
         <Layout style={{ minWidth: 1298, height: '100vh' }} className="main-layout">
-            <Header className="main-header-layout">
+            <Header className="main-header-layout" style={{zIndex: '999'}}>
                 <HeaderLayout setOpen={setOpen} />
             </Header>
 
