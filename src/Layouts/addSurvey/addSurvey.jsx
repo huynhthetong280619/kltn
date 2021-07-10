@@ -37,13 +37,17 @@ const AddSurvey = ({ timelinesList, surveyList, createSurvey, updateSurvey, idSu
 
     useEffect(async () => {
         if (idSurvey) {
+            console.log('sorry that guys')
             await restClient.asyncGet(`/survey/${idSurvey}/update/?idCourse=${idSubject}&idTimeline=${idTimeline}`)
                 .then(res => {
                     console.log('Survey', res)
                     if (!res.hasError) {
                         setSurvey({
                             ...res.data.survey,
-                            expireTime: moment(res.data.survey.expireTime),
+                            setting: {
+                                startTime: moment(res.data.survey.setting.startTime),
+                                expireTime: moment(res.data.survey.setting.expireTime)
+                            }
                         });
                     } else {
                         notifyError(t('failure'), res.data.message);
@@ -244,7 +248,7 @@ const AddSurvey = ({ timelinesList, surveyList, createSurvey, updateSurvey, idSu
                                         <div style={{ color: '#f9f9f9' }}><span style={{ color: "#c0c0c0" }}>Loại câu hỏi: </span>{survey['typeQuestion']}</div>
                                     </Col>
                                     <Col span={1}>
-                                        <Checkbox onChange={() => handleChangeSelectSurvey(survey)} />
+                                        <Checkbox checked={true} onChange={() => handleChangeSelectSurvey(survey)} />
                                     </Col>
                                 </Row>
                             </ModalWrapper>
