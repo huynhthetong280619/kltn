@@ -4,11 +4,12 @@ import { useTranslation } from 'react-i18next';
 import InfiniteScroll from 'react-infinite-scroller';
 import RestClient from '../../../utils/restClient';
 
+import PerfectScrollbar from 'react-perfect-scrollbar'
 
 const { Text } = Typography;
 
-const Messages = ({ t, messages }) => {
-    return <List
+const Messages = ({ t, messages }) => (
+    <List
         dataSource={messages}
         itemLayout="horizontal"
         renderItem={props =>
@@ -34,7 +35,7 @@ const Messages = ({ t, messages }) => {
             />
         }
     />
-}
+)
 
 const Editor = ({ t, onChange, onSubmit, submitting, value }) => (
     <div style={{
@@ -76,26 +77,6 @@ const ChatBox = ({ isOpen, setOpen, socket, roomId, setRoomId, room, profile }) 
         setCommentInput('');
     }
 
-    const [scrollCtrRef, setScrollCtrRef] = useState();
-    // eslint-disable-next-line no-unused-vars
-    const [scrollRef, setScrollRef] = useState();
-
-
-    const handleLoadMoreMessages = () => {
-        loadMessages();
-
-        const preHeight = scrollCtrRef.scrollHeight;
-
-        const currentHeight = scrollCtrRef.scrollHeight
-        scrollTo(currentHeight - preHeight);
-    }
-
-    const scrollTo = (height) => {
-        if (scrollCtrRef) {
-            scrollCtrRef.scrollTop = height;
-        }
-    }
-
     const scrollToNewMessage = (speed = 500) => {
         const elm = document.querySelector('.ant-list-items')
 
@@ -110,7 +91,7 @@ const ChatBox = ({ isOpen, setOpen, socket, roomId, setRoomId, room, profile }) 
         setCommentInput(e.target.value)
     }
 
-    const loadMessages = (callBack) => {
+    const loadMessages = () => {
         setLoadMessages(true);
         restClient.asyncPost(`/chatroom/${roomId}/messages`, {
             current: messages.length
@@ -122,7 +103,6 @@ const ChatBox = ({ isOpen, setOpen, socket, roomId, setRoomId, room, profile }) 
             })
             .finally(() => {
                 setLoadMessages(false);
-                callBack();
             })
     }
 
@@ -165,6 +145,7 @@ const ChatBox = ({ isOpen, setOpen, socket, roomId, setRoomId, room, profile }) 
             headerStyle={{ display: 'none' }}
             footer={null}
             className="message-content"
+            level
         >
             <Row style={{ padding: '4px', marginBottom: '1rem' }}>
                 <Col span={4} style={{ backgroundColor: 'red', height: 46, borderRadius: '50%', display: 'contents' }}>
@@ -179,21 +160,48 @@ const ChatBox = ({ isOpen, setOpen, socket, roomId, setRoomId, room, profile }) 
                 </Col>
 
             </Row>
-             <InfiniteScroll
-                className="alt-modal-wrapper"
-                loadMore={loadMessages}
-                hasMore={true}
-                useWindow={false}
-            >
+
+            <PerfectScrollbar
+                onScrollUp={(ref) => {
+                    console.log(ref.scrollTop)
+                    if (ref.scrollTop === 0) {
+                        if (room._id) {
+                        }
+                    }
+                }}
+                className="alt-modal-wrapper">
                 {
-                isLoadMessages &&
+                    isLoadMessages &&
                     <Row justify="center">
                         <Spin tip="Loading..."></Spin>
                     </Row>
-                } 
-                <Messages t={t} messages={messages} />
+                }
+                {/* <Messages t={t} messages={messages} /> */}
 
-            </InfiniteScroll> 
+                {messages.map(props => (
+                    <Comment author={<span className="color-default">{props.user.firstName + " " + props.user.lastName}</span>}
+                        avatar={
+                            <Avatar
+                                src={props.user.urlAvatar}
+                                alt={props.user.firstName + " " + props.user.lastName}
+                            />
+                        }
+
+                        content={
+                            <p className="color-default">
+                                {props.message}
+                            </p>
+                        }
+
+                        datetime={
+                            <Tooltip title={props.time}>
+                                <span>{props.time}</span>
+                            </Tooltip>
+                        }
+                    />
+                ))}
+            </PerfectScrollbar>
+
 
             <Comment
                 style={{
