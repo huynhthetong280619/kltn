@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import InfiniteScroll from 'react-infinite-scroller';
 import RestClient from '../../../utils/restClient';
+import ModalWrapper from '../../../components/basic/modal-wrapper/index.js';
 
 import PerfectScrollbar from 'react-perfect-scrollbar'
 
@@ -161,47 +162,48 @@ const ChatBox = ({ isOpen, setOpen, socket, roomId, setRoomId, room, profile }) 
 
             </Row>
 
-            <PerfectScrollbar
-                onScrollUp={(ref) => {
-                    console.log(ref.scrollTop)
-                    if (ref.scrollTop === 0) {
-                        if (room._id) {
+            <ModalWrapper style={{height: 314, overflow: 'auto'}}>
+                <PerfectScrollbar
+                    onScrollUp={(ref) => {
+                        console.log(ref.scrollTop)
+                        if (ref.scrollTop === 0) {
+                            if (room._id) {
+                            }
                         }
+                    }}
+                    >
+                    {
+                        isLoadMessages &&
+                        <Row justify="center">
+                            <Spin tip="Loading..."></Spin>
+                        </Row>
                     }
-                }}
-                className="alt-modal-wrapper">
-                {
-                    isLoadMessages &&
-                    <Row justify="center">
-                        <Spin tip="Loading..."></Spin>
-                    </Row>
-                }
-                {/* <Messages t={t} messages={messages} /> */}
+                    {/* <Messages t={t} messages={messages} /> */}
 
-                {messages.map(props => (
-                    <Comment author={<span className="color-default">{props.user.firstName + " " + props.user.lastName}</span>}
-                        avatar={
-                            <Avatar
-                                src={props.user.urlAvatar}
-                                alt={props.user.firstName + " " + props.user.lastName}
-                            />
-                        }
+                    {messages.map(props => (
+                        <Comment author={<span className="color-default">{props.user.firstName + " " + props.user.lastName}</span>}
+                            avatar={
+                                <Avatar
+                                    src={props.user.urlAvatar}
+                                    alt={props.user.firstName + " " + props.user.lastName}
+                                />
+                            }
 
-                        content={
-                            <p className="color-default">
-                                {props.message}
-                            </p>
-                        }
+                            content={
+                                <p className="color-default">
+                                    {props.message}
+                                </p>
+                            }
 
-                        datetime={
-                            <Tooltip title={props.time}>
-                                <span>{props.time}</span>
-                            </Tooltip>
-                        }
-                    />
-                ))}
-            </PerfectScrollbar>
-
+                            datetime={
+                                <Tooltip title={props.time}>
+                                    <span>{props.time}</span>
+                                </Tooltip>
+                            }
+                        />
+                    ))}
+                </PerfectScrollbar>
+            </ModalWrapper>
 
             <Comment
                 style={{
