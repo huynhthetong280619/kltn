@@ -18,7 +18,7 @@ const VideoFrame = ({ currentUser, socket, peer, userStream }) => {
 
     const [isMute, setMute] = React.useState(!userStream.getAudioTracks()[0].enabled);
 
-    const [isHideCamera, setCamera] = React.useState(false);
+    const [isHideCamera, setCamera] = React.useState(!userStream.getVideoTracks()[0].enabled);
 
     const [arrayStream, setArrayStream] = useState([]);
 
