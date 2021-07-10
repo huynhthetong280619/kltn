@@ -1,93 +1,51 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { Col, Dropdown, Row, Switch, Typography, Drawer, Avatar, Form, Button, List, Input, Tooltip, Comment } from 'antd'
+import { Col, Switch, Typography } from 'antd'
+import { isEmpty } from 'lodash'
+import React, { useContext, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useHistory } from 'react-router-dom'
+import io from "socket.io-client"
+import { getCookie } from "../../assets/common/core/localStorage"
+import { SERVER_SOCKET } from "../../assets/constants/const"
+import { ReactComponent as Logout } from '../../assets/images/contents/logout.svg'
 // import IC_MENU from '../../assets/images/ic_menu_bar.png'
 import Menu from '../../assets/images/ic_menu.svg'
-import IC_SETTING from '../../assets/images/ic_setting.svg'
-import IC_USER from '../../assets/images/ic_user_login.svg'
 import IC_MESSAGE from '../../assets/images/ic_message.svg'
-import IC_NOTIFICATION from '../../assets/images/ic_notification.svg'
-import IC_AVATAR from '../../assets/images/ic_avatar.svg'
-import IC_AVATAR_SEC from '../../assets/images/ic_avatar_second.svg'
-import IC_AVATAR_THIRD from '../../assets/images/ic_avatar_third.svg'
-import { useTranslation } from 'react-i18next'
-import { STORE_KEY } from '../../utils/STORE_KEY'
-import en from '../../assets/images/en.png'
-import ArrowDown from '../../assets/images/ic_arr_down.png'
-import { Link, Redirect, useHistory } from 'react-router-dom'
-import Message from '../message'
+import IC_USER from '../../assets/images/ic_user_login.svg'
 import { StoreTrading } from '../../store-trading'
-import { DownOutlined } from '@ant-design/icons'
-import { isEmpty, get } from 'lodash'
-import { ReactComponent as Logout } from '../../assets/images/contents/logout.svg'
-import ModalWrapper from '../basic/modal-wrapper'
+import { STORE_KEY } from '../../utils/STORE_KEY'
+import Messenger from './messenger'
+
+
 
 
 const { Text } = Typography;
-
-
-const CommentList = ({ t, comments }) => (
-    <List
-        dataSource={comments}
-        itemLayout="horizontal"
-        renderItem={props => <Comment author={<span className="color-default">{get(get(props, 'user'), 'firstName') + " " + get(get(props, 'user'), 'lastName')}</span>}
-            avatar={
-                <Avatar
-                    src={get(get(props, 'user'), 'urlAvatar')}
-                    alt={get(get(props, 'user'), 'firstName') + " " + get(get(props, 'user'), 'lastName')}
-                />
-            }
-
-            content={
-                <p className="color-default">
-                    {get(get(props, 'message'), 'message')}
-                </p>
-            }
-
-            datetime={
-                <Tooltip title={get(props, 'time')}>
-                    <span>{get(props, 'time')}</span>
-                </Tooltip>
-            }
-        />}
-
-
-    />
-);
-
-const Editor = ({ t, onChange, onSubmit, submitting, value }) => (
-    <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        columnGap: '1rem'
-    }}>
-        <Form.Item>
-            <Input onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                    onSubmit();
-                }
-            }} onChange={onChange} value={value} placeholder="Nội dung tin nhắn..." />
-        </Form.Item>
-        <Form.Item>
-            <Button htmlType="submit" loading={submitting} onClick={onSubmit} type="primary">
-                {t('send')}
-            </Button>
-        </Form.Item>
-    </div>
-);
 
 const HeaderLayout = ({ setOpen }) => {
     const { t, i18n } = useTranslation()
     const { authFlag, setAuth, language, setLanguage } = useContext(StoreTrading)
 
     const [openMessage, setOpenMessage] = useState(false)
-    const [openContainerMessage, setOpenContainerMessage] = useState(false)
     const [profile, setProfile] = useState({});
     const history = useHistory()
-    const [commentInput, setCommentInput] = useState('')
-    const [comments, setComments] = useState([])
-    const [submitting, setSubmitting] = useState(false);
 
 
+    const [socket, setSocket] = useState(null);
+
+    const setupSocket = () => {
+        const token = getCookie("token");
+        if (token) {
+            const newSocket = io(SERVER_SOCKET, {
+                query: {
+                    token,
+                },
+            });
+            setSocket(newSocket);
+        }
+    };
+
+    useEffect(() => {
+        setupSocket();
+    }, [])
 
     useEffect(() => {
         const lang = localStorage.getItem(STORE_KEY.LANGUAGE)
@@ -128,34 +86,6 @@ const HeaderLayout = ({ setOpen }) => {
 
         history.push('/login')
     }
-
-    const handleSubmit = () => {
-
-        if (!commentInput) {
-            return;
-        }
-
-        setSubmitting(true)
-
-
-        setSubmitting(false)
-        setCommentInput('')
-    }
-
-    const scrollToNewMessage = () => {
-        const elm = document.querySelector('.ant-list-items')
-
-        if (elm) {
-            setTimeout(() => {
-                elm.scrollTo({ left: 0, top: elm.scrollHeight + elm.clientHeight, behavior: "smooth" })
-            }, 1000)
-        }
-    }
-
-    const handleChange = (e) => {
-        setCommentInput(e.target.value)
-    }
-
 
     return <div className="header-layout ant-col-24">
         <Col span={12} className="header-layout-left">
@@ -203,134 +133,14 @@ const HeaderLayout = ({ setOpen }) => {
                 <div className="user-message">{t('title_notification')}</div>
             </Col> */}
             <Col className="header-message cursor-act ml-2 mr-2" >
-                <div style={{ display: 'inline-flex' }} className="cursor-act" onClick={() => {setOpenMessage(!openMessage); setOpenContainerMessage(false)}}>
+                <div style={{ display: 'inline-flex' }} className="cursor-act" onClick={() => { setOpenMessage(!openMessage) }}>
                     <div>
                         <img src={IC_MESSAGE} width="20px" />
                     </div>
                     <div className="user-message" >{t('title_message')}</div>
                 </div>
-                <div style={{
-                    display: openMessage ? 'block' : 'none'
-                }} className="message-dialog">
-                    <div className="title-message">Message</div>
-                    <input style={{ width: '98%', height: '36px', borderRadius: '30px', outline: 'none', backgroundColor: '#3A3B3C', paddingLeft: 20, color: '#fff', border: 0 }} placeholder="Search messager" className="input-message" />
-                    <div style={{
-                        maxHeight: '262px',
-                        overflowY: 'auto',
-                    }}>
-                        <Row style={{ padding: '4px', margin: ' 10px 4px' }} className="item-message" onClick={() => {
-                            setOpenMessage(false);
-                            setOpenContainerMessage(true)
-                        }}>
-                            <Col span={4} style={{ backgroundColor: 'red', height: 46, borderRadius: '50%', display: 'contents' }}>
-                                <img src={IC_AVATAR} height={46} />
-                            </Col>
-                            <Col span={18} style={{
-                                height: 46, lineHeight: 'initial', marginLeft: 10, display: 'flex',
-                                flexDirection: 'column'
-                            }}>
-                                <Text style={{ color: '#e4e6eb' }}>Nguyễn Anh Quân</Text>
-                                <Text style={{ color: '#b0b3b8' }}>You: Socket connection... • 7h</Text>
-                            </Col>
-                        </Row>
-                        <Row style={{ padding: '4px', margin: ' 10px 4px' }} className="item-message">
-                            <Col span={4} style={{ backgroundColor: 'red', height: 46, borderRadius: '50%', display: 'contents' }}>
-                                <img src={IC_AVATAR_SEC} height={46} />
-                            </Col>
-                            <Col span={18} style={{
-                                height: 46, lineHeight: 'initial', marginLeft: 10, display: 'flex',
-                                flexDirection: 'column'
-                            }}>
-                                <Text style={{ color: '#e4e6eb' }}>Huỳnh Thế Tông</Text>
-                                <Text style={{ color: '#b0b3b8' }}>Go to home... • 3m</Text>
-                            </Col>
-                        </Row>
-                        <Row style={{ padding: '4px', margin: ' 10px 4px' }} className="item-message">
-                            <Col span={4} style={{ backgroundColor: 'red', height: 46, borderRadius: '50%', display: 'contents' }}>
-                                <img src={IC_AVATAR_SEC} height={46} />
-                            </Col>
-                            <Col span={18} style={{
-                                height: 46, lineHeight: 'initial', marginLeft: 10, display: 'flex',
-                                flexDirection: 'column'
-                            }}>
-                                <Text style={{ color: '#e4e6eb' }}>Huỳnh Thế Tông</Text>
-                                <Text style={{ color: '#b0b3b8' }}>Go to home... • 3m</Text>
-                            </Col>
-                        </Row>
-                        <Row style={{ padding: '4px', margin: ' 10px 4px' }} className="item-message">
-                            <Col span={4} style={{ backgroundColor: 'red', height: 46, borderRadius: '50%', display: 'contents' }}>
-                                <img src={IC_AVATAR_SEC} height={46} />
-                            </Col>
-                            <Col span={18} style={{
-                                height: 46, lineHeight: 'initial', marginLeft: 10, display: 'flex',
-                                flexDirection: 'column'
-                            }}>
-                                <Text style={{ color: '#e4e6eb' }}>Huỳnh Thế Tông</Text>
-                                <Text style={{ color: '#b0b3b8' }}>Go to home... • 3m</Text>
-                            </Col>
-                        </Row>
-                        <Row style={{ padding: '4px', margin: ' 10px 4px' }} className="item-message">
-                            <Col span={4} style={{ backgroundColor: 'red', height: 46, borderRadius: '50%', display: 'contents' }}>
-                                <img src={IC_AVATAR_SEC} height={46} />
-                            </Col>
-                            <Col span={18} style={{
-                                height: 46, lineHeight: 'initial', marginLeft: 10, display: 'flex',
-                                flexDirection: 'column'
-                            }}>
-                                <Text style={{ color: '#e4e6eb' }}>Huỳnh Thế Tông</Text>
-                                <Text style={{ color: '#b0b3b8' }}>Go to home... • 3m</Text>
-                            </Col>
-                        </Row>
-                        <Row style={{ padding: '4px', margin: ' 10px 4px' }} className="item-message">
-                            <Col span={4} style={{ backgroundColor: 'red', height: 46, borderRadius: '50%', display: 'contents' }}>
-                                <img src={IC_AVATAR_SEC} height={46} />
-                            </Col>
-                            <Col span={18} style={{
-                                height: 46, lineHeight: 'initial', marginLeft: 10, display: 'flex',
-                                flexDirection: 'column'
-                            }}>
-                                <Text style={{ color: '#e4e6eb' }}>Huỳnh Thế Tông</Text>
-                                <Text style={{ color: '#b0b3b8' }}>Go to home... • 3m</Text>
-                            </Col>
-                        </Row>
-                        <Row style={{ padding: '4px', margin: ' 10px 4px' }} className="item-message">
-                            <Col span={4} style={{ backgroundColor: 'red', height: 46, borderRadius: '50%', display: 'contents' }}>
-                                <img src={IC_AVATAR_THIRD} height={46} />
-                            </Col>
-                            <Col span={18} style={{
-                                height: 46, lineHeight: 'initial', marginLeft: 10, display: 'flex',
-                                flexDirection: 'column'
-                            }}>
-                                <Text style={{ color: '#e4e6eb' }}>Nguyễn Trần Thi Văn</Text>
-                                <Text style={{ color: '#b0b3b8' }}>Ngày 22/3 em nhé! • 5s</Text>
-                            </Col>
-                        </Row>
-                        <Row style={{ padding: '4px', margin: ' 10px 4px' }} className="item-message">
-                            <Col span={4} style={{ backgroundColor: 'red', height: 46, borderRadius: '50%', display: 'contents' }}>
-                                <img src={IC_AVATAR_THIRD} height={46} />
-                            </Col>
-                            <Col span={18} style={{
-                                height: 46, lineHeight: 'initial', marginLeft: 10, display: 'flex',
-                                flexDirection: 'column'
-                            }}>
-                                <Text style={{ color: '#e4e6eb' }}>Nguyễn Trần Thi Văn</Text>
-                                <Text style={{ color: '#b0b3b8' }}>Ngày 22/3 em nhé! • 5s</Text>
-                            </Col>
-                        </Row>
-                        <Row style={{ padding: '4px', margin: ' 10px 4px' }} className="item-message">
-                            <Col span={4} style={{ backgroundColor: 'red', height: 46, borderRadius: '50%', display: 'contents' }}>
-                                <img src={IC_AVATAR_THIRD} height={46} />
-                            </Col>
-                            <Col span={18} style={{
-                                height: 46, lineHeight: 'initial', marginLeft: 10, display: 'flex',
-                                flexDirection: 'column'
-                            }}>
-                                <Text style={{ color: '#e4e6eb' }}>Nguyễn Trần Thi Văn</Text>
-                                <Text style={{ color: '#b0b3b8' }}>Ngày 22/3 em nhé! • 5s</Text>
-                            </Col>
-                        </Row>
-                    </div>
-                </div>
+
+                <Messenger profile={profile} isOpen={openMessage} setOpen={setOpenMessage} socket={socket} />
             </Col>
             {/* <Col span={4} className="header-setting cursor-act">
                 <div>
@@ -365,61 +175,6 @@ const HeaderLayout = ({ setOpen }) => {
             </Col>
 
         </Col>
-
-        {/* <Message /> */}
-        <Drawer
-            placement="right"
-            closable={false}
-            onClose={() => setOpenContainerMessage(false)}
-            visible={openContainerMessage}
-            maskStyle={{ backgroundColor: 'transparent' }}
-            width={350}
-            style={{ height: 500, bottom: 0, top: 'unset' }}
-            headerStyle={{ display: 'none' }}
-            footer={null}
-            className="message-content"
-        >
-            <Row style={{ padding: '4px', marginBottom: '1rem' }}>
-                <Col span={4} style={{ backgroundColor: 'red', height: 46, borderRadius: '50%', display: 'contents' }}>
-                    <img src={IC_AVATAR_THIRD} height={46} />
-                </Col>
-                <Col span={18} style={{
-                    height: 46, lineHeight: 'initial', marginLeft: 10, display: 'flex',
-                    flexDirection: 'column'
-                }}>
-                    <Text style={{ color: '#e4e6eb' }}>Nguyễn Trần Thi Văn</Text>
-                    <Text style={{ color: '#232323', fontSize: '0.75rem' }}>Active</Text>
-                </Col>
-                
-            </Row>
-            <ModalWrapper style={{ minWidth: '312px', position: 'relative', height: 403 }} className="zoom-list">
-
-
-                    {comments.length > 0 && <CommentList t={t} comments={comments} />}
-
-                    <Comment
-                        style={{
-                            position: 'absolute',
-                            bottom: 0,
-                        }}
-                        avatar={
-                            <Avatar
-                                src={''}
-                                alt="Avatar"
-                            />
-                        }
-                        content={
-                            <Editor
-                                t={t}
-                                onChange={handleChange}
-                                onSubmit={handleSubmit}
-                                submitting={submitting}
-                                value={commentInput}
-                            />
-                        }
-                    />
-                </ModalWrapper>
-        </Drawer>
     </div>
 }
 
