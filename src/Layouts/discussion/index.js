@@ -1,5 +1,5 @@
 import { get, isEmpty } from 'lodash'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useHistory, useLocation } from 'react-router'
 import RestClient from '../../utils/restClient'
@@ -12,9 +12,8 @@ import { ReactComponent as Logout } from '../../assets/images/contents/logout.sv
 import ModalLoadingLogin from '../login/modal-loading-login';
 
 import * as notify from "../../assets/common/core/notify";
-import { SERVER_SOCKET } from "../../assets/constants/const";
-import io from "socket.io-client";
 import * as localStorage from "../../assets/common/core/localStorage";
+import { StoreTrading } from '../../store-trading'
 
 const { TextArea } = Input;
 const CommentList = ({ t, comments }) => (
@@ -73,32 +72,7 @@ const Discussion = () => {
     const [detailTopic, setDetailTopic] = useState({})
     const [loadingDiscussion, setLoadingDiscussion] = useState(false)
 
-    const [socket, setSocket] = useState(null)
-
-    const setupSocket = () => {
-        const token = localStorage.getCookie("token");
-        if (token) {
-            const newSocket = io(SERVER_SOCKET, {
-                query: {
-                    token,
-                },
-            });
-
-            newSocket.on("connect", () => {
-                notify.notifySuccess(t("success"), t("join_success"));
-            });
-
-            newSocket.on('not-accessible', (message) => {
-                notify.notifyError(t("failure"), message);
-            })
-
-            newSocket.on('error', (message) => {
-                notify.notifyError(t("failure"), message);
-            })
-
-            setSocket(newSocket);
-        }
-    };
+    const { socket } = useContext(StoreTrading);
 
     useEffect(() => {
         setProfile(JSON.parse(localStorage.getLocalStorage('user')))
@@ -114,8 +88,6 @@ const Discussion = () => {
                     setComments(get(res, 'data').topic?.discussions)
                 }
             })
-
-        setupSocket();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -127,6 +99,14 @@ const Discussion = () => {
                 idForum: forumId,
                 idTopic: idTopic
             });
+            
+            socket.on('not-accessible', (message) => {
+                notify.notifyError(t("failure"), message);
+            })
+
+            socket.on('error', (message) => {
+                notify.notifyError(t("failure"), message);
+            })
 
             socket.on('newDiscuss', newDiscuss => {
                 setComments(preState => [newDiscuss, ...preState]);
@@ -150,35 +130,6 @@ const Discussion = () => {
         setSubmitting(true);
 
         socket.emit('discuss', commentInput);
-
-        // setTimeout(async () => {
-
-        //     const data = {
-        //         idSubject,
-        //         idTimeline,
-        //         idForum: forumId,
-        //         idTopic,
-        //         data: {
-        //             content: commentInput
-        //         }
-        //     }
-
-        //     await restClient.asyncPost(`/topic/${idTopic}/discuss?idSubject=${idSubject}&idTimeline=${idTimeline}&idForum=${forumId}`, data)
-        //         .then(res => {
-        //             console.log('Res', res)
-        //             if (!res.hasError) {
-        //                 setSubmitting(false)
-        //                 setCommentInput('')
-        //                 setComments([...[
-        //                     get(res, 'data').discussion,
-
-        //                 ], ...comments.reverse()].reverse())
-        //             }
-        //         })
-
-        // }, 1000);
-
-
     };
 
     const handleChange = e => {
@@ -212,7 +163,7 @@ const Discussion = () => {
                                 <div style={{ textAlign: 'center', color: 'yellow', fontSize: '1rem' }}>
                                     {get(detailTopic, 'content').toUpperCase()}
                                 </div>
-                                <div style={{ textAlign: 'center'}} className="mt-4">
+                                <div style={{ textAlign: 'center' }} className="mt-4">
                                     <Tooltip title="Exit">
                                         <Logout style={{ cursor: 'pointer' }} onClick={() => history.go(-1)} />
                                     </Tooltip>

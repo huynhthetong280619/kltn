@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useReducer } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ReactComponent as Join_Meeting } from '../../assets/images/contents/join_meeting.svg'
 import { ReactComponent as New_Meeting } from '../../assets/images/contents/new_meeting.svg'
@@ -11,15 +11,13 @@ import './zoom.scss'
 
 import { useLocation } from 'react-router'
 
-import io from "socket.io-client";
-
-import { SERVER_SOCKET } from "../../assets/constants/const";
 import * as localStorage from "../../assets/common/core/localStorage";
 import * as notify from "../../assets/common/core/notify";
 import Peer from "peerjs";
 import VideoFrame from "./video-frame";
 import WaitingScreen from "./waiting-screen";
-import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom';
+import { StoreTrading } from '../../store-trading'
 
 const ZoomMeeting = () => {
     const { t } = useTranslation()
@@ -34,7 +32,7 @@ const ZoomMeeting = () => {
 
     const [isJoin, setJoin] = useState(false);
 
-    const [socket, setSocket] = useState(null)
+    const { socket } = useContext(StoreTrading)
 
     const [isOpenShare, setIsOpenShare] = React.useState(false);
 
@@ -45,27 +43,9 @@ const ZoomMeeting = () => {
     useEffect(() => {
         idSubject.current = location.search.slice(1).split("&")[0].split("=")[1]
         console.log('Id subject', idSubject.current)
-        setupSocket();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-
-    const setupSocket = () => {
-        const token = localStorage.getCookie("token");
-        if (token) {
-            const newSocket = io(SERVER_SOCKET, {
-                query: {
-                    token,
-                },
-            });
-
-            newSocket.on("connect", () => {
-                notify.notifySuccess(t("success"), t("join_success"));
-            });
-
-            setSocket(newSocket);
-        }
-    };
 
     const handleWhenHasAlreadyJoinInAnotherPlace = (message) => {
         notify.notifyError("Error!", message);
@@ -99,6 +79,7 @@ const ZoomMeeting = () => {
 
     useEffect(() => {
         if (socket) {
+            console.log("peer", peer);
             peer.on('open', (id) => {
                 socket.emit('join-zoom', idSubject.current, id);
 
@@ -219,7 +200,7 @@ const ZoomMeeting = () => {
                 </Modal>
             </div>
             :
-            <WaitingScreen currentUser={currentUser} isReady={isReady} setJoin={setJoin} stream={userStream} history={history}/>
+            <WaitingScreen currentUser={currentUser} isReady={isReady} setJoin={setJoin} stream={userStream} history={history} />
     }
     </>
 

@@ -3,9 +3,6 @@ import { isEmpty } from 'lodash'
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useHistory } from 'react-router-dom'
-import io from "socket.io-client"
-import { getCookie } from "../../assets/common/core/localStorage"
-import { SERVER_SOCKET } from "../../assets/constants/const"
 import { ReactComponent as Logout } from '../../assets/images/contents/logout.svg'
 // import IC_MENU from '../../assets/images/ic_menu_bar.png'
 import Menu from '../../assets/images/ic_menu.svg'
@@ -16,36 +13,15 @@ import { STORE_KEY } from '../../utils/STORE_KEY'
 import Messenger from './messenger'
 
 
-
-
 const { Text } = Typography;
 
 const HeaderLayout = ({ setOpen }) => {
     const { t, i18n } = useTranslation()
-    const { authFlag, setAuth, language, setLanguage } = useContext(StoreTrading)
+    const { authFlag, setAuth, language, setLanguage, socket } = useContext(StoreTrading)
 
     const [openMessage, setOpenMessage] = useState(false)
     const [profile, setProfile] = useState({});
     const history = useHistory()
-
-
-    const [socket, setSocket] = useState(null);
-
-    const setupSocket = () => {
-        const token = getCookie("token");
-        if (token) {
-            const newSocket = io(SERVER_SOCKET, {
-                query: {
-                    token,
-                },
-            });
-            setSocket(newSocket);
-        }
-    };
-
-    useEffect(() => {
-        setupSocket();
-    }, [])
 
     useEffect(() => {
         const lang = localStorage.getItem(STORE_KEY.LANGUAGE)

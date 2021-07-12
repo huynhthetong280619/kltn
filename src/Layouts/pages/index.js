@@ -78,32 +78,34 @@ function Child() {
 const PagesView = () => {
     const [isOpen, setOpen] = useState(false)
     const history = useHistory()
-    const { authFlag, token } = useContext(StoreTrading)
+    const { authFlag, token, setToken } = useContext(StoreTrading)
 
 
-    useEffect(async () => {
-        const localStorageToken = localStorage.getItem('API_TOKEN')
-        let restClient;
-        if (localStorageToken) {
-            restClient = new RestClient({ localStorageToken })
+    useEffect(() => {
+        const localStorageToken = localStorage.getItem('API_TOKEN');
+        const presentToken = token || localStorageToken;
+        if (presentToken) {
+            let restClient = new RestClient({ presentToken });
+            restClient.asyncGet('/course/public')
+                .then(res => {
+                    if (res.hasError) {
+                        history.push("/login");
+                    } else {
+                        if (!token) {
+                            setToken(presentToken);
+                        }
+                    }
+                })
+
+        } else {
+            history.push("/login");
         }
-        else {
-            restClient = new RestClient({ token })
-        }
-
-
-        await restClient.asyncGet('/course/public')
-            .then(res => {
-                if (res.hasError) {
-                    history.push("/login")
-                }
-            })
-
-    })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <Layout style={{ minWidth: 1298, height: '100vh' }} className="main-layout">
-            <Header className="main-header-layout" style={{zIndex: '999'}}>
+            <Header className="main-header-layout" style={{ zIndex: '999' }}>
                 <HeaderLayout setOpen={setOpen} />
             </Header>
 
