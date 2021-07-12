@@ -89,21 +89,20 @@ html{
         border: 0;
         display: flex;
         align-items: center;
+        margin: 0.5rem 0;
+        .ant-inpt-wrapper{
+            width: 94% !important;
+
+        }
         .ant-input-affix-wrapper{
             background-color: #3A3B3C !important;
     border: 0;
-    width: 94%;
     .ant-input{
         background-color: transparent !important;
     border: none !important;
     }
-    .ant-input-affix-wrapper:focus, .ant-input-affix-wrapper-focused{
-        border-color: transparent !important;
-        outline: none !important;
-    }
-    .ant-input-search .ant-input:hover, .ant-input-search .ant-input:focus{
-        outline: none !important;
-    }
+    
+    
         }
         .ant-input-group-addon{
             background: #3A3B3C !important;
@@ -996,4 +995,11 @@ h5.ant-typography{
         padding: 20px 5px 5px 5px;
         overflow: hidden;
     }
+}
+
+
+.ant-input-affix-wrapper:focus, .ant-input-affix-wrapper-focused{
+    border-color: transparent !important;
+    outline: none !important;
+    box-shadow: none !important
 }

@@ -99,7 +99,7 @@ const PagesView = () => {
                 }
             })
 
-    })
+    }, [])
 
     return (
         <Layout style={{ minWidth: 1298, height: '100vh' }} className="main-layout">

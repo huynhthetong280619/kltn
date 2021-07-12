@@ -8,6 +8,7 @@ import ModalWrapper from '../../components/basic/modal-wrapper'
 import RestClient from '../../utils/restClient'
 import ModalLoadingLogin from '../login/modal-loading-login'
 import './overwrite.css'
+import { ReactComponent as Logout } from '../../assets/images/contents/logout.svg';
 
 
 const { Meta } = Card;
@@ -111,8 +112,15 @@ const Topic = () => {
                 </span>
                 <span className="color-default">[ {t('discussion_forum')} ] {get(forum, 'name')}</span>
             </Col>
-            <Col>
+            <Col style={{display: 'flex', alignItems: 'center', columnGap: '0.25rem'}}>
                 <Button type="primary" onClick={() => setIsModalCreateTopic(true)} className="lms-btn" style={{ marginTop: 0 }}>{t('new_topic')}</Button>
+                <Tooltip title="Exit">
+                    <div className="zm-center" onClick={() => { history.goBack() }}>
+                        <div style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+                            <Logout />
+                        </div>
+                    </div>
+                </Tooltip>
             </Col>
         </Row>
 
@@ -207,7 +215,7 @@ const Topic = () => {
             </Form>
         </Modal>
 
-        <ModalLoadingLogin visible={isLoading} content={t('loading_survey')}/>
+        <ModalLoadingLogin visible={isLoading} content={t('loading_survey')} />
     </ModalWrapper>
     </div>
 
