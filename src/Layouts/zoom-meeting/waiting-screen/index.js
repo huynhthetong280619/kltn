@@ -29,11 +29,11 @@ const WaitingScreen = ({ isReady, setJoin, stream, currentUser, history }) => {
             display: 'flex',
             justifyContent: "center",
             alignItems: 'center',
-            
+
         }}>
             {
                 stream &&
-                <div style={{ width: '350px', height: '350px', borderRadius: '1rem',  display: `${isOnCamera ? 'flex' : 'none'}` }}>
+                <div style={{ width: '350px', height: '350px', borderRadius: '1rem', display: `${isOnCamera ? 'flex' : 'none'}` }}>
 
                     <video id="camera-video" autoPlay style={{ display: `${isOnCamera ? 'flex' : 'none'}`, borderRadius: '1rem' }} />
                 </div>
@@ -93,7 +93,7 @@ const WaitingScreen = ({ isReady, setJoin, stream, currentUser, history }) => {
                         <div className="zm-center" >
                             <i className={`zm-icon ${isOnMic ? 'zm-icon-phone-muted' : 'zm-icon-phone-unmuted'}`} style={{ cursor: 'pointer' }}></i>
                         </div>
-                        <Switch defaultChecked onChange={onStatusMicChange} />
+                        <Switch disabled={stream===null} defaultChecked onChange={onStatusMicChange} />
                     </div>
                 </Tooltip>
                 <Tooltip title="Turn on/off video">
@@ -105,7 +105,7 @@ const WaitingScreen = ({ isReady, setJoin, stream, currentUser, history }) => {
                         <div className="zm-center" >
                             <i className={`zm-icon ${isOnCamera ? 'zm-icon-start-video' : 'zm-icon-stop-video'}`} style={{ cursor: 'pointer' }}></i>
                         </div>
-                        <Switch defaultChecked onChange={onStatusCameraChange} />
+                        <Switch disabled={stream===null} defaultChecked onChange={onStatusCameraChange} />
                     </div>
                 </Tooltip>
             </div>

@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { STORE_KEY } from './utils/STORE_KEY';
+import io from "socket.io-client"
+
+import { SERVER_SOCKET } from "./assets/constants/const"
 
 export const StoreTrading = React.createContext(null);
 
-  const Store = ({ children }) => {
+const Store = ({ children }) => {
 
-    const {i18n} = useTranslation()
+    const { i18n } = useTranslation()
     const [authFlag, setAuth] = useState(false)
     const [token, setToken] = useState(false)
+    const [socket, setSocket] = useState(null)
     // userInfo
     const [userInfo, setUserInfo] = useState({
         code: '',
@@ -18,6 +22,21 @@ export const StoreTrading = React.createContext(null);
         surName: '',
         urlAvatar: ''
     })
+    const setupSocket = () => {
+        const newSocket = io(SERVER_SOCKET, {
+            query: {
+                token,
+            },
+        });
+        setSocket(newSocket);
+    }
+
+    useEffect(() => {
+        if (token) {
+            setupSocket();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [token])
 
     const [language, setLanguage] = useState('VI')
 
@@ -32,7 +51,7 @@ export const StoreTrading = React.createContext(null);
         setLanguage(localStorage.getItem(STORE_KEY.LANGUAGE))
 
     }, [language, i18n])
-    
+
     const store = {
         token,
         setToken,
@@ -41,7 +60,8 @@ export const StoreTrading = React.createContext(null);
         authFlag,
         setAuth,
         setLanguage,
-        language
+        language,
+        socket,
     };
 
     return (
