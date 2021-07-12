@@ -103,6 +103,12 @@
     background-size: 416px 384px;
 }
 
+.footer-button__ask-for-help-icon, .footer-button__breakout-room-icon, .footer-button__out-icon, .footer-button__closed-caption-icon-active, .footer-button__closed-caption-icon-normal, .footer-button__disallow-share-icon, .footer-button__invite-icon, .footer-button__no-record-icon, .footer-button__participants-icon, .footer-button__poll-icon, .footer-button__raise-hand-active-icon, .footer-button__raise-hand-icon, .footer-button__recording-icon, .footer-button__share-icon, .footer-button__sharer-permission-icon {
+    display: inline-block;
+    background: url(../../assets//images/wc_sprites.png);
+    background-size: 416px 384px;
+}
+
 .footer-button__participants-icon {
     font-size: 0;
     background-position: -161px -6px !important;
@@ -112,6 +118,12 @@
 
 .footer-button__chat-icon {
     background-position: -130px -219px !important;
+    width: 28px;
+    height: 25px;
+}
+
+.footer-button__out-icon {
+    background-position: -705px 803px !important;
     width: 28px;
     height: 25px;
 }

@@ -19,11 +19,13 @@ import * as notify from "../../assets/common/core/notify";
 import Peer from "peerjs";
 import VideoFrame from "./video-frame";
 import WaitingScreen from "./waiting-screen";
+import { useHistory } from 'react-router-dom'
 
 const ZoomMeeting = () => {
     const { t } = useTranslation()
     const [isOpenModalFunction, setIsOpenModalFunction] = useState(false)
     const [currentTitle, setCurrentTitle] = useState('')
+    const history = useHistory()
 
     const location = useLocation()
     const idSubject = useRef('')
@@ -217,7 +219,7 @@ const ZoomMeeting = () => {
                 </Modal>
             </div>
             :
-            <WaitingScreen currentUser={currentUser} isReady={isReady} setJoin={setJoin} stream={userStream} />
+            <WaitingScreen currentUser={currentUser} isReady={isReady} setJoin={setJoin} stream={userStream} history={history}/>
     }
     </>
 

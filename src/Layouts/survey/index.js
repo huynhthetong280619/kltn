@@ -63,7 +63,7 @@ const Survey = () => {
         lineHeight: '30px'
     };
 
-    console.log(replyCurrent.questionnaire)
+    console.log(responseSurvey)
 
 return <>
         <ModalWrapper style={{ width: '90%', margin: '0 auto', display: 'flex', rowGap: '1rem', flexDirection: 'column' }}>
@@ -165,8 +165,8 @@ return <>
                             {
                                 !isEmpty(responseSurvey) && (responseSurvey?.questionnaire).map((q, index) => (
                                     q.typeQuestion == 'choice' ?
-                                        (<div style={{ marginBottom: '20px', textAlign: 'left' }} key={q._id}>
-                                            <div style={{ fontWeight: 600, color: '#f9f9f9' }}><span>{t('question')} {index + 1}: </span>{q.question}</div>
+                                        (<div style={{ marginBottom: '20px', textAlign: 'left' }} key={index}>
+                                            <div style={{ fontWeight: 600, color: '#f9f9f9' }}><span>{t('question')} {index + 1}: </span>{q.content}</div>
                                             <Row>
                                                 <Col span={12}>
                                                     <Radio.Group disabled>
@@ -174,7 +174,7 @@ return <>
                                                             q.answer.map(a => (<div style={{ display: 'flex' }}>
                                                                 <div >
                                                                     <Radio style={radioStyle} value={a._id} key={a._id}>
-                                                                        {a.content}
+                                                                        {a.content.content}
                                                                     </Radio>
                                                                 </div>
                                                             </div>
@@ -195,8 +195,8 @@ return <>
                                             </Row>
                                         </div>) :
                                         (
-                                            q.typeQuestion == 'multiple' ? (<div style={{ marginBottom: '20px', textAlign: 'left' }} key={q._id}>
-                                                <div style={{ fontWeight: 600, color: '#f9f9f9' }}><span>{t('question')} {index + 1}: </span>{q.question}</div>
+                                            q.typeQuestion == 'multiple' ? (<div style={{ marginBottom: '20px', textAlign: 'left' }} key={index}>
+                                                <div style={{ fontWeight: 600, color: '#f9f9f9' }}><span>{t('question')} {index + 1}: </span>{q.content}</div>
                                                 <Row>
                                                     <Col span={12} >
                                                         <Checkbox.Group disabled>
@@ -208,7 +208,7 @@ return <>
                                                                             </Radio> */}
 
                                                                         <Checkbox style={radioStyle} value={a._id} key={a._id}>
-                                                                            {a.content}
+                                                                            {a.content.content}
                                                                         </Checkbox>
                                                                     </div>
 
@@ -230,9 +230,9 @@ return <>
                                                 </Row>
                                             </div>)
 
-                                                : <div style={{ textAlign: 'left' }} key={q._id}>
+                                                : <div style={{ textAlign: 'left' }} key={index}>
                                                     <div style={{ fontWeight: 600, color: '#f9f9f9' }}>
-                                                        <span>{t('question')} {index + 1}: </span>{q.question}
+                                                        <span>{t('question')} {index + 1}: </span>{q.content}
                                                     </div>
                                                     {q.answer.map(value => (
                                                         <div>

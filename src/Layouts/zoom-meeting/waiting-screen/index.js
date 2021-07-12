@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Tooltip, Switch, Button } from 'antd'
 
-const WaitingScreen = ({ isReady, setJoin, stream, currentUser }) => {
+const WaitingScreen = ({ isReady, setJoin, stream, currentUser, history }) => {
 
     const [isOnMic, setOnMic] = useState(true);
     const [isOnCamera, setOnCamera] = useState(true);
@@ -71,6 +71,18 @@ const WaitingScreen = ({ isReady, setJoin, stream, currentUser }) => {
                     Join Now
                 </Button>
             </div>
+            {/* <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                width: '100%'
+            }} className="mt-4">
+                <Button
+                    onClick={() => { history.goBack() }}
+                    size="large"
+                >
+                    Go back
+                </Button>
+            </div> */}
             <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                 <Tooltip title="Join Audio">
                     <div style={{

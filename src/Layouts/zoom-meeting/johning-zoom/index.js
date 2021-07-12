@@ -43,6 +43,7 @@ const JoiningZoom = ({ idSubject, setIsJoin }) => {
                 }}
                     onClick={(e) => { e.preventDefault(); history.push(`zoom-meeting?idCourse=${idSubject}`, { idSubject: idSubject }) }}
                 >Join Now</div>
+                
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                 <Tooltip title="Join Audio">

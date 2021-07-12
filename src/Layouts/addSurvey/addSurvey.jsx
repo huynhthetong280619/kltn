@@ -7,6 +7,7 @@ import formatTime from '../../assets/common/core/formatTime.js';
 import { notifyError } from '../../assets/common/core/notify';
 import ModalWrapper from '../../components/basic/modal-wrapper/index.js';
 import RestClient from '../../utils/restClient';
+import Survey from '../survey/index.js';
 const { Option } = Select;
 const { TextArea } = Input;
 
@@ -37,7 +38,6 @@ const AddSurvey = ({ timelinesList, surveyList, createSurvey, updateSurvey, idSu
 
     useEffect(async () => {
         if (idSurvey) {
-            console.log('sorry that guys')
             await restClient.asyncGet(`/survey/${idSurvey}/update/?idCourse=${idSubject}&idTimeline=${idTimeline}`)
                 .then(res => {
                     console.log('Survey', res)
@@ -49,6 +49,15 @@ const AddSurvey = ({ timelinesList, surveyList, createSurvey, updateSurvey, idSu
                                 expireTime: moment(res.data.survey.setting.expireTime)
                             }
                         });
+
+                        let temp = {}
+                        res.data.survey.questionnaire.map(item => {
+                            temp = {
+                                ...temp,
+                                [`${item.identity}`]: item
+                            }
+                        })
+                        setSurveyQuestion(temp)
                     } else {
                         notifyError(t('failure'), res.data.message);
                     }
@@ -115,6 +124,7 @@ const AddSurvey = ({ timelinesList, surveyList, createSurvey, updateSurvey, idSu
     }
 
     const handleUpdateSurvey = async (survey, idTimelineUpdate) => {
+        console.log('handleUpdateSurvey', survey)
         const data = {
             idCourse: idSubject,
             idTimeline: idTimelineUpdate,
@@ -137,7 +147,7 @@ const AddSurvey = ({ timelinesList, surveyList, createSurvey, updateSurvey, idSu
         console.log(selected)
         if (surveyQuestion[`${selected.identity}`]) {
             delete surveyQuestion[`${selected.identity}`]
-            setSurveyQuestion(surveyQuestion);
+            setSurveyQuestion({...surveyQuestion});
             return;
         }
         setSurveyQuestion({ ...surveyQuestion, [`${selected.identity}`]: selected })
@@ -248,7 +258,7 @@ const AddSurvey = ({ timelinesList, surveyList, createSurvey, updateSurvey, idSu
                                         <div style={{ color: '#f9f9f9' }}><span style={{ color: "#c0c0c0" }}>Loại câu hỏi: </span>{survey['typeQuestion']}</div>
                                     </Col>
                                     <Col span={1}>
-                                        <Checkbox checked={true} onChange={() => handleChangeSelectSurvey(survey)} />
+                                        <Checkbox disabled={idSubject ? true : false} checked={surveyQuestion[`${survey?.identity}`] ? true : false} onChange={() => handleChangeSelectSurvey(survey)} />
                                     </Col>
                                 </Row>
                             </ModalWrapper>

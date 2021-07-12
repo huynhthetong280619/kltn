@@ -108,10 +108,10 @@ const Discussion = () => {
         restClient.asyncGet(`/topic/${idTopic}?idCourse=${idSubject}&idTimeline=${idTimeline}&idForum=${forumId}`)
             .then(res => {
                 console.log(res)
+                setLoadingDiscussion(false)
                 if (!res.hasError) {
                     setDetailTopic(get(res, 'data').topic)
                     setComments(get(res, 'data').topic?.discussions)
-                    setLoadingDiscussion(false)
                 }
             })
 
@@ -213,7 +213,7 @@ const Discussion = () => {
                                     {get(detailTopic, 'content').toUpperCase()}
                                 </div>
                                 <div style={{ textAlign: 'center'}} className="mt-4">
-                                    <Tooltip title="Thoát hội thảo">
+                                    <Tooltip title="Exit">
                                         <Logout style={{ cursor: 'pointer' }} onClick={() => history.go(-1)} />
                                     </Tooltip>
                                 </div>

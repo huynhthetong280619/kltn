@@ -5,16 +5,19 @@ import { Tooltip, Popover, Row, Col, Typography } from 'antd'
 import ModalWrapper from '../../../components/basic/modal-wrapper'
 
 import VideoContainer from "../components/videoContainer";
+import { ReactComponent as Logout } from '../../../assets/images/contents/logout.svg'
 
 import ChatTab from "../chat-tab";
 
 import IC_AVATAR from '../../../assets/images/ic_avatar.svg'
+import { useHistory } from 'react-router-dom';
 
 const { Text } = Typography;
 
 const VideoFrame = ({ currentUser, socket, peer, userStream }) => {
 
     const { t } = useTranslation()
+    const history = useHistory()
 
     const [isMute, setMute] = React.useState(!userStream.getAudioTracks()[0].enabled);
 
@@ -432,6 +435,13 @@ const VideoFrame = ({ currentUser, socket, peer, userStream }) => {
                     <Tooltip title="Chat">
                         <div className="zm-center" onClick={() => { setOpenChatTab(!openChatTab) }}>
                             <div className="footer-button__chat-icon" style={{ cursor: 'pointer' }}></div>
+                        </div>
+                    </Tooltip>
+                    <Tooltip title="Exit">
+                        <div className="zm-center" onClick={() => { history.goBack() }}>
+                            <div style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+                                <Logout />
+                            </div>
                         </div>
                     </Tooltip>
                 </div>
