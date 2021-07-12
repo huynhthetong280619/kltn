@@ -84,7 +84,7 @@ html{
         border-radius: 30px; 
         outline: none; 
         background-color: #3A3B3C; 
-        padding-left: 20; 
+        padding-left: 20px; 
         color: #fff; 
         border: 0;
         display: flex;
@@ -92,9 +92,17 @@ html{
         .ant-input-affix-wrapper{
             background-color: #3A3B3C !important;
     border: 0;
+    width: 94%;
     .ant-input{
         background-color: transparent !important;
     border: none !important;
+    }
+    .ant-input-affix-wrapper:focus, .ant-input-affix-wrapper-focused{
+        border-color: transparent !important;
+        outline: none !important;
+    }
+    .ant-input-search .ant-input:hover, .ant-input-search .ant-input:focus{
+        outline: none !important;
     }
         }
         .ant-input-group-addon{
@@ -102,7 +110,7 @@ html{
             .ant-btn{
                 background: #3A3B3C !important;
     border: 0;
-    color: #f9f9f9;
+    color: #f9f9f9 !important;
             }
         }
 
