@@ -25,3 +25,11 @@ export function notifyError(message, description) {
         placement: 'bottomRight'
     });
 };
+
+export function notifyMessage(userName, message) {
+    notification.info({
+        message: userName,
+        description: message,
+        placement: 'bottomRight'
+    });
+};
