@@ -1,7 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Col, Row, Tooltip } from 'antd';
+import { Col, Empty, Row, Tooltip } from 'antd';
+import Modal from "antd/lib/modal/Modal";
 import { get, head, isEmpty, pick } from 'lodash';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router';
@@ -24,6 +25,8 @@ import ModalLoadingLogin from '../login/modal-loading-login';
 import QuizBank from '../quiz-bank';
 import './styles.scss';
 
+import { ReactComponent as IC_CLOSE } from '../../assets/images/contents/ic_close.svg';
+import { ReactComponent as IC_TODO } from '../../assets/images/todo-item.svg'
 
 
 
@@ -83,6 +86,9 @@ const Subject = () => {
     const [isExecuteClass, setIsExecuteClass] = useState(false)
 
     const [isUpdate, setIsUpdate] = useState(false)
+    const cloneFlag = useRef(false)
+    const [isOpenClone, setOpenClone] = useState(false)
+    const [listSubjectClone, setListSubjectClone] = useState([])
 
     const history = useHistory()
     const restClient = new RestClient({ token })
@@ -113,12 +119,25 @@ const Subject = () => {
 
         restClient.asyncGet(`/course/${location.state._id}`)
             .then(res => {
-                console.log('res', res)
+                console.log('detail subject', res)
                 if (!res.hasError) {
-                    console.log(res?.data);
+                    if (res?.data?.course.timelines.length < 1) {
+                        cloneFlag.current = true;
+                        queryListSubjectClone()
+                    }
                     setLoadingSubject(false)
                     setDetailSubject(res?.data?.course?.timelines)
                 }
+            })
+    }
+
+    const queryListSubjectClone = () => {
+        restClient.asyncGet(`/course/${location.state._id}/clone`)
+            .then(res => {
+                if (!res.hasError) {
+                    setListSubjectClone(res?.data?.courses)
+                }
+
             })
     }
 
@@ -535,6 +554,21 @@ const Subject = () => {
     }
 
 
+    const executeClone = async (idClone) => {
+        const data = {
+            cloneId: idClone
+        }
+
+        await restClient.asyncPost(`/Course/${location.state._id}/clone`, data)
+            .then(res => {
+                if (!res.hasError) {
+                    cloneFlag.current = false;
+                    queryDetailSubject()
+                }
+            })
+    }
+
+
     const closeModalCurrentQuizBank = () => {
         setOpenCreateContent(false)
         setIsOpenModalFunction(false)
@@ -608,7 +642,7 @@ const Subject = () => {
                                                 <div  {...provided.droppableProps}
                                                     ref={provided.innerRef}>
                                                     {
-                                                        detailSubject.map(({ _id, name, description, assignments, exams, forums, announcements, files, surveys }, index) => {
+                                                        detailSubject.length > 0 ? detailSubject.map(({ _id, name, description, assignments, exams, forums, announcements, files, surveys }, index) => {
                                                             return <Draggable key={_id.toString()} draggableId={_id} index={index}>
                                                                 {(provided) => (
                                                                     <div className="subject-container" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} key={index.toString()}>
@@ -870,6 +904,10 @@ const Subject = () => {
                                                                 )}
                                                             </Draggable>
                                                         })
+                                                        :
+                                                        <div>
+                                                            <Empty description={<div style={{color: '#f9f9f9'}}>{t('noData')}</div>}/>
+                                                        </div>
                                                     }
                                                 </div>
                                             )}
@@ -881,7 +919,7 @@ const Subject = () => {
 
                         <Col span={8} style={{ padding: '10px', display: 'flex', flexDirection: 'column', rowGap: '0.75rem' }}>
                             <ModalWrapper>
-                                <div style={{ textAlign: 'center', marginBottom: '0.5rem', color: '#f9f9f9' }}>QUẢN LÝ & TIỆN ÍCH</div>
+                                <div style={{ textAlign: 'center', marginBottom: '0.5rem', color: '#f9f9f9' }}>{t('manage_utils')}</div>
                                 <Row style={{ justifyContent: 'space-between', columnGap: '0.5rem' }}>
                                     <Col span={7} className="action-select-add-content" style={{
                                         display: 'flex',
@@ -892,7 +930,8 @@ const Subject = () => {
                                         padding: '0.5rem',
                                         borderRadius: '0.5rem',
                                         cursor: 'pointer',
-                                        height: '6rem'
+                                        height: '6rem',
+                                        textAlign: 'center'
                                     }}
                                         onClick={() => isTeacherFlag ? directManageStudent() : directManageScore()}
                                     >
@@ -907,7 +946,8 @@ const Subject = () => {
                                         padding: '0.5rem',
                                         borderRadius: '0.5rem',
                                         cursor: 'pointer',
-                                        height: '6rem'
+                                        height: '6rem',
+                                        textAlign: 'center'
                                     }}
                                         onClick={(e) => { e.preventDefault(); history.push(`zoom-meeting?idCourse=${location.state._id}`, { idSubject: location.state._id }) }}
                                     >
@@ -937,7 +977,7 @@ const Subject = () => {
                                 </Row>
                             </ModalWrapper>
                             <ModalWrapper>
-                                <div style={{ textAlign: 'center', marginBottom: '0.5rem', color: '#f9f9f9' }}>CHỨC NĂNG NGHIỆP VỤ</div>
+                                <div style={{ textAlign: 'center', marginBottom: '0.5rem', color: '#f9f9f9' }}>{t('pro_function')}</div>
                                 <Row style={{ justifyContent: 'space-between', columnGap: '0.5rem' }}>
                                     <Col span={7} className="action-select-add-content" style={{
                                         display: 'flex',
@@ -1111,22 +1151,44 @@ const Subject = () => {
                                         padding: '0.5rem',
                                         borderRadius: '0.5rem',
                                         cursor: 'pointer',
-                                        height: '6rem'
+                                        height: '6rem',
+                                        textAlign: 'center'
                                     }}
                                         onClick={() => {
                                             handleLogoutExecute();
                                             resetEdit();
                                             setIsUpdate(true)
                                             setIsExecuteClass(true)
-                                            setCurrentTitle(t('Quiz Bank'))
+                                            setCurrentTitle(t('quiz_bank'))
                                             setQuizBankState(true)
                                         }}
                                     >
-                                        {t('Quiz Bank')}
+                                        {t('quiz_bank')}
                                     </Col>
-                                    <Col span={7} className="action-select-add-content"
-                                    >
-                                    </Col>
+                                    {
+                                        cloneFlag.current ? <Col span={7} className="action-select-add-content" style={{
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            background: '#c8d6e5',
+                                            color: '#fff',
+                                            padding: '0.5rem',
+                                            borderRadius: '0.5rem',
+                                            cursor: 'pointer',
+                                            height: '6rem'
+                                        }}
+                                            onClick={() => {
+                                                setOpenClone(true)
+                                            }}
+                                        >
+                                            {t('Clone')}
+                                        </Col>
+                                            : <Col span={7} className="action-select-add-content"
+
+                                            >
+                                            </Col>
+                                    }
+
                                 </Row>
                             </ModalWrapper>
                         </Col>
@@ -1137,7 +1199,7 @@ const Subject = () => {
                     <Row>
                         <Col span={16}>
                             {
-                                detailSubject.map(({ _id, name, description, assignments, exams, forums, announcements, files, surveys }, index) => {
+                                detailSubject.length > 0 ? detailSubject.map(({ _id, name, description, assignments, exams, forums, announcements, files, surveys }, index) => {
                                     return (
                                         <div className="subject-container" key={index.toString()}>
                                             <div className="subject-wrapper">
@@ -1306,11 +1368,15 @@ const Subject = () => {
 
                                     )
                                 })
+                                : 
+                                <div>
+                                    <Empty description={t('noData')}/>
+                                </div>
                             }
                         </Col>
                         <Col span={8} style={{ padding: '10px', display: 'flex', flexDirection: 'column', rowGap: '0.75rem' }}>
                             <ModalWrapper>
-                                <div style={{ textAlign: 'center', marginBottom: '0.5rem', color: '#f9f9f9' }}>QUẢN LÝ & TIỆN ÍCH</div>
+                                <div style={{ textAlign: 'center', marginBottom: '0.5rem', color: '#f9f9f9' }}>{t('manage_utils')}</div>
                                 <Row style={{ justifyContent: 'space-between', columnGap: '0.5rem' }}>
                                     <Col span={7} className="action-select-add-content" style={{
                                         display: 'flex',
@@ -1321,7 +1387,8 @@ const Subject = () => {
                                         padding: '0.5rem',
                                         borderRadius: '0.5rem',
                                         cursor: 'pointer',
-                                        height: '6rem'
+                                        height: '6rem',
+                                        textAlign: 'center'
                                     }}
                                         onClick={() => isTeacherFlag ? directManageStudent() : directManageScore()}
                                     >
@@ -1336,7 +1403,8 @@ const Subject = () => {
                                         padding: '0.5rem',
                                         borderRadius: '0.5rem',
                                         cursor: 'pointer',
-                                        height: '6rem'
+                                        height: '6rem',
+                                        textAlign: 'center'
                                     }}
                                         onClick={(e) => { e.preventDefault(); history.push(`zoom-meeting?idCourse=${location.state._id}`, { idSubject: location.state._id }) }}
                                     >
@@ -1414,6 +1482,50 @@ const Subject = () => {
                 onSubmitAssignment={onSubmitAssignment}
                 onCancelSubmitAssignment={onCancelSubmitAssignment} />
 
+            <Modal
+                closable={false}
+                className="modal-function-customize"
+                title={<div
+                    style={{
+                        padding: '1rem 0.625rem 0.625rem 0',
+                        alignItems: 'center',
+                    }}
+
+                >
+                    <div style={{ color: '#f9f9f9' }}>CLONE SUBJECT</div>
+                    <div className="close-icon-modal" onClick={() => setOpenClone(false)}>
+                        <IC_CLOSE />
+                    </div></div>}
+                visible={isOpenClone}
+                onCancel={() => setOpenClone(false)}
+                footer={null}
+            >
+                {
+                    listSubjectClone.map(item => {
+                        console.log(item)
+                        return <div className="todos-item mb-4">
+                            <div className="todos-item__f">
+                                <Row span={24} style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    cursor: 'pointer'
+                                }}
+                                    onClick={() => executeClone(item?._id)}
+                                >
+                                    <Col className="todos-item__ic" span={8}>
+                                        <IC_TODO />
+                                    </Col>
+                                    <Col span={16}>
+                                        <div className="todos-item__n" style={{ color: '#f9f9f9' }}>{item?.name}</div>
+                                        <div className="todos-item__t" style={{ color: '#f9f9f9' }}>{item?.code}</div>
+                                    </Col>
+                                </Row>
+
+                            </div>
+                        </div>
+                    })
+                }
+            </Modal>
         </>
     }
 }

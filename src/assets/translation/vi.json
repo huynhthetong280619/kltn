@@ -315,7 +315,7 @@
     "loading_login": "Đang đăng nhập...",
     "loading_subject": "Hệ thống đang tải dữ liệu môn học...",
     "loading_class": "Hệ thống đang tải dữ liệu lớp học...",
-    "call_video": "Call video",
+    "call_video": "Lớp học trực tuyến",
     "go_back": "Quay lại",
     "reset_pwd": "Lấy lại mật khẩu",
     "join_success": "Tham gia lớp học thành công!",
@@ -324,6 +324,13 @@
     "registered_subject": "Đã đăng ký",
     "todo_list": "Việc cần làm",
     "loading_survey": "Hệ thống đang tải dữ liệu...",
-    "add_quiz_bank": "Thêm bộ câu hỏi"
+    "add_quiz_bank": "Thêm bộ câu hỏi",
+    "noData": "Không có dữ liệu",
+    "join_now": "Tham gia ngay",
+    "private": "Cá nhân",
+    "public": "Công đồng",
+    "manage_utils": "QUẢN LÝ & TIỆN ÍCH",
+    "pro_function": "CHỨC NĂNG NGHIỆP VỤ",
+    "forget_pass": "Quên mật khẩu ?"
 
 }

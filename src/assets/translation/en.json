@@ -314,7 +314,7 @@
     "loading_login": "Signing in...",
     "loading_subject": "The system is loading subject data ...",
      "loading_class": "The system is loading class data ...",
-     "call_video": "Call video",
+     "call_video": "Zoom video class",
      "go_back": "Back",
      "reset_pwd": "Reset password",
      "join_success": "Join class success!",
@@ -323,7 +323,15 @@
      "registered_subject": "Registered subject",
      "todo_list": "To do lists",
      "loading_survey": "The system is loading data...",
-     "add_quiz_bank": "Add quiz bank"
+     "add_quiz_bank": "Add quiz bank",
+     "noData": "No data",
+     "join_now": "Join Now",
+     "private": "Private class",
+     "public": "Public class",
+     "manage_utils": "Management & utilities",
+     "pro_function": "Professional function",
+     "forget_pass": "Forget password ?"
+
 
 
 

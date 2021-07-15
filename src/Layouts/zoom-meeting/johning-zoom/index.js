@@ -1,10 +1,12 @@
 import React from 'react'
 import { Tooltip, Switch } from 'antd'
 import { useHistory, useLocation } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 const JoiningZoom = ({ idSubject, setIsJoin }) => {
     const history = useHistory()
     const location = useLocation()
+    const t = useTranslation()
 
     return <div>
         <div style={{
@@ -42,7 +44,7 @@ const JoiningZoom = ({ idSubject, setIsJoin }) => {
                     cursor: 'pointer'
                 }}
                     onClick={(e) => { e.preventDefault(); history.push(`zoom-meeting?idCourse=${idSubject}`, { idSubject: idSubject }) }}
-                >Join Now</div>
+                >{t('join_now')}</div>
                 
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-around' }}>

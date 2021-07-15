@@ -161,11 +161,11 @@ const Login = () => {
 
                     <div className="login-utils">
                         <Col span={12} className="remember-me">
-                            <Checkbox onChange={onChange} />
-                            <div style={{ marginLeft: 10, cursor: 'pointer' }}>Lưu tên đăng nhập</div>
+                            {/* <Checkbox onChange={onChange} /> */}
+                            {/* <div style={{ marginLeft: 10, cursor: 'pointer' }}>Lưu tên đăng nhập</div> */}
                         </Col>
                         <Col span={12} className="forget-pass" onClick={() => history.push('forget')}>
-                            <div style={{ cursor: 'pointer' }}>Quên mật khẩu ?</div>
+                            <div style={{ cursor: 'pointer' }}>{t('forget_pass')}</div>
                         </Col>
                     </div>
 

@@ -104,7 +104,7 @@ const MainAppLayout = () => {
                 tab={
                     <span>
                         <AppleOutlined />
-          Private
+          {t('private')}
         </span>
                 }
                 key="1"
@@ -146,7 +146,7 @@ const MainAppLayout = () => {
                 tab={
                     <span>
                         <AndroidOutlined />
-          Public
+          {t('public')}
         </span>
                 }
                 key="2"
