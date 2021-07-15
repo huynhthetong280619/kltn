@@ -330,7 +330,8 @@
      "public": "Public class",
      "manage_utils": "Management & utilities",
      "pro_function": "Professional function",
-     "forget_pass": "Forget password ?"
+     "forget_pass": "Forget password ?",
+     "sync_data": "The system is syncing data. Please wait a moment..."
 
 
 

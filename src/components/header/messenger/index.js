@@ -6,6 +6,7 @@ import SearchContact from './search-contact';
 
 import * as notify from "../../../assets/common/core/notify";
 import { isFile } from '@babel/types';
+import { useTranslation } from 'react-i18next';
 
 const { Text } = Typography;
 
@@ -24,6 +25,8 @@ const Messenger = ({ profile, socket, isOpen, setOpen }) => {
     const [searchText, setSearchText] = useState('');
 
     const [isSearching, setIsSearching] = useState(false);
+
+    const {t} = useTranslation()
 
     useEffect(() => {
         if (isOpenChatBox && isOpen) {
@@ -71,7 +74,7 @@ const Messenger = ({ profile, socket, isOpen, setOpen }) => {
         <div style={{
             display: isOpen ? 'block' : 'none'
         }} className="message-dialog">
-            <div className="title-message">Message</div>
+            <div className="title-message">{t('title_message')}</div>
             <Input.Search
                 placeholder="Search messager"
                 className="input-message"

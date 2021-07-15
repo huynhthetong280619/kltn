@@ -331,6 +331,7 @@
     "public": "Công đồng",
     "manage_utils": "QUẢN LÝ & TIỆN ÍCH",
     "pro_function": "CHỨC NĂNG NGHIỆP VỤ",
-    "forget_pass": "Quên mật khẩu ?"
+    "forget_pass": "Quên mật khẩu ?",
+    "sync_data": "Hệ thống đang tiến hành đồng bộ dữ liệu.Vui lòng chờ trong giây lát..."
 
 }

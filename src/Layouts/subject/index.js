@@ -89,6 +89,7 @@ const Subject = () => {
     const cloneFlag = useRef(false)
     const [isOpenClone, setOpenClone] = useState(false)
     const [listSubjectClone, setListSubjectClone] = useState([])
+    const [cloneStatus, setCloneStatus] = useState(false)
 
     const history = useHistory()
     const restClient = new RestClient({ token })
@@ -555,12 +556,16 @@ const Subject = () => {
 
 
     const executeClone = async (idClone) => {
+        setCloneStatus(true)
         const data = {
             cloneId: idClone
         }
 
         await restClient.asyncPost(`/Course/${location.state._id}/clone`, data)
             .then(res => {
+                setCloneStatus(false)
+                setOpenClone(false);
+                
                 if (!res.hasError) {
                     cloneFlag.current = false;
                     queryDetailSubject()
@@ -605,6 +610,7 @@ const Subject = () => {
         setFileIdEdit('')
         setAssignmentIdEdit('')
     }
+
     if (loadingSubject) {
         return <ModalLoadingLogin visible={loadingSubject} content={t("loading_class")} />
     } else {
@@ -1526,6 +1532,8 @@ const Subject = () => {
                     })
                 }
             </Modal>
+
+            <ModalLoadingLogin visible={cloneStatus} content={t("sync_data")} />
         </>
     }
 }
