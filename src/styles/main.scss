@@ -90,7 +90,14 @@ html{
         display: flex;
         align-items: center;
         margin: 0.5rem 0;
-        .ant-inpt-wrapper{
+
+        .ant-input-affix-wrapper:focus, .ant-input-affix-wrapper-focused{
+            border-color: transparent !important;
+            outline: none !important;
+            box-shadow: none !important
+        }
+
+        .ant-input-wrapper{
             width: 94% !important;
 
         }
@@ -998,8 +1005,13 @@ h5.ant-typography{
 }
 
 
-.ant-input-affix-wrapper:focus, .ant-input-affix-wrapper-focused{
-    border-color: transparent !important;
-    outline: none !important;
-    box-shadow: none !important
+
+
+.ant-collapse-header{
+    color: #f9f9f9 !important;
+    background: #232323;
+}
+
+.ant-collapse-content{
+    background: #232323;
 }
