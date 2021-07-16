@@ -1,10 +1,11 @@
-import { Input, Row, Select, Table } from 'antd'
-import React from 'react'
+import { Button, Input, Row, Select, Table } from 'antd'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ModalWrapper from '../../components/basic/modal-wrapper'
 
 const SearchCourse = ({ keySearch, setKeySearch, listSearch, setListSearch }) => {
     const { t } = useTranslation()
+    const [isLoading, setIsLoading] = useState(false)
 
     const columnsCourses = [
         {
@@ -26,7 +27,12 @@ const SearchCourse = ({ keySearch, setKeySearch, listSearch, setListSearch }) =>
         {
             title: t('Tác vụ'),
             dataIndex: "grade",
-            key: "grade"
+            key: "grade",
+            render: () => <div>
+                <Button type="primary" loading={isLoading} onClick={() => {
+                    setIsLoading(true);
+                }}>{t('enroll')}</Button>
+            </div>
         }
     ]
     return <>

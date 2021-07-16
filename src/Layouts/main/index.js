@@ -26,7 +26,10 @@ const MainAppLayout = () => {
     const { authFlag, token } = useContext(StoreTrading)
     const history = useHistory()
 
-    const [listSubjectJoined, setListSubjectJoined] = useState([])
+    const [listSubjectJoined, setListSubjectJoined] = useState({
+        private: [],
+        public: []
+    })
     const [loadingCourse, setLoadingCourse] = useState(false)
     const [publicSubject, setPublicSubject] = useState([])
 
@@ -71,18 +74,19 @@ const MainAppLayout = () => {
                     const { allCourses } = res.data
                     setListSubjectJoined(allCourses)
                 }
-            })
-
-
-        await restClientApi.asyncGet('/course/public')
-            .then(res => {
-                console.log('response', res)
-                if (!res.hasError) {
-                    const { allCourses } = res.data
-                    setPublicSubject(allCourses)
-                }
                 setLoadingCourse(false)
             })
+
+
+        // await restClientApi.asyncGet('/course/public')
+        //     .then(res => {
+        //         console.log('response', res)
+        //         if (!res.hasError) {
+        //             const { allCourses } = res.data
+        //             setPublicSubject(allCourses)
+        //         }
+        //         setLoadingCourse(false)
+        //     })
     }
 
     const menuPrivate = (
@@ -123,7 +127,7 @@ const MainAppLayout = () => {
                     <Collapse.Panel header={t('private')} key="1">
                         <div className="main-app-layout">
                             {
-                                listSubjectJoined.map((item, index) => {
+                                listSubjectJoined?.private.map((item, index) => {
                                     console.log('item', item)
                                     return <Card
 
@@ -157,7 +161,7 @@ const MainAppLayout = () => {
                     <Collapse.Panel header={t('public')} key="2">
                         <div className="main-app-layout">
                             {
-                                listSubjectJoined.map((item, index) => {
+                                listSubjectJoined?.public.map((item, index) => {
                                     console.log('item', item)
                                     return <Card
 
@@ -202,7 +206,7 @@ const MainAppLayout = () => {
                 key="2"
             >
 
-               <SearchCourse keySearch={keySearch} setKeySearch={setKeySearch} listSearch={listSearch} setListSearch={setListSearch}/>
+               <SearchCourse keySearch={keySearch} setKeySearch={setKeySearch} listSearch={listSubjectJoined?.public} setListSearch={setListSearch}/>
             </TabPane>
         </Tabs>
 

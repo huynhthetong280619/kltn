@@ -86,7 +86,7 @@ const PagesView = () => {
         const presentToken = token || localStorageToken;
         if (presentToken) {
             let restClient = new RestClient({ presentToken });
-            restClient.asyncGet('/course/public')
+            restClient.asyncGet('/course')
                 .then(res => {
                     if (res.hasError) {
                         history.push("/login");
