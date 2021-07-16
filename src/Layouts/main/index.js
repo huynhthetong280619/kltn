@@ -31,11 +31,10 @@ const MainAppLayout = () => {
         public: []
     })
     const [loadingCourse, setLoadingCourse] = useState(false)
-    const [publicSubject, setPublicSubject] = useState([])
 
     const [isTeacherFlag, setIsTeacherFlag] = useState(false)
-    const [listSearch, setListSearch] = useState([])
-    const [keySearch, setKeySearch] = useState("1")
+
+    const [restClientApi] = useState(new RestClient({ token }));
 
     useEffect(() => {
 
@@ -58,20 +57,15 @@ const MainAppLayout = () => {
 
     }, [])
 
-    useEffect(() => {
-        // search
-    }, [keySearch])
-
     const getListSubjectJoin = async () => {
         setLoadingCourse(true)
-
-        const restClientApi = new RestClient({ token })
 
         await restClientApi.asyncGet('/course')
             .then(res => {
                 console.log(res)
                 if (!res.hasError) {
                     const { allCourses } = res.data
+
                     setListSubjectJoined(allCourses)
                 }
                 setLoadingCourse(false)
@@ -102,7 +96,7 @@ const MainAppLayout = () => {
         </Menu>
     );
 
-    
+
 
     const navigationTo = (item) => {
         history.push('/home/course-app', item)
@@ -110,6 +104,14 @@ const MainAppLayout = () => {
 
     if (loadingCourse) {
         return <ModalLoadingLogin visible={loadingCourse} content={t("loading_subject")} />
+    }
+
+
+    const handleAddPublicCourse = (course) => {
+        setListSubjectJoined({
+            public: [...listSubjectJoined.public, course],
+            private: [...listSubjectJoined.private]
+        })
     }
 
     return (<><div className="wrapper-main-app">
@@ -206,7 +208,10 @@ const MainAppLayout = () => {
                 key="2"
             >
 
-               <SearchCourse keySearch={keySearch} setKeySearch={setKeySearch} listSearch={listSubjectJoined?.public} setListSearch={setListSearch}/>
+                <SearchCourse
+                    sTeacherFlag={isTeacherFlag}
+                    restClientApi={restClientApi}
+                    addCourse={handleAddPublicCourse} />
             </TabPane>
         </Tabs>
 
