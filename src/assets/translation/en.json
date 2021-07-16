@@ -331,7 +331,12 @@
      "manage_utils": "Management & utilities",
      "pro_function": "Professional function",
      "forget_pass": "Forget password ?",
-     "sync_data": "The system is syncing data. Please wait a moment..."
+     "sync_data": "The system is syncing data. Please wait a moment...",
+     "search_messenger": "Search messenger",
+     "enroll_course": "Enrolled",
+     "search_course": "Search course"
+
+
 
 
 

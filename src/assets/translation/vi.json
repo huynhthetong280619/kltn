@@ -332,6 +332,10 @@
     "manage_utils": "QUẢN LÝ & TIỆN ÍCH",
     "pro_function": "CHỨC NĂNG NGHIỆP VỤ",
     "forget_pass": "Quên mật khẩu ?",
-    "sync_data": "Hệ thống đang tiến hành đồng bộ dữ liệu.Vui lòng chờ trong giây lát..."
+    "sync_data": "Hệ thống đang tiến hành đồng bộ dữ liệu.Vui lòng chờ trong giây lát...",
+    "search_messenger": "Tìm kiếm tin nhắn",
+    "enroll_course": "Khóa học đã ghi danh",
+    "search_course": "Tìm kiếm khóa học",
+    "content_search_guide": "Thông tin tìm kiếm..."
 
 }

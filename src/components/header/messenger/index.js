@@ -76,7 +76,7 @@ const Messenger = ({ profile, socket, isOpen, setOpen }) => {
         }} className="message-dialog">
             <div className="title-message">{t('title_message')}</div>
             <Input.Search
-                placeholder="Search messager"
+                placeholder={t("search_messenger")}
                 className="input-message"
                 onChange={(e) => {
                     const text = e.target.value;

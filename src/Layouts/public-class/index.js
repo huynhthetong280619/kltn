@@ -140,13 +140,6 @@ const PublicClass = () => {
                 </Form>
             </div>
 
-            <div className="main-setting__f">
-                <Title level={4}>Thông báo</Title>
-                <Title level={5}>Email</Title>
-                <div className="main-setting__s">
-                    <Title level={5}>Nhận thông báo email</Title>
-                </div>
-            </div>
         </main>
     </div>
 }

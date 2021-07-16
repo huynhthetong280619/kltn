@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { Tooltip, Switch, Button } from 'antd'
+import { useTranslation } from 'react-i18next';
 
 const WaitingScreen = ({ isReady, setJoin, stream, currentUser, history }) => {
 
     const [isOnMic, setOnMic] = useState(true);
     const [isOnCamera, setOnCamera] = useState(true);
+    const {t} = useTranslation()
 
     const onStatusMicChange = (status) => {
         setOnMic(status);
@@ -68,7 +70,7 @@ const WaitingScreen = ({ isReady, setJoin, stream, currentUser, history }) => {
                     loading={!isReady}
                     size="large"
                 >
-                    Join Now
+                    {t('join_now')}
                 </Button>
             </div>
             {/* <div style={{

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Card, Avatar, Tooltip, Menu, Dropdown, Tabs } from 'antd';
+import { Card, Avatar, Tooltip, Menu, Dropdown, Tabs, Collapse, Input, Select, Row, Table } from 'antd';
 import { EditOutlined, EllipsisOutlined, SettingOutlined, AppleOutlined, AndroidOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import IC_CHART from '../../assets/images/ic_chart.svg'
@@ -11,6 +11,8 @@ import ModalLoadingLogin from '../login/modal-loading-login';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Footer } from 'antd/lib/layout/layout';
 import FooterLayout from '../footer-layout';
+import ModalWrapper from '../../components/basic/modal-wrapper';
+import SearchCourse from './SearchCourse';
 
 const { Meta } = Card;
 const { TabPane } = Tabs;
@@ -29,6 +31,8 @@ const MainAppLayout = () => {
     const [publicSubject, setPublicSubject] = useState([])
 
     const [isTeacherFlag, setIsTeacherFlag] = useState(false)
+    const [listSearch, setListSearch] = useState([])
+    const [keySearch, setKeySearch] = useState("1")
 
     useEffect(() => {
 
@@ -50,6 +54,10 @@ const MainAppLayout = () => {
 
 
     }, [])
+
+    useEffect(() => {
+        // search
+    }, [keySearch])
 
     const getListSubjectJoin = async () => {
         setLoadingCourse(true)
@@ -90,6 +98,8 @@ const MainAppLayout = () => {
         </Menu>
     );
 
+    
+
     const navigationTo = (item) => {
         history.push('/home/course-app', item)
     }
@@ -104,86 +114,95 @@ const MainAppLayout = () => {
                 tab={
                     <span>
                         <AppleOutlined />
-          {t('private')}
-        </span>
+                        {t('enroll_course')}
+                    </span>
                 }
                 key="1"
-            ><div className="main-app-layout">
-                    {
-                        listSubjectJoined.map((item, index) => {
-                            console.log('item', item)
-                            return <Card
+            >
+                <Collapse defaultActiveKey={['1']} onChange={() => { }}>
+                    <Collapse.Panel header={t('private')} key="1">
+                        <div className="main-app-layout">
+                            {
+                                listSubjectJoined.map((item, index) => {
+                                    console.log('item', item)
+                                    return <Card
 
-                                key={index}
-                                className="course-card"
-                                cover={
-                                    <div style={{ background: generateColor(), width: '100%', height: 50, borderRadius: '0.25rem 0.25rem 0 0' }}></div>
-                                }
-                                actions={[
-                                    <Dropdown overlay={menuPrivate} trigger={['click']} placement="topCenter">
-                                        <SettingOutlined key="setting" />
-                                    </Dropdown>,
-                                    <Tooltip placement="topLeft" title="Mở sổ điểm cho">
-                                        <img src={IC_CHART} />
-                                    </Tooltip>,
-                                    <EllipsisOutlined key="ellipsis" />,
-                                ]}
-                            >
-                                <Meta
-                                    onClick={() => navigationTo(item)}
-                                    avatar={<FontAwesomeIcon icon="graduation-cap" style={{ width: 50, height: 50, color: '#0F70B8' }} />}
-                                    title={item?.name}
-                                    description="Chào mứng đến lớp học vui vẻ của tôi ^_^"
-                                    style={{ cursor: 'pointer' }}
-                                />
-                            </Card>
-                        })
-                    }
+                                        key={index}
+                                        className="course-card"
+                                        cover={
+                                            <div style={{ background: generateColor(), width: '100%', height: 50, borderRadius: '0.25rem 0.25rem 0 0' }}></div>
+                                        }
+                                        actions={[
+                                            <Dropdown overlay={menuPrivate} trigger={['click']} placement="topCenter">
+                                                <SettingOutlined key="setting" />
+                                            </Dropdown>,
+                                            <Tooltip placement="topLeft" title="Mở sổ điểm cho">
+                                                <img src={IC_CHART} />
+                                            </Tooltip>,
+                                            <EllipsisOutlined key="ellipsis" />,
+                                        ]}
+                                    >
+                                        <Meta
+                                            onClick={() => navigationTo(item)}
+                                            avatar={<FontAwesomeIcon icon="graduation-cap" style={{ width: 50, height: 50, color: '#0F70B8' }} />}
+                                            title={item?.name}
+                                            description="Chào mứng đến lớp học vui vẻ của tôi ^_^"
+                                            style={{ cursor: 'pointer' }}
+                                        />
+                                    </Card>
+                                })
+                            }
+                        </div>
+                    </Collapse.Panel>
+                    <Collapse.Panel header={t('public')} key="2">
+                        <div className="main-app-layout">
+                            {
+                                listSubjectJoined.map((item, index) => {
+                                    console.log('item', item)
+                                    return <Card
 
-                </div>
+                                        key={index}
+                                        className="course-card"
+                                        cover={
+                                            <div style={{ background: generateColor(), width: '100%', height: 50, borderRadius: '0.25rem 0.25rem 0 0' }}></div>
+                                        }
+                                        actions={[
+                                            <Dropdown overlay={menuPrivate} trigger={['click']} placement="topCenter">
+                                                <SettingOutlined key="setting" />
+                                            </Dropdown>,
+                                            <Tooltip placement="topLeft" title="Mở sổ điểm cho">
+                                                <img src={IC_CHART} />
+                                            </Tooltip>,
+                                            <EllipsisOutlined key="ellipsis" />,
+                                        ]}
+                                    >
+                                        <Meta
+                                            onClick={() => navigationTo(item)}
+                                            avatar={<FontAwesomeIcon icon="graduation-cap" style={{ width: 50, height: 50, color: '#0F70B8' }} />}
+                                            title={item?.name}
+                                            description="Chào mứng đến lớp học vui vẻ của tôi ^_^"
+                                            style={{ cursor: 'pointer' }}
+                                        />
+                                    </Card>
+                                })
+                            }
+                        </div>
+                    </Collapse.Panel>
+                </Collapse>
+
+
             </TabPane>
             <TabPane
                 tab={
                     <span>
                         <AndroidOutlined />
-          {t('public')}
-        </span>
+                        {t('search_course')}
+                    </span>
                 }
                 key="2"
             >
-                <div className="main-app-layout">
-                    {
-                        publicSubject.map((item, index) => {
-                            console.log('item', item)
-                            return <Card
 
-                                key={index}
-                                className="course-card"
-                                cover={
-                                    <div style={{ background: generateColor(), width: '100%', height: 50, borderRadius: '0.25rem 0.25rem 0 0' }}></div>
-                                }
-                                actions={[
-                                    <Dropdown overlay={menuPublic} trigger={['click']} placement="topCenter">
-                                        <SettingOutlined key="setting" />
-                                    </Dropdown>,
-                                    <Tooltip placement="topLeft" title="Mở sổ điểm cho">
-                                        <img src={IC_CHART} />
-                                    </Tooltip>,
-                                    <EllipsisOutlined key="ellipsis" />,
-                                ]}
-                            >
-                                <Meta
-                                    onClick={() => navigationTo(item)}
-                                    avatar={<FontAwesomeIcon icon="graduation-cap" style={{ width: 50, height: 50, color: '#0F70B8' }} />}
-                                    title={item?.name}
-                                    description="Chào mứng đến lớp học vui vẻ của tôi ^_^"
-                                    style={{ cursor: 'pointer' }}
-                                />
-                            </Card>
-                        })
-                    }
-
-                </div>
+               <SearchCourse keySearch={keySearch} setKeySearch={setKeySearch} listSearch={listSearch} setListSearch={setListSearch}/>
             </TabPane>
         </Tabs>
 

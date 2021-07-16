@@ -26,6 +26,18 @@ const ExamManage = ({ lstSubmissionCore }) => {
             render: data => <span>{data.code}</span>
         },
         {
+            title: t('surName'),
+            dataIndex: "student",
+            key: "firstName",
+            render: data => <span>{data.firstName}</span>
+        },
+        {
+            title: t('firstName'),
+            dataIndex: "student",
+            key: "lastName",
+            render: data => <span>{data.lastName}</span>
+        },
+        {
             title: t('grade'),
             dataIndex: "grade",
             key: '',
@@ -39,12 +51,12 @@ const ExamManage = ({ lstSubmissionCore }) => {
 
     const headersCSV = [
         { label: t('code_student'), key: 'student.code' },
-        { label: t('surName'), key: 'student.surName' },
         { label: t('firstName'), key: 'student.firstName' },
+        { label: t('surName'), key: 'student.lastName' },
         { label: t('grade'), key: 'grade' }
     ]
 
-    console.log('lstSubmissionCore', lstSubmissionCore)
+    console.log('lstSubmissionCore', lstSubmissionCore, test?.submissions)
     return (<>
         <Row style={{ width: "100%", display: 'flex', justifyContent: 'space-between' }} className="mb-4">
             <div >
