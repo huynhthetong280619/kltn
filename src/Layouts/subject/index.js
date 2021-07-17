@@ -463,6 +463,7 @@ const Subject = () => {
                     setDetailSubject([...detailSubject, get(res, 'data')?.timeline])
                     setTimelinesIndex([...detailSubject, get(res, 'data')?.timeline])
 
+                    queryListTimelines()
                     handleLogoutExecute()
 
                 } else {
@@ -1445,36 +1446,6 @@ const Subject = () => {
                 )
             }
 
-            {/* {isOpenModalFunction && <Modal className="modal-function-customize"
-                onCancel={() => onCloseModalAction()}
-                visible={isOpenModalFunction}
-                closable={false}
-                title={<div
-                    style={{
-                        padding: '1rem 0.625rem 0.625rem 0',
-                        alignItems: 'center',
-                    }}
-
-                >
-                    <div style={{ color: '#f9f9f9' }}>{t(currentTitle)}</div>
-                    <div className="close-icon-modal" onClick={() => onCloseModalAction()}>
-                        <IC_CLOSE />
-                    </div>
-                </div>}
-                footer={null}
-            >
-                <ModalWrapper>
-                    {(todosState || focusAssignmentEdit) && (<AddAssignment timelinesList={timelinesList} createAssignment={createAssignment} updateAssignment={updateAssignment} idSubject={location.state._id} idTimeline={timelineIdEdit} idAssignment={assignmentIdEdit} />)}
-                    {(quizState || focusExamEdit) && (<AddQuiz quizList={quizList} timelinesList={timelinesList} createQuiz={createQuiz} updateQuiz={updateQuiz} idSubject={location.state._id} idTimeline={timelineIdEdit} idExam={examIdEdit} />)}
-                    {(surveyState || focusSurveyEdit) && (<AddSurvey timelinesList={timelinesList} surveyList={surveyList} createSurvey={createSurvey} updateSurvey={updateSurvey} idSubject={location.state._id} idTimeline={timelineIdEdit} idSurvey={surveyIdEdit} />)}
-                    {(documentState || focusFileEdit) && (<AddFile timelinesList={timelinesList} createFile={createFile} updateFile={updateFile} idSubject={location.state._id} idTimeline={timelineIdEdit} idFile={fileIdEdit} />)}
-                    {timelineState && (<AddTimeline createTimeline={createTimeline} isLoading={null} />)}
-                    {(forumState || focusForumEdit) && (<AddForum timelinesList={timelinesList} createForum={createForum} updateForum={updateForum} idSubject={location.state._id} idTimeline={timelineIdEdit} idForum={forumIdEdit} />)}
-                    {/* {importState && (<ImportSubject isLoading={null} handleImportSubject={handleImportSubject} />)}
-                {exportState && (<ExportSubject idSubject={location.state._id} nameSubject={null} />)} */}
-            {/* {quizBankState && (<QuizBank idSubject={location.state._id} closeModalCurrentQuizBank={closeModalCurrentQuizBank} />)}
-                </ModalWrapper>
-            </Modal>} */}
 
 
             <AssignmentModal

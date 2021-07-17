@@ -21,6 +21,7 @@ const AddSurvey = ({ timelinesList, surveyList, createSurvey, updateSurvey, idSu
 
     const [surveyQuestion, setSurveyQuestion] = useState({})
     const [isLoading, setLoading] = useState(false);
+    const [isEdit, setIsEdit] = useState(false)
 
     const { t } = useTranslation()
 
@@ -38,6 +39,7 @@ const AddSurvey = ({ timelinesList, surveyList, createSurvey, updateSurvey, idSu
 
     useEffect(async () => {
         if (idSurvey) {
+            setIsEdit(true);
             await restClient.asyncGet(`/survey/${idSurvey}/update/?idCourse=${idSubject}&idTimeline=${idTimeline}`)
                 .then(res => {
                     console.log('Survey', res)
@@ -258,7 +260,7 @@ const AddSurvey = ({ timelinesList, surveyList, createSurvey, updateSurvey, idSu
                                         <div style={{ color: '#f9f9f9' }}><span style={{ color: "#c0c0c0" }}>Loại câu hỏi: </span>{survey['typeQuestion']}</div>
                                     </Col>
                                     <Col span={1}>
-                                        <Checkbox disabled={idSubject ? true : false} checked={surveyQuestion[`${survey?.identity}`] ? true : false} onChange={() => handleChangeSelectSurvey(survey)} />
+                                        <Checkbox disabled={idSubject && isEdit ? true : !isEdit ? false : true} checked={surveyQuestion[`${survey?.identity}`] ? true : false} onChange={() => handleChangeSelectSurvey(survey)} />
                                     </Col>
                                 </Row>
                             </ModalWrapper>
