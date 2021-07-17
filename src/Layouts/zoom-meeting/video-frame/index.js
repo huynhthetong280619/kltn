@@ -329,7 +329,7 @@ const VideoFrame = ({ currentUser, socket, peer, userStream }) => {
                         <div style={{
                             columnGap: '0.5rem',
                             flexWrap: 'wrap',
-                            rowGap: '0.5rem',
+                            rowGap: '3rem',
                             justifyContent: 'flex-start',
                             width: '100%',
                             display: 'flex',
