@@ -202,7 +202,7 @@ class RestClient {
                 console.log('Response url', res.url);
                 return {
                     name: res.original_filename,
-                    path: res.url,
+                    path: res.secure_url,
                     type: res.format || res.public_id.split('.')[1]
                 }
             })
