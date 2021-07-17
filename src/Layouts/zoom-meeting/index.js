@@ -89,7 +89,11 @@ const ZoomMeeting = () => {
                 socket.on('200', () => {
                     navigator.mediaDevices
                         .getUserMedia({
-                            video: true,
+                            video: {
+                                width: 640,
+                                height: 400,
+                                frameRate: { max: 16 }
+                            },
                             audio: true,
                         })
                         .then((stream) => {
