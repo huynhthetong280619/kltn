@@ -36,7 +36,7 @@ const VideoContainer = ({ id, stream, user, isMuted }) => {
 
     return (
         <>
-            <div style={{ width: 200, height: 150, background: 'blue', position: 'relative' }} onClick={(e) => fullScreen(e)}>
+            <div style={{ width: 200, height: 150, background: 'black', position: 'relative' }} onClick={(e) => fullScreen(e)}>
                 <div className="full-screen">
                     <i className="full-screen-widget__icon"></i>
                 </div>
