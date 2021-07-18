@@ -24,6 +24,7 @@ import SurveyTake from '../survey-take';
 import ManageScore from '../manage-score';
 import PublicClass from '../public-class';
 import RestClient from '../../utils/restClient';
+import ResetPassword from '../reset-password';
 
 const { Header, Content, Footer } = Layout
 

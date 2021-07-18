@@ -9,6 +9,7 @@ import Login from './Layouts/login';
 import StoreTrading from './store-trading'
 import CreateAccount from './Layouts/createAccount';
 import ForgetPassword from './Layouts/forgetPassword';
+import ResetPassword from './Layouts/reset-password';
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
               <Route path="/login" component={Login} />
               <Route path="/create-account" component={CreateAccount} />
               <Route path="/forget" component={ForgetPassword} />
+              <Route path="/password" component={ResetPassword} />
               <Route exact path="/" component={Pages} />
               <Route path="/home" component={Pages} />
             </Switch>

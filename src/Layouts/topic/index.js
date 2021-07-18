@@ -201,14 +201,13 @@ const Topic = () => {
                 >
                     <Input placeholder={t('topic_content')} style={{ borderRadius: 20 }} />
                 </Form.Item>
-                <Form.Item>
-
-                    <Button key="submit" form="frm_add_topic" htmlType="submit" type="primary" className="lms-btn">
+                <Form.Item wrapperCol={{ span: 24 }}>
+                    <Button key="submit" form="frm_add_topic" htmlType="submit" type="primary" >
                         {t('save')}
                     </Button>
                 </Form.Item>
-                <Form.Item>
-                    <Button key="back" type="danger" onClick={handleCancel} className="lms-btn">
+                <Form.Item wrapperCol={{ span: 24 }} >
+                    <Button key="back" type="danger" onClick={handleCancel} style={{width: '100%'}}>
                         {t('cancel')}
                     </Button>
                 </Form.Item>
