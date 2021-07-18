@@ -31,7 +31,7 @@ const TodoList = () => {
             .then(res => {
                 if (!res.hasError) {
                     const { deadline } = res?.data;
-                    console.log(deadline);
+                    // console.log(deadline);
                     setTodoslist(deadline);
                 }
             })

@@ -1,9 +1,10 @@
 import {
     DisconnectOutlined, FacebookOutlined
 } from '@ant-design/icons'
-import { Button, Col, Divider, Form, Input, Row, Tag, Upload } from 'antd'
+import { Button, Col, Divider, Form, Input, Row, Tag, Upload, Switch } from 'antd'
 // import HeadPage from '../headPage/headPage.jsx';
 import 'antd/dist/antd.css'
+import Title from 'antd/lib/skeleton/Title'
 import React, { useEffect, useState } from 'react'
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import { useTranslation } from 'react-i18next'
@@ -66,6 +67,7 @@ const Profile = ({ }) => {
         });
         setProfile(usrObj);
 
+        console.log(usrObj)
         formProfile.setFieldsValue({
             emailAddress: usrObj.emailAddress,
             lastName: usrObj.lastName,
@@ -234,25 +236,25 @@ const Profile = ({ }) => {
                 padding: '2rem',
                 margin: '0 auto'
             }}>
-                
+
                 <div style={{ display: 'flex', width: '100%', justifyContent: 'space-around', columnGap: '1rem' }}>
-                <div >
-                    <Upload
-                        name="avatar"
-                        listType="picture-card"
-                        className="avatar-uploader"
-                        showUploadList={false}
-                        beforeUpload={beforeUpload}
-                        customRequest={handleImageUpload}
-                        accept={fileTypes}
-                        loading={loading}
-                    >
+                    <div >
+                        <Upload
+                            name="avatar"
+                            listType="picture-card"
+                            className="avatar-uploader"
+                            showUploadList={false}
+                            beforeUpload={beforeUpload}
+                            customRequest={handleImageUpload}
+                            accept={fileTypes}
+                            loading={loading}
+                        >
 
-                        <img src={imageUrl ? imageUrl : profile.urlAvatar} alt="avatar" style={{ width: '100%' }} />
+                            <img src={imageUrl ? imageUrl : profile.urlAvatar} alt="avatar" style={{ width: '100%' }} />
 
-                    </Upload>
-                </div>
-                    <ModalWrapper style={{width: '100%'}}>
+                        </Upload>
+                    </div>
+                    <ModalWrapper style={{ width: '100%' }}>
                         <Row style={{ justifyContent: 'space-between', flexDirection: 'column' }}>
                             <div>
                                 <SectionDescription title={t('profile')} content={t('profile_description')} />
@@ -302,6 +304,10 @@ const Profile = ({ }) => {
                                             }
                                         ]}>
                                         <Input />
+                                    </Form.Item>
+                                    <Form.Item label={t('active_notification')}
+                                    name="isNotify">
+                                        <Switch />
                                     </Form.Item>
                                     <Form.Item
                                         style={{ textAlign: 'center' }}>
@@ -356,7 +362,7 @@ const Profile = ({ }) => {
                             </div>
                         </Row>
                     </ModalWrapper>
-                    <ModalWrapper style={{width: '100%'}}>
+                    <ModalWrapper style={{ width: '100%' }}>
                         <Row style={{ flexDirection: 'column' }}>
                             <div >
                                 <SectionDescription title={t('password')} content={t('password_description')} />
@@ -444,7 +450,9 @@ const Profile = ({ }) => {
                                     </Form.Item>
                                 </Form>
                             </div>
+
                         </Row>
+
                     </ModalWrapper>
                 </div>
             </Row>
