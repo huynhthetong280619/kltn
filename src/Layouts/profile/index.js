@@ -68,7 +68,7 @@ const Profile = ({ }) => {
 
         formProfile.setFieldsValue({
             emailAddress: usrObj.emailAddress,
-            surName: usrObj.surName,
+            lastName: usrObj.lastName,
             firstName: usrObj.firstName,
             code: usrObj.code
         });
@@ -95,7 +95,7 @@ const Profile = ({ }) => {
     const updateProfile = async (values) => {
         setState({ ...state, submitProfile: true });
         await restClient.asyncPut(`/user/`, {
-            surName: values.surName,
+            lastName: values.lastName,
             firstName: values.firstName,
             urlAvatar: imageUrl,
         })
@@ -282,23 +282,23 @@ const Profile = ({ }) => {
                                         <Input readOnly disabled />
                                     </Form.Item>
                                     <Form.Item
-                                        label={t('surName')}
-                                        name={"surName"}
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: t('req_surName'),
-                                            }
-                                        ]}>
-                                        <Input />
-                                    </Form.Item>
-                                    <Form.Item
                                         label={t('firstName')}
                                         name={"firstName"}
                                         rules={[
                                             {
                                                 required: true,
                                                 message: t('req_firstName'),
+                                            }
+                                        ]}>
+                                        <Input />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label={t('lastName')}
+                                        name={"lastName"}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: t('req_lastName'),
                                             }
                                         ]}>
                                         <Input />

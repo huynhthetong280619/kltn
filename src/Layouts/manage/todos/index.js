@@ -72,7 +72,7 @@ const ManageTodos = () => {
             sortDirections: ['descend'],
             sortOrder: 'descend',
         },
-        { title: t('fullName'), dataIndex: 'student', key: 'student', render: data => <span>{get(data, 'surName') + " " + get(data, 'firstName')}</span> },
+        { title: t('fullName'), dataIndex: 'student', key: 'student', render: data => <span>{get(data, 'firstName') + " " + get(data, 'lastName')}</span> },
         {
             title: t('file_submission'), dataIndex: 'file', key: 'file',
             render: data => <span onClick={() => downloadFile(data)}>{data.name}.{data.type}</span>

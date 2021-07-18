@@ -18,6 +18,7 @@ const parseResponse = async response => {
 };
 
 const URL_DEFAULT = 'https://lms-api-server.herokuapp.com/'
+//const URL_DEFAULT = `http://localhost:8000/`
 
 class RestClient {
     constructor(props) {

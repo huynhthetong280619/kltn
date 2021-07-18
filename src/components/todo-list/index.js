@@ -2,14 +2,18 @@ import { Badge, Col } from 'antd'
 import React, { useContext, useEffect, useState } from 'react'
 import { StoreTrading } from '../../store-trading'
 import RestClient from '../../utils/restClient'
-import { ReactComponent as IC_TODO } from '../../assets/images/todo-item.svg'
+import { ReactComponent as IC_TODO } from '../../assets/images/todo-item.svg';
+import IC_QUIZ from '../../assets/images/deadline/quiz.png';
+import IC_ASSIGNMENT from '../../assets/images/deadline/assignment.png'
+import IC_SURVEY from '../../assets/images/deadline/survey.png';
+
 import { useTranslation } from 'react-i18next'
 import moment from 'moment'
 import { get } from 'lodash'
 import { useHistory } from 'react-router'
 
 const TodoList = () => {
-    const {t} = useTranslation()
+    const { t } = useTranslation()
     const { token } = useContext(StoreTrading)
 
     const [todolist, setTodoslist] = useState([])
@@ -26,8 +30,9 @@ const TodoList = () => {
         await restClientAPI.asyncGet('/course/deadline')
             .then(res => {
                 if (!res.hasError) {
-                    const { deadline } = res?.data
-                    setTodoslist(deadline)
+                    const { deadline } = res?.data;
+                    console.log(deadline);
+                    setTodoslist(deadline);
                 }
             })
     }
@@ -77,7 +82,7 @@ const TodoList = () => {
                 </div> */}
                 {
                     todolist.map(item => {
-                        return <Badge.Ribbon placement="end" text={flag ? t('completed') : checkUrgentDay(get(item, 'expireTime')) ? t('urgent_upcoming_deadline') : t('not_done')} color={flag ? '#4cd137' : checkUrgentDay(get(item, 'expireTime')) ? '#e84118' : '#00a8ff'}
+                        return <Badge.Ribbon placement="end" text={item.isSubmit ? t('completed') : checkUrgentDay(get(item, 'expireTime')) ? t('urgent_upcoming_deadline') : t('not_done')} color={item.isSubmit ? '#4cd137' : checkUrgentDay(get(item, 'expireTime')) ? '#e84118' : '#00a8ff'}
                         >
                             <div className="todos-item mb-4">
                                 <div className="todos-item__f">
@@ -85,17 +90,20 @@ const TodoList = () => {
                                         display: 'flex',
                                         alignItems: 'center'
                                     }}
-                                    onClick={() => history.push('/home/course-app', {_id: item?.idSubject})}
+                                        onClick={() => history.push('/home/course-app', { _id: item?.idCourse })}
                                     >
                                         <Col className="todos-item__ic">
-                                            <IC_TODO />
+                                            <img src={item.type === 'assignment' ? IC_ASSIGNMENT :
+                                                item.type === 'survey' ? IC_SURVEY :
+                                                    IC_QUIZ
+                                            } alt={item.name} ></img>
                                         </Col>
                                         <Col >
-                                            <div className="todos-item__n">[{getType(item.type)}] {item?.name}</div>
+                                            <div className="todos-item__n">[{item.courseName}][{getType(item.type)}] {item?.name}</div>
                                             <div className="todos-item__t">{transTime(get(item, 'expireTime'))}</div>
                                         </Col>
                                     </Col>
-                                    
+
                                 </div>
                             </div>
                         </Badge.Ribbon>

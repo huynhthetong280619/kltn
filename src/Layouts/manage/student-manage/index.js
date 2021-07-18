@@ -104,12 +104,12 @@ const StudentManage = ({ idSubject }) => {
             key: 'emailAddress'
         },
         {
-            title: t('surName'),
+            title: t('firstName'),
             dataIndex: 'firstName',
             key: 'firstName',
         },
         {
-            title: t('firstName'),
+            title: t('lastName'),
             dataIndex: 'lastName',
             key: 'lastName',
         },
@@ -132,8 +132,8 @@ const StudentManage = ({ idSubject }) => {
     const headersCSVClass = [
         { label: t('code_student'), key: 'code' },
         { label: t('Email'), key: 'emailAddress' },
-        { label: t('surName'), key: 'surName' },
         { label: t('firstName'), key: 'firstName' },
+        { label: t('lastName'), key: 'lastName' },
     ]
 
     console.log('List student', list)

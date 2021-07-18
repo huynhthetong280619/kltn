@@ -19,7 +19,7 @@ const Store = ({ children }) => {
         emailAddress: '',
         firstName: '',
         idPrivilege: '',
-        surName: '',
+        lastName: '',
         urlAvatar: ''
     })
     const setupSocket = () => {
