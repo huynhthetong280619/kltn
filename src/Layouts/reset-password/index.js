@@ -1,28 +1,36 @@
 import { Button, Input, Form } from 'antd'
 import React from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useHistory, useLocation } from 'react-router-dom'
 import Logo from '../../assets/images/logo-utex.png'
 import RestClient from '../../utils/restClient'
-
+import * as notify from '../../assets/common/core/notify';
 
 const ResetPassword = () => {
     const { t } = useTranslation()
     const location = useLocation()
     const history = useHistory()
 
-    const restClient = new RestClient({token: location.pathname.split('/')[3]})
+    const restClient = new RestClient({ token: location.pathname.split('/')[3] })
 
-    console.log('locatio',  location.pathname.split('/')[3])
+    const [isLoading, setLoading] = useState(false);
 
     const handleResetPassword = (fieldValues) => {
         console.log(fieldValues)
-        restClient.asyncPost('/user/password/reset', {password: fieldValues['password']})
-        .then(res => {
-            if(!res.hasError){
-                history.push('/login')
-            }
-        })
+        setLoading(true);
+        restClient.asyncPost('/user/password/reset', { password: fieldValues['password'] })
+            .then(res => {
+                if (!res.hasError) {
+                    notify.notifySuccess(res.data.message);
+                    history.push('/login')
+                } else {
+                    notify.notifyError(res.data.message);
+                }
+            })
+            .finally(() => {
+                setLoading(false);
+            })
     }
 
     return <div className="login-container">
@@ -45,7 +53,7 @@ const ResetPassword = () => {
                     >
                         <Input.Password className="pwd-login"
                             size='large'
-                            placeholder={t('placeholder_new_password')}/>
+                            placeholder={t('placeholder_new_password')} />
                     </Form.Item>
                     <Form.Item
                         name="confirmPassword"
@@ -76,7 +84,8 @@ const ResetPassword = () => {
                     <Form.Item
                         style={{ textAlign: 'center' }}
                     >
-                        <Button className="btn-login" type="primary" size='large' htmlType="submit" style={{ fontSize: 'initial', width: '100%' }}>
+                        <Button
+                            loading={isLoading} className="btn-login" type="primary" size='large' htmlType="submit" style={{ fontSize: 'initial', width: '100%' }}>
                             Tạo mật khẩu mới</Button>
                     </Form.Item>
                 </Form>
