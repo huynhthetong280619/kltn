@@ -337,7 +337,13 @@
     "search_course": "Search course",
     "active_notification": "Active receive notification",
     "quantity_join": "Quantity join",
-    "quantity_question": "Quantity question:"
+    "quantity_question": "Quantity question:",
+
+    "create_account": "Create account",
+    "have_account": "Do not have an account?",
+    "E_LEARNING": "E-LEARNING SYSTEM"
+
+
 
 
 

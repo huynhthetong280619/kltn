@@ -159,7 +159,7 @@ const AssignmentModal = (props) => {
                         <div style={{ fontWeight: "700", color: '#f9f9f9' }} > [{t('require_content')}]</div>
                         <div style={{ whiteSpace: 'pre-line', color: '#f9f9f9' }} dangerouslySetInnerHTML={{ __html: get(props.assignment, 'content') }} />
                         <div style={{ fontWeight: "700", color: '#f9f9f9' }}>{t('file_submit')}</div>
-                        <div style={{ height: 50 }}>
+                        <div style={{ marginTop: '0.25rem' }}>
                             {
                                 (get(props.assignment, 'attachments') || []).map(f => {
                                     return <span style={{
@@ -167,11 +167,12 @@ const AssignmentModal = (props) => {
                                         border: '1px dashed #cacaca',
                                         padding: '3px 10px',
                                         borderRadius: '20px',
+                                        display: 'flex'
                                     }}>
                                         {f.type.includes('doc')
                                             ? <img src={word} width={20} /> : <img src={pdf} width={20} />}
                                         <div style={{ marginLeft: 10 }} >
-                                            <span onClick={(e) => { e.preventDefault(); downloadFile(f) }}>{f.name}.{f.type}</span>
+                                            <span style={{color: '#f9f9f9', cursor: 'pointer'}} onClick={(e) => { e.preventDefault(); downloadFile(f) }}>{f.name}.{f.type}</span>
                                         </div>
                                     </span>
                                 })

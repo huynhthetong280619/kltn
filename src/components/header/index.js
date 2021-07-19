@@ -72,7 +72,7 @@ const HeaderLayout = ({ setOpen }) => {
             </Col>
             <Col span={7} className="header-layout--element__second">
                 <div className="header-text__second">
-                    {t('Hệ thống dạy học số')}
+                    {t('E_LEARNING')}
                 </div>
             </Col>
         </Col>
