@@ -1,4 +1,4 @@
-import { Row, Col, Table, Input, Button, Form, notification } from 'antd';
+import { Row, Col, Table, Input, Button, Form, notification, Tooltip } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { get } from 'lodash'
 import { useTranslation } from 'react-i18next';
@@ -8,12 +8,15 @@ import RestClient from '../../utils/restClient.js';
 import { useLocation } from 'react-router';
 import ModalWrapper from '../../components/basic/modal-wrapper/index.js';
 import ModalLoadingLogin from '../login/modal-loading-login.js';
+import { ReactComponent as Logout } from '../../assets/images/contents/logout.svg'
+import { useHistory } from 'react-router-dom';
 
 const AssignmentCheck = () => {
     const { t } = useTranslation()
     const [form] = Form.useForm();
     const [assignment, setAssignment] = useState({})
     const location = useLocation()
+    const history = useHistory()
     const { idSubject, idTodo, idTimeline } = location.state
     const restClient = new RestClient({ token: '' })
     const [isLoading, setIsLoading] = useState(false)
@@ -142,7 +145,7 @@ const AssignmentCheck = () => {
             render: (data) => {
                 if (isEditingRow(data)) {
                     return (
-                        <div style={{display: 'flex'}}>
+                        <div style={{ display: 'flex' }}>
                             <Button
                                 onClick={() => enterGradeVerify(data._id)}
                                 style={{
@@ -175,8 +178,17 @@ const AssignmentCheck = () => {
 
         <ModalWrapper style={{ margin: '0 auto', width: '90%' }}>
 
-            <Row style={{ width: '100%' }}>
-                <Col span={24} style={{ padding: '25px', fontSize: '2em', color: '#f9f9f9' }}>{get(state.assignment, 'name')}</Col>
+            <Row style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+            }}>
+                <div style={{ padding: '25px', fontSize: '2em', color: '#f9f9f9' }}>{get(state.assignment, 'name')}</div>
+                <div style={{ textAlign: 'center' }} className="mt-4">
+                    <Tooltip title="Exit">
+                        <Logout style={{ cursor: 'pointer' }} onClick={() => history.go(-1)} />
+                    </Tooltip>
+                </div>
             </Row>
             <Row style={{ width: '100%', padding: 10 }}>
                 <div style={{ width: '100%', border: '1px solid #cacaca' }} className="style-table">
@@ -195,7 +207,7 @@ const AssignmentCheck = () => {
                 </div>
             </Row>
 
-            <ModalLoadingLogin visible={isLoading} content={t('loading_survey')}/>
+            <ModalLoadingLogin visible={isLoading} content={t('loading_survey')} />
         </ModalWrapper>
     )
 }

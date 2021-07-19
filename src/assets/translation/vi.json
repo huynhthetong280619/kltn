@@ -108,7 +108,7 @@
     "settings": "Cấu hình chi tiết",
     "questionCount": "Số câu hỏi: ",
     "timeTodo": "Thời gian làm: ",
-    "code_quiz_bank": "Ngân hàng câu hỏi",
+    "code_quiz_bank": "Bộ đề",
     "attemptQuantity": "Số lần làm: ",
     "isOverDue": "Cho phép quá hạn",
     "overDueDate": "Ngày quá hạn: ",
@@ -337,6 +337,8 @@
     "enroll_course": "Khóa học đã ghi danh",
     "search_course": "Tìm kiếm khóa học",
     "content_search_guide": "Thông tin tìm kiếm...",
-    "active_notification": "Nhận thông báo"
+    "active_notification": "Nhận thông báo",
+    "quantity_join": "Số lần",
+    "quantity_question": "Số câu"
 
 }

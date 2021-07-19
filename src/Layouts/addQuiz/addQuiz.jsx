@@ -266,7 +266,7 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
                                                     {...restField}
                                                     labelCol={{ span: 4 }}
                                                     wrapperCol={{ span: 20 }}
-                                                    label={t('Quantity')}
+                                                    label={t('quantity_question')}
                                                     name={[fieldKey, 'questionCount']}
                                                     rules={[
                                                         {
@@ -314,7 +314,7 @@ const AddQuiz = ({ timelinesList, quizList, createQuiz, updateQuiz, idSubject, i
                         </Form.Item>
 
                         <Form.Item
-                            label={t('Quantity join')}
+                            label={t('quantity_join')}
                             name={['exam', 'setting', 'attemptCount']}
                             rules={[
                                 {

@@ -139,7 +139,7 @@ const Login = () => {
                     >
                         <Input
                             size='large'
-                            prefix={<UserOutlined className="site-form-item-icon" />}
+                            prefix={<UserOutlined className="site-form-item-icon" style={{color: '#f9f9f9' }} />}
                             placeholder={t('placeholder_username')} />
                     </Form.Item>
                     <Form.Item
@@ -153,7 +153,7 @@ const Login = () => {
                     >
                         <Input.Password
                             className="pwd-login"
-                            prefix={<KeyOutlined className="site-form-item-icon" />}
+                            prefix={<KeyOutlined className="site-form-item-icon" style={{color: '#f9f9f9' }}/>}
                             size='large'
                             placeholder={t('placeholder_password')}
                         />

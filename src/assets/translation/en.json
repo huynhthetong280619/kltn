@@ -335,7 +335,9 @@
     "search_messenger": "Search messenger",
     "enroll_course": "Enrolled",
     "search_course": "Search course",
-    "active_notification": "Active receive notification"
+    "active_notification": "Active receive notification",
+    "quantity_join": "Quantity join",
+    "quantity_question": "Quantity question:"
 
 
 
