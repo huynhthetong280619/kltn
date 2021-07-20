@@ -1,4 +1,4 @@
-import { Row, Col, Table, Input, Button, Form, notification, Tooltip } from 'antd';
+import { Row, Space, Table, Input, Button, Form, notification, Tooltip } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { get } from 'lodash'
 import { useTranslation } from 'react-i18next';
@@ -92,6 +92,47 @@ const AssignmentCheck = () => {
             })
     }
 
+    const getColumnSearchProps = dataIndex => ({
+        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+            <div style={{ padding: 8 }}>
+                <Input
+                    placeholder={`Search ${dataIndex}`}
+                    value={selectedKeys[0]}
+                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                    onPressEnter={() => confirm()}
+                    style={{ width: 188, marginBottom: 8, display: 'block' }}
+                />
+                <Space>
+                    <Button
+                        type="primary"
+                        onClick={() => confirm()}
+                        size="small"
+                        style={{ width: 90 }}
+                    >
+                        Search
+                    </Button>
+                    <Button onClick={() => clearFilters()} size="small" style={{ width: 90 }}>
+                        Reset
+                    </Button>
+                    <Button
+                        type="link"
+                        size="small"
+                        onClick={() => {
+                            confirm({ closeDropdown: false });
+                        }}
+                    >
+                        Filter
+                    </Button>
+                </Space>
+            </div>
+        ),
+        onFilter: (value, record) => {
+            return record.student[dataIndex]
+                ? record.student[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
+                : ''
+        }
+    });
+
     const columns = [
         {
             title: t('code_student'),
@@ -100,11 +141,23 @@ const AssignmentCheck = () => {
             sorter: (a, b) => parseInt(b.student.code) - parseInt(a.student.code),
             sortDirections: ['descend'],
             sortOrder: 'descend',
+            ...getColumnSearchProps('code')
         },
-        { title: t('fullName'), dataIndex: 'student', key: 'student', render: data => <span>{get(data, 'firstName') + " " + get(data, 'lastName')}</span> },
+        {
+            title: t('firstName'),
+            dataIndex: ['student', 'firstName'],
+            key: 'firstName',
+            ...getColumnSearchProps('firstName')
+        },
+        {
+            title: t('lastName'),
+            dataIndex: ['student', 'lastName'],
+            key: 'lastName',
+            ...getColumnSearchProps('lastName')
+        },
         {
             title: t('file_submission'), dataIndex: 'file', key: 'file',
-            render: data => <span onClick={(e) => { e.preventDefault(); downloadFile(data) }} >{data.name}.{data.type}</span>
+            render: data => <a href="/#" onClick={(e) => { e.preventDefault(); downloadFile(data) }} >{data.name}.{data.type}</a>
         },
         {
             title: t('grade'),
