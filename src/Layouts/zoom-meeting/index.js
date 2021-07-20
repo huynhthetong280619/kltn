@@ -19,6 +19,8 @@ import WaitingScreen from "./waiting-screen";
 import { useHistory } from 'react-router-dom';
 import { StoreTrading } from '../../store-trading'
 
+import { TURN_CREDENTIAL } from '../../assets/constants/turn-credentials';
+
 const ZoomMeeting = () => {
     const { t } = useTranslation()
     const [isOpenModalFunction, setIsOpenModalFunction] = useState(false)
@@ -56,35 +58,7 @@ const ZoomMeeting = () => {
         host: 'lms-api-server.herokuapp.com',
         port: 443,
         path: '/',
-        config: {
-            iceServers: [
-                {
-                    urls: [
-                        "stun:stun1.l.google.com:19302",
-                        "stun:stun2.l.google.com:19302",
-
-                    ]
-                },
-                {
-                    url: 'turn:numb.viagenie.ca',
-                    credential: 'muazkh',
-                    username: 'webrtc@live.com'
-                },
-                { urls: ["stun:ss-turn1.xirsys.com"] },
-                {
-                    username: "AieLXWVdVidcH2sXPpGtal8Xb6mA55tBWuUlXRaELJL6QYLFSQe50jwUYiXH8it9AAAAAGDzq4hsbXN0dXJu",
-                    credential: "2ceb7050-e77f-11eb-a049-0242ac140004",
-                    urls: [
-                        "turn:ss-turn1.xirsys.com:80?transport=udp",
-                        "turn:ss-turn1.xirsys.com:3478?transport=udp",
-                        "turn:ss-turn1.xirsys.com:80?transport=tcp",
-                        "turn:ss-turn1.xirsys.com:3478?transport=tcp",
-                        "turns:ss-turn1.xirsys.com:443?transport=tcp",
-                        "turns:ss-turn1.xirsys.com:5349?transport=tcp"]
-                }],
-            iceCandidatePoolSize: 10,
-            iceTransportPolicy: 'all'
-        }
+        config: TURN_CREDENTIAL
     }));
 
     useEffect(() => {
