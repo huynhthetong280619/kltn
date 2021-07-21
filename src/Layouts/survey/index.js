@@ -174,7 +174,7 @@ return <>
                                                             q.answer.map(a => (<div style={{ display: 'flex' }}>
                                                                 <div >
                                                                     <Radio style={radioStyle} value={a._id} key={a._id}>
-                                                                        {a.content.content}
+                                                                        {a.answer.content}
                                                                     </Radio>
                                                                 </div>
                                                             </div>
