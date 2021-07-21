@@ -276,6 +276,7 @@ const Subject = () => {
     const submissionFile = async ({ file, idAssignment }) => {
         await restClient.asyncPost(`/assignment/${idAssignment}/submit`, { idCourse: location.state._id, idTimeline: idTimelineRequired, file: file })
             .then(res => {
+                console.log('res', res)
                 setIsSubmitAssignment(false)
                 if (!res.hasError) {
                     notifySuccess(t('success'), t('submit_success'))
