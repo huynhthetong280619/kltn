@@ -83,7 +83,7 @@ const PagesView = () => {
         const localStorageToken = localStorage.getItem('API_TOKEN');
         const presentToken = token || localStorageToken;
         if (presentToken) {
-            let restClient = new RestClient({ presentToken });
+            let restClient = new RestClient({ token: presentToken });
             restClient.asyncGet('/verify')
                 .then(res => {
                     if (res.hasError) {

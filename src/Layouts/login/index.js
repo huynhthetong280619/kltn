@@ -67,7 +67,9 @@ const Login = () => {
             token: token
         }
 
-        const restClientAPI = new RestClient({ token: null });
+        localStorage.setItem('API_TOKEN', token);
+
+        const restClientAPI = new RestClient({ token: token });
 
         await restClientAPI.asyncPost(`/user/auth/google`, data)
             .then(res => {
@@ -98,7 +100,9 @@ const Login = () => {
             token: token
         }
 
-        const restClientAPI = new RestClient({ token: null });
+        localStorage.setItem('API_TOKEN', token);
+
+        const restClientAPI = new RestClient({ token: token });
 
         await restClientAPI.asyncPost(`/user/auth/facebook`, data)
             .then(res => {
