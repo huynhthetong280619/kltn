@@ -208,7 +208,7 @@ return <>
                                                                             </Radio> */}
 
                                                                         <Checkbox style={radioStyle} value={a._id} key={a._id}>
-                                                                            {a.content.content}
+                                                                            {a.answer.content}
                                                                         </Checkbox>
                                                                     </div>
 
