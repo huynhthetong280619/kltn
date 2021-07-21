@@ -252,12 +252,13 @@ const Subject = () => {
 
     const commentAssignmentGrade = async ({ comment, idAssignment }) => {
         setIsCommentAssignment(true);
-        await restClient.asyncPost(`/assignment/${idAssignment}/comment/${submissionAssigmentId}?idCourse=${location.state._id}&idTimeline=${idTimelineRequired}`, { idSubject: location.state._id, idTimeline: idTimelineRequired, comment: comment }, token)
+        await restClient.asyncPost(`/assignment/${idAssignment}/comment/${submissionAssigmentId}?idCourse=${location.state._id}&idTimeline=${idTimelineRequired}`, { idSubject: location.state._id, idTimeline: idTimelineRequired, comment: comment })
             .then(res => {
                 setIsCommentAssignment(false);
                 if (!res.hasError) {
                     notifySuccess(t('success'), res.data.message)
                     //console.log('Notification', res)
+                    console.log('res', res)
                     let submission = res.data.submission;
                     //console.log('OLD-ASSIGNMENT', assignmentRequirement);
                     setAssignmentRequirement({ ...assignmentRequirement, submission: submission })
