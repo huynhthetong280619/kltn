@@ -195,7 +195,7 @@ const AssignmentModal = (props) => {
                                     <span style={{ color: '#f9f9f9' }}>{transTime(get(get(props.assignment, 'submission')?.feedBack, 'gradeOn'))}</span>
                                 </div>
                                 {
-                                    (props.assignment.submission.feedBack.comment) ?
+                                    (props.assignment?.submission?.feedBack?.comment) ?
                                         (
                                             <div>
                                                 <span style={{ fontWeight: 600, color: '#f9f9f9' }}>{t('comment')}: </span>
