@@ -174,7 +174,7 @@ return <>
                                                             q.answer.map(a => (<div style={{ display: 'flex' }}>
                                                                 <div >
                                                                     <Radio style={radioStyle} value={a._id} key={a._id}>
-                                                                        {a.answer.content}
+                                                                        {a.content}
                                                                     </Radio>
                                                                 </div>
                                                             </div>
@@ -208,7 +208,7 @@ return <>
                                                                             </Radio> */}
 
                                                                         <Checkbox style={radioStyle} value={a._id} key={a._id}>
-                                                                            {a.answer.content}
+                                                                            {a.content}
                                                                         </Checkbox>
                                                                     </div>
 
