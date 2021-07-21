@@ -259,9 +259,9 @@ const Subject = () => {
                     notifySuccess(t('success'), res.data.message)
                     //console.log('Notification', res)
                     console.log('res', res)
-                    let submission = res.data.submission;
-                    //console.log('OLD-ASSIGNMENT', assignmentRequirement);
-                    setAssignmentRequirement({ ...assignmentRequirement, submission: submission })
+                    // let submission = res.data.submission;
+                    // //console.log('OLD-ASSIGNMENT', assignmentRequirement);
+                    // setAssignmentRequirement({ ...assignmentRequirement, submission: submission })
                 } else {
                     notifyError(t('failure'), res.data.message);
                 }

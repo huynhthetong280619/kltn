@@ -172,7 +172,7 @@ const AssignmentModal = (props) => {
                                         {f.type.includes('doc')
                                             ? <img src={word} width={20} /> : <img src={pdf} width={20} />}
                                         <div style={{ marginLeft: 10 }} >
-                                            <span style={{color: '#f9f9f9', cursor: 'pointer'}} onClick={(e) => { e.preventDefault(); downloadFile(f) }}>{f.name}.{f.type}</span>
+                                            <span style={{ color: '#f9f9f9', cursor: 'pointer' }} onClick={(e) => { e.preventDefault(); downloadFile(f) }}>{f.name}.{f.type}</span>
                                         </div>
                                     </span>
                                 })
@@ -194,33 +194,31 @@ const AssignmentModal = (props) => {
                                     <span style={{ fontWeight: 600, color: '#f9f9f9' }}>{t('grade_on')}: </span>
                                     <span style={{ color: '#f9f9f9' }}>{transTime(get(get(props.assignment, 'submission')?.feedBack, 'gradeOn'))}</span>
                                 </div>
-                                {
-                                    (props.assignment?.submission?.feedBack?.comment) ?
-                                        (
-                                            <div>
-                                                <span style={{ fontWeight: 600, color: '#f9f9f9' }}>{t('comment')}: </span>
-                                                <span>{props.assignment.submission.feedBack.comment}</span>
-                                            </div>
-                                        )
-                                        : (
-                                            <>
-                                                <div>
-                                                    <div style={{ marginBottom: 10, color: '#f9f9f9' }}>{t('fback_comt')}</div>
-                                                    <TextArea rows={2}
-                                                        placeholder="Comment about grade..."
-                                                        autoSize={{ minRows: 2, maxRows: 5 }}
-                                                        showCount
-                                                        onChange={e => {
-                                                            setComment(e.target.value)
-                                                        }}
-                                                    />
-                                                </div>
-                                                <div style={{ textAlign: 'center' }}>
-                                                    <Button type="primary" loading={props.isCommentAssignment} onClick={commentFeedback} className="lms-btn">{t('send')}</Button>
-                                                </div>
-                                            </>
-                                        )
-                                }
+
+                                {/* <div>
+                                    <span style={{ fontWeight: 600, color: '#f9f9f9' }}>{t('comment')}: </span>
+                                    <span>{props.assignment.submission.feedBack.comments.map(item => <div key={item._id} style={{color: '#f9f9f9'}}>{item?.content}</div>)}</span>
+                                </div>
+
+
+
+                                <div>
+                                    <div style={{ marginBottom: 10, color: '#f9f9f9' }}>{t('fback_comt')}</div>
+                                    <TextArea rows={2}
+                                        placeholder="Comment about grade..."
+                                        autoSize={{ minRows: 2, maxRows: 5 }}
+                                        showCount
+                                        onChange={e => {
+                                            setComment(e.target.value)
+                                        }}
+                                    />
+                                </div>
+                                <div style={{ textAlign: 'center' }}>
+                                    <Button type="primary" loading={props.isCommentAssignment} onClick={commentFeedback} className="lms-btn">{t('send')}</Button>
+                                </div> */}
+
+
+
                             </>
                             )
                                 :
