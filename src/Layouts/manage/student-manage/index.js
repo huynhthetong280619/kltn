@@ -44,6 +44,7 @@ const StudentManage = ({ idSubject }) => {
                 setIdStudent(null);
                 console.log('delete', res)
                 if (!res.hasError) {
+                    notifySuccess('Thành công!', res.data.message);
                     const res = list.filter(item => item._id !== record._id)
                     setList(res);
                 } else {
