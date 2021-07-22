@@ -4,9 +4,10 @@ import {
 
     Select
 } from 'antd';
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
+import { notifySuccess, notifyWarning } from '../../assets/common/core/notify';
 import Logo from '../../assets/images/logo-utex.png'
 import RestClient from '../../utils/restClient';
 
@@ -21,12 +22,19 @@ const CreateAccount = () => {
 
     const [form] = Form.useForm();
 
+    const [isLoading, setIsLoading] = useState(false)
+
     const onFinish = (values) => {
         console.log(values)
+        setIsLoading(true)
         restClient.asyncPost(`/user/register`, values)
             .then(res => {
-                history.replace('/login')
+                setIsLoading(false)
                 if (!res.hasError) {
+                    history.replace('/login')
+                    notifySuccess('Thành công!', res.data.message);
+                } else {
+                    notifyWarning('Thành công!', res.data.message);
                 }
             })
     };
@@ -123,12 +131,12 @@ const CreateAccount = () => {
                     </Form.Item>
 
                     <Form.Item {...tailLayout}>
-                        <Button type="primary" htmlType="submit">
+                        <Button type="primary" htmlType="submit" loading={isLoading}>
                             Register
-                         </Button>
+                        </Button>
                     </Form.Item>
-                    <Form.Item wrapperCol={{span: 24}}>
-                        <Button type="danger" style={{width: '100%'}} onClick={() => history.go(-1)}>
+                    <Form.Item wrapperCol={{ span: 24 }}>
+                        <Button type="danger" style={{ width: '100%' }} onClick={() => history.go(-1)}>
                             Back
                         </Button>
                     </Form.Item>

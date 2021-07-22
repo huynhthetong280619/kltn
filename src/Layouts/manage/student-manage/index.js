@@ -42,7 +42,6 @@ const StudentManage = ({ idSubject }) => {
             .then(res => {
                 setLoadingDelete(false);
                 setIdStudent(null);
-                console.log('delete', res)
                 if (!res.hasError) {
                     notifySuccess('Thành công!', res.data.message);
                     const res = list.filter(item => item._id !== record._id)
