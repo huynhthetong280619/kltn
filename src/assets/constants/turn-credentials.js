@@ -23,7 +23,22 @@ export const TURN_CREDENTIAL = {
                 "turns:ss-turn2.xirsys.com:443?transport=tcp",
                 "turns:ss-turn2.xirsys.com:5349?transport=tcp"
             ]
-        }],
+        },
+        {
+            urls: ["stun:ss-turn2.xirsys.com"]
+        }, {
+            username: "sVWtBirTkzIrPpgiH8yuqvrQjjuWlp7fdrm1RCqsHeLUuFQIldMd6Y9dSDGGUK53AAAAAGD5lCFsbXN0dXJuMg==",
+            credential: "c0c0f2d6-eb04-11eb-9b6f-0242ac140004",
+            urls: [
+                "turn:ss-turn2.xirsys.com:80?transport=udp",
+                "turn:ss-turn2.xirsys.com:3478?transport=udp",
+                "turn:ss-turn2.xirsys.com:80?transport=tcp",
+                "turn:ss-turn2.xirsys.com:3478?transport=tcp",
+                "turns:ss-turn2.xirsys.com:443?transport=tcp",
+                "turns:ss-turn2.xirsys.com:5349?transport=tcp"
+            ]
+        }
+    ],
     iceCandidatePoolSize: 10,
     iceTransportPolicy: 'all'
 }

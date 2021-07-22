@@ -32,7 +32,7 @@ const Store = ({ children }) => {
     }
 
     useEffect(() => {
-        if (token) {
+        if (token && !socket) {
             setupSocket();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
