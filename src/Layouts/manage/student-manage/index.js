@@ -37,14 +37,15 @@ const StudentManage = ({ idSubject }) => {
         setLoadingDelete(true);
         setIdStudent(record._id)
         await restClient.asyncDelete(`/course/${idSubject}/remove-student`, {
-            idStudent: record.code
+            idStudent: record._id
         })
             .then(res => {
                 setLoadingDelete(false);
                 setIdStudent(null);
-                //console.log('delete', res)
+                console.log('delete', res)
                 if (!res.hasError) {
-                    setList(res.data.students);
+                    const res = list.filter(item => item._id !== record._id)
+                    setList(res);
                 } else {
                     notifyError('Thất bại!', res.data.message);
                 }
@@ -65,10 +66,11 @@ const StudentManage = ({ idSubject }) => {
         await restClient.asyncPost(`/course/${idSubject}/add-student`,
             { idStudent: codeStudent })
             .then(res => {
+                console.log('student ', res)
                 setLoadingAdd(false);
                 if (!res.hasError) {
                     notifySuccess('Thành công!', res.data.message);
-                    setList(res.data.students);
+                    setList([...list, res.data.student]);
                     onCloseDrawer();
                 } else {
                     notifyError('Thất bại!', res.data.message);
