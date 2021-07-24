@@ -1523,6 +1523,7 @@ const Subject = () => {
                     }}
 
                 >
+                    <div style={{ color: '#f9f9f9' }}>{dataView?.name}</div>
                     <div className="close-icon-modal" onClick={() => setOpenView(false)}>
                         <IC_CLOSE />
                     </div></div>}
