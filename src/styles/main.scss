@@ -1019,3 +1019,21 @@ h5.ant-typography{
 .ant-radio-disabled .ant-radio-inner::after{
     background-color: #000000d9 !important; 
 }
+
+.document-container{
+    width: 100% !important;
+    height: 100%  !important;
+}
+
+.modal-preview{
+    left: 16px !important;
+    .ant-modal-body{
+        height: 500px !important;
+        .react-grid-Grid{
+            min-height: 500px !important;
+            .react-grid-Viewport{
+                height: 500px;
+            }
+        }
+    }
+}

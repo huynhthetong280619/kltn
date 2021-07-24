@@ -24,6 +24,7 @@ import AssignmentModal from '../assignmentModal/assignmentModal';
 import ModalLoadingLogin from '../login/modal-loading-login';
 import QuizBank from '../quiz-bank';
 import './styles.scss';
+import FileViewer from 'react-file-viewer';
 
 import { ReactComponent as IC_CLOSE } from '../../assets/images/contents/ic_close.svg';
 import { ReactComponent as IC_TODO } from '../../assets/images/todo-item.svg'
@@ -91,6 +92,8 @@ const Subject = () => {
     const [listSubjectClone, setListSubjectClone] = useState([])
     const [cloneStatus, setCloneStatus] = useState(false)
 
+    const [openView, setOpenView] = useState(false)
+    const [dataView, setDataView] = useState({})
     const history = useHistory()
     const restClient = new RestClient({ token })
 
@@ -568,7 +571,7 @@ const Subject = () => {
             .then(res => {
                 setCloneStatus(false)
                 setOpenClone(false);
-                
+
                 if (!res.hasError) {
                     cloneFlag.current = false;
                     queryDetailSubject()
@@ -622,7 +625,7 @@ const Subject = () => {
                 isTeacherFlag ? (<>
                     <Row>
                         {
-                            isExecuteClass ? <Col span={16}>
+                            isExecuteClass ? <Col span={20}>
                                 <div className="subject-container">
                                     <div className="subject-wrapper">
                                         <div className="subject-header" style={{ display: 'flex', justifyContent: 'space-between', alignContent: 'center' }}>
@@ -644,7 +647,7 @@ const Subject = () => {
                                     </div>
                                 </div>
                             </Col> :
-                                <Col span={16}>
+                                <Col span={20}>
                                     <DragDropContext onDragEnd={handleOnDragEnd}>
                                         <Droppable droppableId="characters">
                                             {(provided) => (
@@ -767,10 +770,13 @@ const Subject = () => {
                                                                                                         {
                                                                                                             isOnEdit && <div>
                                                                                                                 <Tooltip title={t('edit_file')}>
-                                                                                                                    <FontAwesomeIcon icoăn="edit" onClick={(e) => { e.stopPropagation(); setIsExecuteClass(true); focusEditFile(file._id, _id) }} />
+                                                                                                                    <FontAwesomeIcon icon="edit" onClick={(e) => { e.stopPropagation(); setIsExecuteClass(true); focusEditFile(file._id, _id) }} />
                                                                                                                 </Tooltip>
                                                                                                             </div>
                                                                                                         }
+                                                                                                        <div>
+                                                                                                            <FontAwesomeIcon icon="caret-square-up" style={{ color: '#e84118' }} onClick={(e) => { console.log('Log'); e.stopPropagation(); setDataView(file); setOpenView(true) }} />
+                                                                                                        </div>
                                                                                                         {
                                                                                                             !file.isDeleted ?
                                                                                                                 <div>
@@ -913,10 +919,10 @@ const Subject = () => {
                                                                 )}
                                                             </Draggable>
                                                         })
-                                                        :
-                                                        <div>
-                                                            <Empty description={<div style={{color: '#f9f9f9'}}>{t('noData')}</div>}/>
-                                                        </div>
+                                                            :
+                                                            <div>
+                                                                <Empty description={<div style={{ color: '#f9f9f9' }}>{t('noData')}</div>} />
+                                                            </div>
                                                     }
                                                 </div>
                                             )}
@@ -926,11 +932,11 @@ const Subject = () => {
 
                         }
 
-                        <Col span={8} style={{ padding: '10px', display: 'flex', flexDirection: 'column', rowGap: '0.75rem' }}>
-                            <ModalWrapper>
+                        <Col span={3} style={{ padding: '10px 0', display: 'flex', flexDirection: 'column', rowGap: '0.75rem' }}>
+                            <ModalWrapper style={{ minWidth: '14.2rem' }}>
                                 <div style={{ textAlign: 'center', marginBottom: '0.5rem', color: '#f9f9f9' }}>{t('manage_utils')}</div>
-                                <Row style={{ justifyContent: 'space-between', columnGap: '0.5rem' }}>
-                                    <Col span={7} className="action-select-add-content" style={{
+                                <Row style={{ justifyContent: 'space-between', rowGap: '0.5rem', flexDirection: 'column' }}>
+                                    <Col span={24} className="action-select-add-content" style={{
                                         display: 'flex',
                                         justifyContent: 'center',
                                         alignItems: 'center',
@@ -946,7 +952,7 @@ const Subject = () => {
                                     >
                                         {isTeacherFlag ? t('manage_student') : t('manage_point')}
                                     </Col>
-                                    <Col span={7} className="action-select-add-content" style={{
+                                    <Col span={24} className="action-select-add-content" style={{
                                         display: 'flex',
                                         justifyContent: 'center',
                                         alignItems: 'center',
@@ -963,7 +969,7 @@ const Subject = () => {
                                         {t('call_video')}
                                     </Col>
                                     {isTeacherFlag && ((!isUpdate && isTeacherFlag) ?
-                                        <Col span={7} className="action-select-add-content" style={{
+                                        <Col span={24} className="action-select-add-content" style={{
                                             display: 'flex',
                                             justifyContent: 'center',
                                             alignItems: 'center',
@@ -982,13 +988,13 @@ const Subject = () => {
                                             {t('update')}
                                         </Col>
                                         :
-                                        <Col span={7}></Col>)}
+                                        <Col span={24}></Col>)}
                                 </Row>
                             </ModalWrapper>
-                            <ModalWrapper>
+                            <ModalWrapper style={{ minWidth: '14.2rem' }}>
                                 <div style={{ textAlign: 'center', marginBottom: '0.5rem', color: '#f9f9f9' }}>{t('pro_function')}</div>
-                                <Row style={{ justifyContent: 'space-between', columnGap: '0.5rem' }}>
-                                    <Col span={7} className="action-select-add-content" style={{
+                                <Row style={{ justifyContent: 'space-between', rowGap: '0.5rem', flexDirection: 'column' }}>
+                                    <Col span={24} className="action-select-add-content" style={{
                                         display: 'flex',
                                         justifyContent: 'center',
                                         alignItems: 'center',
@@ -1012,7 +1018,7 @@ const Subject = () => {
                                     >
                                         {t('information')}
                                     </Col>
-                                    <Col span={7} className="action-select-add-content" style={{
+                                    <Col span={24} className="action-select-add-content" style={{
                                         display: 'flex',
                                         justifyContent: 'center',
                                         alignItems: 'center',
@@ -1034,7 +1040,7 @@ const Subject = () => {
                                     >
                                         {t('document')}
                                     </Col>
-                                    <Col span={7} className="action-select-add-content" style={{
+                                    <Col span={24} className="action-select-add-content" style={{
                                         display: 'flex',
                                         justifyContent: 'center',
                                         alignItems: 'center',
@@ -1057,8 +1063,8 @@ const Subject = () => {
                                         {t('exercise')}
                                     </Col>
                                 </Row>
-                                <Row style={{ justifyContent: 'space-between', marginTop: '10px', columnGap: '0.5rem' }}>
-                                    <Col span={7} className="action-select-add-content" style={{
+                                <Row style={{ justifyContent: 'space-between', marginTop: '10px', rowGap: '0.5rem', flexDirection: 'column' }}>
+                                    <Col span={24} className="action-select-add-content" style={{
                                         display: 'flex',
                                         justifyContent: 'center',
                                         alignItems: 'center',
@@ -1080,7 +1086,7 @@ const Subject = () => {
                                     >
                                         {t('quiz')}
                                     </Col>
-                                    <Col span={7} className="action-select-add-content" style={{
+                                    <Col span={24} className="action-select-add-content" style={{
                                         display: 'flex',
                                         justifyContent: 'center',
                                         alignItems: 'center',
@@ -1102,7 +1108,7 @@ const Subject = () => {
                                     >
                                         {t('survey')}
                                     </Col>
-                                    <Col span={7} className="action-select-add-content" style={{
+                                    <Col span={24} className="action-select-add-content" style={{
                                         display: 'flex',
                                         justifyContent: 'center',
                                         alignItems: 'center',
@@ -1128,8 +1134,8 @@ const Subject = () => {
 
 
                                 </Row>
-                                <Row style={{ justifyContent: 'space-between', marginTop: '10px', columnGap: '0.5rem' }}>
-                                    <Col span={7} className="action-select-add-content" style={{
+                                <Row style={{ justifyContent: 'space-between', marginTop: '10px', rowGap: '0.5rem', flexDirection: 'column' }}>
+                                    <Col span={24} className="action-select-add-content" style={{
                                         display: 'flex',
                                         justifyContent: 'center',
                                         alignItems: 'center',
@@ -1151,7 +1157,7 @@ const Subject = () => {
                                     >
                                         {t('forum')}
                                     </Col>
-                                    <Col span={7} className="action-select-add-content" style={{
+                                    <Col span={24} className="action-select-add-content" style={{
                                         display: 'flex',
                                         justifyContent: 'center',
                                         alignItems: 'center',
@@ -1192,7 +1198,7 @@ const Subject = () => {
                                         >
                                             {t('Clone')}
                                         </Col>
-                                            : <Col span={7} className="action-select-add-content"
+                                            : <Col span={24} className="action-select-add-content"
 
                                             >
                                             </Col>
@@ -1206,7 +1212,7 @@ const Subject = () => {
                 </>
                 ) : (
                     <Row>
-                        <Col span={16}>
+                        <Col span={20}>
                             {
                                 detailSubject.length > 0 ? detailSubject.map(({ _id, name, description, assignments, exams, forums, announcements, files, surveys }, index) => {
                                     return (
@@ -1377,17 +1383,17 @@ const Subject = () => {
 
                                     )
                                 })
-                                : 
-                                <div>
-                                    <Empty description={t('noData')}/>
-                                </div>
+                                    :
+                                    <div>
+                                        <Empty description={t('noData')} />
+                                    </div>
                             }
                         </Col>
-                        <Col span={8} style={{ padding: '10px', display: 'flex', flexDirection: 'column', rowGap: '0.75rem' }}>
-                            <ModalWrapper>
+                        <Col span={3} style={{ padding: '10px 0', display: 'flex', flexDirection: 'column', rowGap: '0.75rem' }}>
+                            <ModalWrapper style={{ minWidth: '14.2rem' }}>
                                 <div style={{ textAlign: 'center', marginBottom: '0.5rem', color: '#f9f9f9' }}>{t('manage_utils')}</div>
-                                <Row style={{ justifyContent: 'space-between', columnGap: '0.5rem' }}>
-                                    <Col span={7} className="action-select-add-content" style={{
+                                <Row style={{ justifyContent: 'space-between', rowGap: '0.5rem', flexDirection: 'column' }}>
+                                    <Col span={24} className="action-select-add-content" style={{
                                         display: 'flex',
                                         justifyContent: 'center',
                                         alignItems: 'center',
@@ -1403,7 +1409,7 @@ const Subject = () => {
                                     >
                                         {isTeacherFlag ? t('manage_student') : t('manage_point')}
                                     </Col>
-                                    <Col span={7} className="action-select-add-content" style={{
+                                    <Col span={24} className="action-select-add-content" style={{
                                         display: 'flex',
                                         justifyContent: 'center',
                                         alignItems: 'center',
@@ -1420,7 +1426,7 @@ const Subject = () => {
                                         {t('call_video')}
                                     </Col>
                                     {
-                                        isTeacherFlag ? <Col span={7} className="action-select-add-content" style={{
+                                        isTeacherFlag ? <Col span={24} className="action-select-add-content" style={{
                                             display: 'flex',
                                             justifyContent: 'center',
                                             alignItems: 'center',
@@ -1504,6 +1510,32 @@ const Subject = () => {
                         </div>
                     })
                 }
+            </Modal>
+
+            <Modal
+                style={{ minWidth: 1080, left: 16 }}
+                closable={false}
+                className="modal-function-customize modal-preview"
+                title={<div
+                    style={{
+                        padding: '1rem 0.625rem 0.625rem 0',
+                        alignItems: 'center',
+                    }}
+
+                >
+                    <div className="close-icon-modal" onClick={() => setOpenView(false)}>
+                        <IC_CLOSE />
+                    </div></div>}
+                visible={openView}
+                onCancel={() => setOpenView(false)}
+                footer={null}
+            >
+                <FileViewer fileType={dataView.type}
+                    filePath={dataView.path}
+                    onError={() => { }}
+                    errorComponent={() => { }}
+                    unsupportedComponent={() => { }}
+                />
             </Modal>
 
             <ModalLoadingLogin visible={cloneStatus} content={t("sync_data")} />

@@ -41,11 +41,13 @@ import {
   faVideo,
   faGraduationCap,
   faDownload,
-  faUpload
+  faUpload,
+  faCaretSquareUp
 } from "@fortawesome/free-solid-svg-icons";
 
 
 library.add(
+  faCaretSquareUp,
   faDownload,
   faUpload,
   faGraduationCap,
