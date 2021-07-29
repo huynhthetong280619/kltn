@@ -334,13 +334,6 @@ const AddAssignment = ({ timelinesList, createAssignment, updateAssignment, idSu
                             <Checkbox onChange={e => handleOnchangeOverDue(e)} />
                         </Form.Item>
 
-                        <Form.Item
-                            label={t('display')}
-                            name={['assignment', 'isDeleted']}
-                            valuePropName="checked"
-                        >
-                            <Checkbox />
-                        </Form.Item>
                         {isOverDue && (
                             <Form.Item
                                 label={t('overDueDate')}
@@ -367,6 +360,14 @@ const AddAssignment = ({ timelinesList, createAssignment, updateAssignment, idSu
                             </Form.Item>
                         )}
 
+
+                        <Form.Item
+                            label={t('display')}
+                            name={['assignment', 'isDeleted']}
+                            valuePropName="checked"
+                        >
+                            <Checkbox />
+                        </Form.Item>
 
                         <Form.Item wrapperCol={{ span: 24 }}>
                             <Button type="primary" loading={isLoading} htmlType="submit" >

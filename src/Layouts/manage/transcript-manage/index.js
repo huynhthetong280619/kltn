@@ -1,24 +1,33 @@
-import { Button, InputNumber, Row, Table } from 'antd';
+import { Button, InputNumber, Row, Table, Card, Col } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { CSVLink } from "react-csv";
 import { useTranslation } from 'react-i18next';
 import { notifyError, notifySuccess } from '../../../assets/common/core/notify';
 import excel from '../../../assets/images/contents/excel.png';
 import RestClient from '../../../utils/restClient';
-
+import NVD3Chart from 'react-nvd3';
 
 const TranscriptManage = ({ lstClassScore, idSubject }) => {
 
     const { t } = useTranslation()
     const [isLoading, setLoading] = useState(false);
 
-    const [transcript, setTranscript] = useState(lstClassScore)
+    const [transcript, setTranscript] = useState(lstClassScore);
+
+    const [dataChart, setDataChart] = useState([]);
 
     const restClient = new RestClient({ token: '' })
     const setRatio = (obj, ratio) => {
         let target = ratios.find(value => value._id === obj._id);
         target.ratio = ratio / 100;
     }
+
+    useEffect(() => {
+        setDataChart([{
+            key: "Statistic",
+            values: transcript.statistic
+        }])
+    }, [transcript])
 
 
     const putTotalScore = async () => {
@@ -111,6 +120,30 @@ const TranscriptManage = ({ lstClassScore, idSubject }) => {
         </Row>
         <Row style={{ overflow: 'auto' }} className="style-table">
             <Table pagination={false} columns={columnsClassScore} dataSource={transcript.data} style={{ width: '100%' }} scroll={{ y: 240, x: 700 }} />
+        </Row>
+
+        <Row style={{ marginTop: '30px' }}>
+            <Col span={24}>
+                <Card>
+
+                    {React.createElement(NVD3Chart, {
+                        xAxis: {
+                            tickFormat: function (d) { return d; },
+                            axisLabel: 'Score'
+                        },
+                        yAxis: {
+                            axisLabel: 'Number of students',
+                            tickFormat: function (d) { return d; }
+                        },
+                        type: 'discreteBarChart',
+                        datum: dataChart,
+                        x: 'score',
+                        y: 'count',
+                        height: 400,
+                    })}
+
+                </Card>
+            </Col>
         </Row>
 
     </>)

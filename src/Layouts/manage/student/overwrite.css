@@ -1,12 +1,16 @@
-.lms-ws-student-page .ant-tabs-nav-list{
+.lms-ws-student-page .ant-tabs-nav-list {
     width: 100%;
 }
 
-.lms-ws-student-page .ant-tabs-tab{
+.lms-ws-student-page .ant-tabs-tab {
     width: 33%;
     justify-content: center;
 }
 
-.lms-ws-student-page .ant-tabs-content-holder{
-    width:100%
+.lms-ws-student-page .ant-tabs-content-holder {
+    width: 100%
+}
+
+.nv-chart>svg {
+    width: 100%;
 }
