@@ -1305,6 +1305,9 @@ const Subject = () => {
                                                                                         </i>
                                                                                     )}
                                                                             </div>
+                                                                            <div>
+                                                                                <FontAwesomeIcon icon="caret-square-up" style={{ color: '#e84118' }} onClick={(e) => { console.log('Log'); e.stopPropagation(); setDataView(file); setOpenView(true) }} />
+                                                                            </div>
                                                                             <div className="subject-content" onClick={(e) => { downloadFile(file) }}>{file.name}</div>
                                                                         </div>
 
