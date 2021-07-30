@@ -69,7 +69,7 @@ const CreateAccount = () => {
                         rules={[
                             {
                                 required: true,
-                                message: 'Please input your E-mail!',
+                                message: 'Please input your first name!',
                             },
                         ]}
                     >
@@ -81,7 +81,7 @@ const CreateAccount = () => {
                         rules={[
                             {
                                 required: true,
-                                message: 'Please input your E-mail!',
+                                message: 'Please input your last name!',
                             },
                         ]}
                     >
@@ -93,7 +93,7 @@ const CreateAccount = () => {
                         rules={[
                             {
                                 required: true,
-                                message: 'Please input your E-mail!',
+                                message: 'Please input your username!',
                             },
                         ]}
                     >
